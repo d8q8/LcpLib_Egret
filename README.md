@@ -1,7 +1,7 @@
 LcpLib_Egret
 ============
 
-Egret引擎的封装库
+Egret引擎的封装库v1.0.a
 
 目录结构如下
 
