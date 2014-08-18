@@ -24,5 +24,5 @@ Lcp
 │   └─IGraphics     //绘制图形接口类
 └─utils
     ├─LString       //字符处理类(待完善)
-    └─LTrace        //跟踪捕获类
+    └─LTrace        //跟踪捕获类(待完善)
 </pre>
