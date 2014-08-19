@@ -10,7 +10,6 @@ module Lcp {
      */
     export class LEllipse extends LGraphics{
         public CLASS_NAME:string = "LEllipse";
-
         public constructor(vars?:IGraphics) {
             super(vars);
 
@@ -19,5 +18,8 @@ module Lcp {
             this.graphics.drawEllipse(this.vars.width/2,this.vars.height/2,this.vars.width/2,this.vars.height/2);
         }
 
+        public clone():LEllipse{
+            return new LEllipse(this.vars);
+        }
     }
 }

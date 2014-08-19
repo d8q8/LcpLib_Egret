@@ -21,5 +21,8 @@ module Lcp{
             this.graphics.drawRect(0,0,this.vars.width,this.vars.height);
         }
 
+        public clone():LRect{
+            return new LRect(this.vars);
+        }
     }
 }

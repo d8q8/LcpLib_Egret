@@ -26,5 +26,8 @@ module Lcp{
 			}
 		}
 
+        public clone():LPolygon{
+            return new LPolygon(this.vars);
+        }
     }
 }

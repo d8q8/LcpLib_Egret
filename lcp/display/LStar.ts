@@ -29,5 +29,8 @@ module Lcp{
 			}
 		}
 
+        public clone():LStar{
+            return new LStar(this.vars);
+        }
     }
 }
