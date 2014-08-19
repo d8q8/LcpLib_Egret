@@ -1,11 +1,11 @@
 LcpLib_Egret
 ============
 
-Egret引擎的封装库v1.0.a(目前完美支持最新版egret1.0.4,欢迎使用,有问题及时反馈)
+Egret引擎的封装库v1.0.a(目前完美支持最新版egret1.0.4)
 
 目录结构如下
 
-<pre class="brush:js;toolbar:false">
+<pre class="brush:ts;toolbar:false">
 Lcp
 ├─data
 │   └─LVars         //全局变参类(待完善)
@@ -27,7 +27,80 @@ Lcp
     └─LTrace        //跟踪捕获类(待完善)
 </pre>
 
-使用说明请看这里 <br />
+1> 绘制参数
+
+<pre class="brush:ts;toolbar:false">
+    //基本属性
+    x:number;//元件x坐标
+    y:number;//元件y坐标
+    name?:string;//元件实例名,如sp
+    width?:number;//元件宽度
+    height?:number;//元件高度
+    anchorX?:number;//元件x锚点,旋转时会用到
+    anchorY?:number;//元件y锚点,旋转时会用到
+    
+    //样式属性
+    thickness?:number;//一个整数，以点为单位表示线条的粗细，有效值为 0 到 255.
+    linecolor?:number;//线条的十六进制颜色值（例如，红色为 0xFF0000，蓝色为 0x0000FF 等）。
+    linealpha?:number;//表示线条颜色的 Alpha 值的数字；有效值为 0 到 1。
+    pixelHinting?:boolean;//指定是否提示笔触采用完整像素
+    scaleMode?:string;//用于指定要使用的比例模式
+    caps?:string;//用于指定线条末端处端点类型的 CapsStyle 类的值
+    joints?:string;//指定用于拐角的连接外观的类型
+    miterLimit?:number;//用于表示剪切斜接的极限值的数字
+    
+    //填充属性
+    fillcolor?:number;//填充颜色,如0xff0000 红色
+    fillalpha?:number;//填充透明度,有效值为 0 到 1
+    
+    radius?:number;//半径及圆角半径
+    corner?:number;//多边形角
+    ratio?:number;//多角星比率
+</pre>
+
+2> 圆,方,圆角矩形,椭圆,多边形,多角星实现
+
+<pre class="brush:ts;toolbar:false">
+//圆
+var sp:egret.Sprite = new Lcp.LCircle({name:"sp",x:300,y:600,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//方
+//var sp:egret.Sprite = new Lcp.LRect({name:"sp",x:300,y:600,width:400,height:300,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//圆角矩形
+//var sp:egret.Sprite = new Lcp.LRoundRect({name:"sp",x:300,y:600,width:400,height:300,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//椭圆
+//var sp:egret.Sprite = new Lcp.LEllipse({name:"sp",x:300,y:600,width:200,height:100,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//多边形,如三角形
+//var sp:egret.Sprite = new Lcp.LPolygon({name:"sp",x:300,y:600,width:300,height:300,corner:3,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//多角星,如五角星
+//var sp:egret.Sprite = new Lcp.LStar({name:"sp",x:300,y:600,width:300,height:300,corner:5,ratio:.4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+this.addChild(sp);
+</pre>
+
+3> 自定义事件类和全局侦听类使用如下
+
+<pre class="brush:ts;toolbar:false">
+sp.touchEnabled=true;//开启触点事件
+//单击
+sp.addEventListener(egret.TouchEvent.TOUCH_TAP,(e)=>{
+    this.trace("我单击了圆",e.stageX,e.stageY);
+    //全局侦听发送消息和自定义事件,这里的自定义事件,也可以自己封装成强类型即可,比如LEvent.MYCIRCLE
+    Lcp.LListener.getInstance().dispatchEvent(new Lcp.LEvent("mycircle",.1,false));
+    //元件自身发送消息和自定义事件,同上
+    sp.dispatchEvent(new Lcp.LEvent("mycircle1",.5));
+},this);
+//当前元件侦听自定义事件获取数据
+sp.addEventListener("mycircle1",(e)=>{
+   this.trace(e.param);//自定义事件参数param,可以传入任意对象,然后自行解析即可.
+   sp.y=1000*parseFloat(e.param);
+},this);
+//全局侦听自定义事件获取数据
+Lcp.LListener.getInstance().addEventListener("mycircle",(e)=>{
+    this.trace(e.param);//同上
+    sp.alpha=parseFloat(e.param);
+},this);
+</pre>
+
+使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. <br />
 <a href="http://bbs.egret-labs.org/thread-592-1-1.html" target="_blank">
 http://bbs.egret-labs.org/thread-592-1-1.html
 </a>
