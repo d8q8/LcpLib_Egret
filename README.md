@@ -82,7 +82,7 @@ this.addChild(sp);
 sp.touchEnabled=true;//开启触点事件
 //单击
 sp.addEventListener(egret.TouchEvent.TOUCH_TAP,(e)=>{
-    this.trace("我单击了圆",e.stageX,e.stageY);
+    console.log("我单击了圆",e.stageX,e.stageY);
     //全局侦听发送消息和自定义事件,这里的自定义事件,也可以自己封装成强类型即可,比如LEvent.MYCIRCLE
     Lcp.LListener.getInstance().dispatchEvent(new Lcp.LEvent("mycircle",.1,false));
     //元件自身发送消息和自定义事件,同上
@@ -90,12 +90,12 @@ sp.addEventListener(egret.TouchEvent.TOUCH_TAP,(e)=>{
 },this);
 //当前元件侦听自定义事件获取数据
 sp.addEventListener("mycircle1",(e)=>{
-   this.trace(e.param);//自定义事件参数param,可以传入任意对象,然后自行解析即可.
+   console.log(e.param);//自定义事件参数param,可以传入任意对象,然后自行解析即可.
    sp.y=1000*parseFloat(e.param);
 },this);
 //全局侦听自定义事件获取数据
 Lcp.LListener.getInstance().addEventListener("mycircle",(e)=>{
-    this.trace(e.param);//同上
+    console.log(e.param);//同上
     sp.alpha=parseFloat(e.param);
 },this);
 </pre>
