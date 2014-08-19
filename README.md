@@ -31,8 +31,8 @@ Lcp
 
 <pre class="brush:ts;toolbar:false">
     //基本属性
-    x:number;//元件x坐标
-    y:number;//元件y坐标
+    x?:number;//元件x坐标
+    y?:number;//元件y坐标
     name?:string;//元件实例名,如sp
     width?:number;//元件宽度
     height?:number;//元件高度
