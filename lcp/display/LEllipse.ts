@@ -13,11 +13,10 @@ module Lcp {
 
         public constructor(vars?:IGraphics) {
             super(vars);
-            this.x = vars.x + vars.width / 2;
-            this.y = vars.y + vars.height / 2;
+
         }
         public drawShape():void{
-            this.graphics.drawEllipse(0,0,this.vars.width,this.vars.height);
+            this.graphics.drawEllipse(this.vars.width/2,this.vars.height/2,this.vars.width/2,this.vars.height/2);
         }
 
     }
