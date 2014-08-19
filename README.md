@@ -1,7 +1,9 @@
 LcpLib_Egret
 ============
 
-Egret引擎的封装库v1.0.a(目前完美支持最新版egret1.0.4)
+Egret引擎的封装库v1.0.b(目前完美支持最新版egret1.0.4)
+
+<span style="color:#ff0000">(注:修正椭圆圆角实现,跟AS3保持一致)</span>
 
 目录结构如下
 
@@ -54,6 +56,8 @@ Lcp
     fillalpha?:number;//填充透明度,有效值为 0 到 1
     
     radius?:number;//半径及圆角半径
+    ellipseWidth?:number;//圆角宽半径
+    ellipseHeight?:number;//圆角高半径
     corner?:number;//多边形角
     ratio?:number;//多角星比率
 </pre>
@@ -66,7 +70,7 @@ var sp:egret.Sprite = new Lcp.LCircle({name:"sp",x:300,y:600,radius:50,fillcolor
 //方
 //var sp:egret.Sprite = new Lcp.LRect({name:"sp",x:300,y:600,width:400,height:300,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //圆角矩形
-//var sp:egret.Sprite = new Lcp.LRoundRect({name:"sp",x:300,y:600,width:400,height:300,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp:egret.Sprite = new Lcp.LRoundRect({name:"sp",x:300,y:600,width:400,height:300,ellipseWidth:100,ellipseHeight:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //椭圆
 //var sp:egret.Sprite = new Lcp.LEllipse({name:"sp",x:300,y:600,width:200,height:100,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //多边形,如三角形
