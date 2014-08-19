@@ -1,7 +1,7 @@
 LcpLib_Egret
 ============
 
-Egret引擎的封装库v1.0.a
+Egret引擎的封装库v1.0.a(目前完美支持最新版egret1.0.4,欢迎使用,有问题及时反馈)
 
 目录结构如下
 
@@ -26,3 +26,8 @@ Lcp
     ├─LString       //字符处理类(待完善)
     └─LTrace        //跟踪捕获类(待完善)
 </pre>
+
+使用说明请看这里 <br />
+<a href="http://bbs.egret-labs.org/thread-592-1-1.html" target="_blank">
+http://bbs.egret-labs.org/thread-592-1-1.html
+</a>
