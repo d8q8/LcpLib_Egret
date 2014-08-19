@@ -13,14 +13,14 @@ module Lcp {
 
         constructor(vars?:IGraphics){
             super(vars);
-            this.vars.x = vars.x + vars.width / 2;
-            this.vars.y = vars.y + vars.height / 2;
+            this.x = vars.x + vars.width / 2;
+            this.y = vars.y + vars.height / 2;
             this.vars.ellipseWidth = vars.ellipseWidth ? vars.ellipseWidth : 5;
             this.vars.ellipseHeight = vars.ellipseHeight ? vars.ellipseHeight : vars.ellipseWidth;
         }
 
         public drawShape():void{
-            this.graphics.drawRect(0,0,this.vars.width,this.vars.height,this.vars.ellipseWidth,this.vars.ellipseHeight);
+            this.graphics.drawRoundRect(0,0,this.vars.width,this.vars.height,this.vars.ellipseWidth,this.vars.ellipseHeight);
         }
 
     }

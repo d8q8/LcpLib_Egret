@@ -14,7 +14,7 @@ module Lcp {
         public constructor(vars?:IGraphics) {
             super(vars);
             this.x = vars.x + vars.width / 2;
-            this.y = vars.y + vars.width / 2;
+            this.y = vars.y + vars.height / 2;
         }
         public drawShape():void{
             this.graphics.drawEllipse(0,0,this.vars.width,this.vars.height);
