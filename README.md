@@ -66,17 +66,17 @@ Lcp
 
 <pre class="brush:ts;toolbar:false">
 //圆
-var sp:egret.Sprite = new Lcp.LCircle({name:"sp",x:300,y:600,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+var sp:Lcp.LCircle = new Lcp.LCircle({name:"sp",x:300,y:600,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //方
-//var sp:egret.Sprite = new Lcp.LRect({name:"sp",x:300,y:600,width:400,height:300,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp:Lcp.LRect = new Lcp.LRect({name:"sp",x:300,y:600,width:400,height:300,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //圆角矩形
-//var sp:egret.Sprite = new Lcp.LRoundRect({name:"sp",x:300,y:600,width:400,height:300,ellipseWidth:100,ellipseHeight:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp:Lcp.LRoundRect = new Lcp.LRoundRect({name:"sp",x:300,y:600,width:400,height:300,ellipseWidth:100,ellipseHeight:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //椭圆
-//var sp:egret.Sprite = new Lcp.LEllipse({name:"sp",x:300,y:600,width:200,height:100,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp:Lcp.LEllipse = new Lcp.LEllipse({name:"sp",x:300,y:600,width:200,height:100,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //多边形,如三角形
-//var sp:egret.Sprite = new Lcp.LPolygon({name:"sp",x:300,y:600,width:300,height:300,corner:3,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp:Lcp.LPolygon = new Lcp.LPolygon({name:"sp",x:300,y:600,width:300,height:300,corner:3,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //多角星,如五角星
-//var sp:egret.Sprite = new Lcp.LStar({name:"sp",x:300,y:600,width:300,height:300,corner:5,ratio:.4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp:Lcp.LStar = new Lcp.LStar({name:"sp",x:300,y:600,width:300,height:300,corner:5,ratio:.4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 this.addChild(sp);
 </pre>
 
