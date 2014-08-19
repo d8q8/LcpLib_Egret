@@ -43,6 +43,8 @@ module Lcp{
             this._vars.fillalpha = vars.fillalpha ? vars.fillalpha : 1;
 
             this._vars.radius = vars.radius ? vars.radius : 5;
+            this._vars.ellipseWidth = vars.ellipseWidth ? vars.ellipseWidth : 5;
+            this._vars.ellipseHeight = vars.ellipseHeight ? vars.ellipseHeight : vars.ellipseWidth;
             this._vars.corner = vars.corner ? vars.corner : 3;
             this._vars.ratio = vars.ratio ? vars.ratio : .5;
             this.draw();

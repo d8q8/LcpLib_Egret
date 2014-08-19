@@ -31,6 +31,8 @@ module Lcp {
         fillalpha?:number;//填充透明度,有效值为 0 到 1
 
         radius?:number;//半径及圆角半径
+        ellipseWidth?:number;//圆角宽半径
+        ellipseHeight?:number;//圆角高半径
         corner?:number;//多边形角
         ratio?:number;//多角星比率
     }
