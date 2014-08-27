@@ -25,6 +25,7 @@ Lcp
 ├─interfaces
 │   └─IGraphics     //绘制图形接口类
 └─utils
+    ├─LGlobal       //全局静态类
     ├─LString       //字符处理类(待完善)
     └─LTrace        //跟踪捕获类(待完善)
 </pre>
