@@ -47,6 +47,7 @@ module Lcp{
             this._vars.ellipseHeight = vars.ellipseHeight ? vars.ellipseHeight : vars.ellipseWidth;
             this._vars.corner = vars.corner ? vars.corner : 3;
             this._vars.ratio = vars.ratio ? vars.ratio : .5;
+            this._vars.petal = vars.petal ? vars.petal : 4;
             this.draw();
         }
 

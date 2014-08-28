@@ -35,6 +35,8 @@ module Lcp {
         ellipseHeight?:number;//圆角高半径
         corner?:number;//多边形角
         ratio?:number;//多角星比率
+
+        petal?:number;//花瓣数,偶数翻倍,奇数不变
     }
 
 }

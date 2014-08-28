@@ -18,6 +18,8 @@ Lcp
 │   ├─LPolygon      //绘制多边形类
 │   ├─LRect         //绘制矩形类
 │   ├─LRoundRect    //绘制圆角矩形类
+│   ├─LHeart        //绘制心形类
+│   ├─LRose         //绘制玫瑰类
 │   └─LStar         //绘制多角星类
 ├─events
 │   ├─LEvent        //自定义事件类
@@ -61,6 +63,8 @@ Lcp
     ellipseHeight?:number;//圆角高半径
     corner?:number;//多边形角
     ratio?:number;//多角星比率
+    
+    petal?:number;//花瓣数,偶数翻倍,奇数不变
 </pre>
 
 2> 圆,方,圆角矩形,椭圆,多边形,多角星实现
@@ -76,6 +80,10 @@ var sp:Lcp.LCircle = new Lcp.LCircle({name:"sp",x:300,y:600,radius:50,fillcolor:
 //var sp:Lcp.LEllipse = new Lcp.LEllipse({name:"sp",x:300,y:600,width:200,height:100,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //多边形,如三角形
 //var sp:Lcp.LPolygon = new Lcp.LPolygon({name:"sp",x:300,y:600,width:300,height:300,corner:3,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//心形
+//var sp:Lcp.LHeart = new Lcp.LHeart({name:"sp",x:200,y:400,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//玫瑰形,花瓣偶数翻倍,奇数不变
+//var sp:Lcp.LRose = new Lcp.LRose({name:"sp",x:200,y:350,radius:100,petal:4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //多角星,如五角星
 //var sp:Lcp.LStar = new Lcp.LStar({name:"sp",x:300,y:600,width:300,height:300,corner:5,ratio:.4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 this.addChild(sp);
