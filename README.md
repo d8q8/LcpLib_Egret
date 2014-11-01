@@ -1,7 +1,7 @@
 LcpLib_Egret
 ============
 
-Egret引擎的封装库v1.0.b(目前完美支持最新版egret1.0.4)
+Egret引擎的封装库v1.0.b(目前完美支持最新版egret1.1.2)
 
 <span style="color:#ff0000">(注:修正椭圆圆角实现,跟AS3保持一致)</span>
 
