@@ -32,7 +32,7 @@ module lcp {
             this._stage = value;
         }
         public constructor() {
-
+            egret.Logger.warning("不可以实例化"+this.CLASS_NAME+"类,这是全局类");
         }
     }
 }

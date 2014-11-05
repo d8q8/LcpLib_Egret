@@ -11,7 +11,7 @@ module lcp{
     export class LPolygon extends LGraphics{
         public CLASS_NAME:string = "LPolygon";
 
-        constructor(vars?:IGraphics){
+        public constructor(vars?:IGraphics){
             super(vars);
 
             this.x = this.vars.x;

@@ -11,7 +11,7 @@ module lcp{
     export class LCircle extends LGraphics{
         public CLASS_NAME:string = "LCircle";
 
-        constructor(vars?:IGraphics){
+        public constructor(vars?:IGraphics){
             super(vars);
 
             this.x = this.vars.x;

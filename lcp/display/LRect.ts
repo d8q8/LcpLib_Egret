@@ -11,7 +11,7 @@ module lcp{
     export class LRect extends LGraphics{
         public CLASS_NAME:string = "LRect";
 
-        constructor(vars?:IGraphics){
+        public constructor(vars?:IGraphics){
             super(vars);
 
             this.x = this.vars.x;

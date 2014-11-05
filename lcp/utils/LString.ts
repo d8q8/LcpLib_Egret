@@ -12,7 +12,7 @@ module lcp {
         public CLASS_NAME:string = "LString";
 
         public constructor() {
-
+            egret.Logger.warning("不可以实例化"+this.CLASS_NAME+"类,这是字符串处理类");
         }
 
         /**

@@ -11,7 +11,7 @@ module lcp{
     export class LTrace{
         public CLASS_NAME:string = "LTrace";
         public constructor(){
-
+            egret.Logger.warning("不可以实例化"+this.CLASS_NAME+"类,这是跟踪捕获类");
         }
 
         /**

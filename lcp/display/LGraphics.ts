@@ -11,7 +11,7 @@ module lcp {
     export class LGraphics extends egret.Sprite {
         public CLASS_NAME:string = "LGraphics";
 
-        constructor(public vars?:IGraphics) {
+        public constructor(public vars?:IGraphics) {
             super();
             this.initValue();
             if(vars){

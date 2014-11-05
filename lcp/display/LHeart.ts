@@ -12,7 +12,7 @@ module lcp {
     export class LHeart extends LGraphics {
         public CLASS_NAME:string = 'LHeart';
 
-        constructor(vars?:IGraphics) {
+        public constructor(vars?:IGraphics) {
             super(vars);
 
             this.x = this.vars.x;
