@@ -21,7 +21,7 @@ module lcp{
 
         public static getInstance():LListener{
             if(this._instance==null)
-                this._instance = arguments.callee();
+                this._instance = new LListener();
             return this._instance;
         }
 
