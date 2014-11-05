@@ -25,6 +25,7 @@ lcp
 │   ├─LEvent        //自定义事件类
 │   └─LListener     //全局侦听消息类
 ├─interfaces
+│   ├─GraphicsType  //绘制枚举类(暂未用到)
 │   └─IGraphics     //绘制图形接口类
 └─utils
     ├─LGlobal       //全局静态类
