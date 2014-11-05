@@ -18,8 +18,8 @@ module lcp{
             }
         }
 
-        public clone():LEvent{
-            return arguments.callee(this.type, this._obj, this.bubbles, this.cancelable);
+        public clone(obj?:Object):LEvent{
+            return new LEvent(this.type, obj?obj:this._obj, this.bubbles, this.cancelable);
         }
 
         public toString():void{

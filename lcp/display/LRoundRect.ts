@@ -27,8 +27,8 @@ module lcp {
             this.graphics.drawRoundRect(0,0,this.vars.width,this.vars.height,this.vars.ellipseWidth,this.vars.ellipseHeight);
         }
 
-        public clone():LRoundRect{
-            return arguments.callee(this.vars);
+        public clone(vars?:IGraphics):LRoundRect{
+            return new LRoundRect(vars?vars:this.vars);
         }
     }
 }

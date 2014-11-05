@@ -42,8 +42,8 @@ module lcp {
             }
         }
 
-        public clone():LHeart{
-            return arguments.callee(this.vars);
+        public clone(vars?:LHeart):LHeart{
+            return new LHeart(vars?vars:this.vars);
         }
     }
 }

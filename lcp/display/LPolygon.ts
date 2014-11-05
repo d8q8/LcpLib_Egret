@@ -32,8 +32,8 @@ module lcp{
 			}
 		}
 
-        public clone():LPolygon{
-            return arguments.callee(this.vars);
+        public clone(vars?:LPolygon):LPolygon{
+            return new LPolygon(vars?vars:this.vars);
         }
     }
 }

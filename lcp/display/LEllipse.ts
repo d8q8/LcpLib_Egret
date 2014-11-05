@@ -24,8 +24,8 @@ module lcp {
             this.graphics.drawEllipse(this.vars.width/2,this.vars.height/2,this.vars.width/2,this.vars.height/2);
         }
 
-        public clone():LEllipse{
-            return arguments.callee(this.vars);
+        public clone(vars?:IGraphics):LEllipse{
+            return new LEllipse(vars?vars:this.vars);
         }
     }
 }

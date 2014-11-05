@@ -20,7 +20,6 @@ module lcp {
          * @returns {string}
          */
         public toString():string {
-            console.log("ClassName", this.CLASS_NAME);
             return this.CLASS_NAME;
         }
     }

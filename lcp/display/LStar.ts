@@ -35,8 +35,8 @@ module lcp{
 			}
 		}
 
-        public clone():LStar{
-            return arguments.callee(this.vars);
+        public clone(vars?:IGraphics):LStar{
+            return new LStar(vars?vars:this.vars);
         }
     }
 }

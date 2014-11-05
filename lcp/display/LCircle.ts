@@ -26,8 +26,8 @@ module lcp{
             this.graphics.drawCircle(this.vars.radius, this.vars.radius, this.vars.radius);
         }
 
-        public clone():LCircle{
-            return arguments.callee(this.vars);
+        public clone(vars?:IGraphics):LCircle{
+            return new LCircle(vars?vars:this.vars);
         }
     }
 }

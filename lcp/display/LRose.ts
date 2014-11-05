@@ -42,8 +42,8 @@ module lcp {
             }
         }
 
-        public clone():LRose{
-            return arguments.callee(this.vars);
+        public clone(vars?:IGraphics):LRose{
+            return new LRose(vars?vars:this.vars);
         }
 
 
