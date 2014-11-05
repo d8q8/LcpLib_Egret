@@ -4,7 +4,7 @@
  * @class LStar
  * @constructor
  **/
-module Lcp{
+module lcp{
     /**
      * 绘制多角星
      */
@@ -13,8 +13,14 @@ module Lcp{
 
         constructor(vars?:IGraphics){
             super(vars);
-            this.vars.corner = vars.corner ? vars.corner : 5;
-            this.vars.ratio = vars.ratio ? vars.ratio : .5;
+
+            this.x = this.vars.x;
+            this.y = this.vars.y;
+            this.width = this.vars.width;
+            this.height = this.vars.height;
+            this.touchEnabled = this.vars.touchEnabled;
+            this.name = this.vars.name;
+            super.draw();
         }
 
 		public drawShape():void
@@ -30,7 +36,7 @@ module Lcp{
 		}
 
         public clone():LStar{
-            return new LStar(this.vars);
+            return arguments.callee(this.vars);
         }
     }
 }

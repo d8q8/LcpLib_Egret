@@ -4,7 +4,7 @@
  * @class LString
  * @constructor
  **/
-module Lcp {
+module lcp {
     /**
      * 字符处理类(暂未完善)
      */

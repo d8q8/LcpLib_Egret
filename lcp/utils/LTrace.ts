@@ -4,12 +4,13 @@
  * @class LTrace
  * @constructor
  */
-module Lcp{
+module lcp{
     /**
      * 跟踪捕获类(待完善)
      */
     export class LTrace{
-        constructor(){
+        public CLASS_NAME:string = "LTrace";
+        public constructor(){
 
         }
 
@@ -18,8 +19,17 @@ module Lcp{
          * @param message
          * @param optionalParams
          */
-        static trace(message?: any, ...optionalParams: any[]):void{
+        public static trace(message?: any, ...optionalParams: any[]):void{
             console.log(message, optionalParams);
         }
+
+        /**
+         * 类名
+         * @returns {string}
+         */
+        public toString():string {
+            return this.CLASS_NAME;
+        }
+
     }
 }

@@ -4,7 +4,7 @@
  * @class LEvent
  * @constructor
  */
-module Lcp{
+module lcp{
     /**
      * 自定义事件类
      */
@@ -18,8 +18,8 @@ module Lcp{
             }
         }
 
-        public clone():Lcp.LEvent{
-            return new Lcp.LEvent(this.type, this._obj, this.bubbles, this.cancelable);
+        public clone():LEvent{
+            return arguments.callee(this.type, this._obj, this.bubbles, this.cancelable);
         }
 
         public toString():void{
@@ -34,9 +34,5 @@ module Lcp{
             return this._obj;
         }
 
-        public static dispatchLEvent(target:egret.IEventDispatcher, type:string):void{
-            var eventClass:any = Lcp.LEvent;
-            egret.Event._dispatchByTarget(eventClass, target, type);
-        }
     }
 }

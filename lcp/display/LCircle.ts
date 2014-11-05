@@ -4,7 +4,7 @@
  * @class LCircle
  * @constructor
  **/
-module Lcp{
+module lcp{
     /**
      * 绘制圆形类
      */
@@ -13,17 +13,21 @@ module Lcp{
 
         constructor(vars?:IGraphics){
             super(vars);
-            this.width = vars.radius * 2;
-            this.height = vars.radius * 2;
-            this.vars.radius = vars.radius;
+
+            this.x = this.vars.x;
+            this.y = this.vars.y;
+            this.width = this.vars.radius * 2;
+            this.height = this.vars.radius * 2;
+            this.touchEnabled = this.vars.touchEnabled;
+            this.name = this.vars.name;
         }
 
         public drawShape():void{
-            this.graphics.drawCircle(this.vars.radius,this.vars.radius,this.vars.radius);
+            this.graphics.drawCircle(this.vars.radius, this.vars.radius, this.vars.radius);
         }
 
         public clone():LCircle{
-            return new LCircle(this.vars);
+            return arguments.callee(this.vars);
         }
     }
 }

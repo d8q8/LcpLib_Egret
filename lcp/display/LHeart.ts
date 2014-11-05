@@ -4,7 +4,7 @@
  * @class LHeart
  * @constructor
  **/
-module Lcp {
+module lcp {
     /**
      * 绘制心形
      * 笛卡尔心形 r = a(1 - sinθ)
@@ -14,8 +14,13 @@ module Lcp {
 
         constructor(vars?:IGraphics) {
             super(vars);
-            this.width = vars.radius * 2;
-            this.height = vars.radius * 2;
+
+            this.x = this.vars.x;
+            this.y = this.vars.y;
+            this.width = this.vars.radius * 2;
+            this.height = this.vars.radius * 2;
+            this.touchEnabled = this.vars.touchEnabled;
+            this.name = this.vars.name;
         }
 
         public drawShape():void{
@@ -33,12 +38,12 @@ module Lcp {
                 cos = Math.cos(angle);
                 dist = this.vars.radius * (1 - sin);
                 //将极坐标转化为直角坐标并画线
-                this.graphics.lineTo(this.vars.radius - dist * cos, - dist * sin);
+                this.graphics.lineTo(this.vars.radius - dist * cos, -dist * sin);
             }
         }
 
         public clone():LHeart{
-            return new LHeart(this.vars);
+            return arguments.callee(this.vars);
         }
     }
 }

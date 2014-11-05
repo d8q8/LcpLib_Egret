@@ -4,7 +4,7 @@
  * @class LRose
  * @constructor
  **/
-module Lcp {
+module lcp {
     /**
      * 绘制玫瑰
      * 玫瑰曲线 r = a*cos(Kθ)
@@ -14,9 +14,13 @@ module Lcp {
 
         constructor(vars?:IGraphics) {
             super(vars);
-            this.width = vars.radius * 2;
-            this.height = vars.radius * 2;
-            this.vars.petal = vars.petal ? vars.petal : 4;
+
+            this.x = this.vars.x;
+            this.y = this.vars.y;
+            this.width = this.vars.radius * 2;
+            this.height = this.vars.radius * 2;
+            this.touchEnabled = this.vars.touchEnabled;
+            this.name = this.vars.name;
         }
 
         public drawShape():void{
@@ -39,7 +43,7 @@ module Lcp {
         }
 
         public clone():LRose{
-            return new LRose(this.vars);
+            return arguments.callee(this.vars);
         }
 
 

@@ -1,14 +1,14 @@
 LcpLib_Egret
 ============
 
-Egret引擎的封装库v1.0.b(目前完美支持最新版egret1.1.2)
+Egret引擎的封装库v1.0.3(目前完美支持最新版egret1.1.2)
 
-<span style="color:#ff0000">(注:修正椭圆圆角实现,跟AS3保持一致)</span>
+<span style="color:#ff0000">(注:修正了根据官方偏移的问题)</span>
 
 目录结构如下
 
 <pre class="brush:ts;toolbar:false">
-Lcp
+lcp
 ├─data
 │   └─LVars         //全局变参类(待完善)
 ├─display
@@ -71,21 +71,21 @@ Lcp
 
 <pre class="brush:ts;toolbar:false">
 //圆
-var sp:Lcp.LCircle = new Lcp.LCircle({name:"sp",x:300,y:600,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+var sp = new lcp.LCircle({name:"sp",x:300,y:600,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //方
-//var sp:Lcp.LRect = new Lcp.LRect({name:"sp",x:300,y:600,width:400,height:300,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp= new lcp.LRect({name:"sp",x:300,y:600,width:400,height:300,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //圆角矩形
-//var sp:Lcp.LRoundRect = new Lcp.LRoundRect({name:"sp",x:300,y:600,width:400,height:300,ellipseWidth:100,ellipseHeight:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LRoundRect({name:"sp",x:300,y:600,width:400,height:300,ellipseWidth:100,ellipseHeight:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //椭圆
-//var sp:Lcp.LEllipse = new Lcp.LEllipse({name:"sp",x:300,y:600,width:200,height:100,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LEllipse({name:"sp",x:300,y:600,width:200,height:100,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //多边形,如三角形
-//var sp:Lcp.LPolygon = new Lcp.LPolygon({name:"sp",x:300,y:600,width:300,height:300,corner:3,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LPolygon({name:"sp",x:300,y:600,width:300,height:300,corner:3,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //心形
-//var sp:Lcp.LHeart = new Lcp.LHeart({name:"sp",x:200,y:400,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LHeart({name:"sp",x:200,y:400,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //玫瑰形,花瓣偶数翻倍,奇数不变
-//var sp:Lcp.LRose = new Lcp.LRose({name:"sp",x:200,y:350,radius:100,petal:4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LRose({name:"sp",x:200,y:350,radius:100,petal:4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 //多角星,如五角星
-//var sp:Lcp.LStar = new Lcp.LStar({name:"sp",x:300,y:600,width:300,height:300,corner:5,ratio:.4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LStar({name:"sp",x:300,y:600,width:300,height:300,corner:5,ratio:.4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
 this.addChild(sp);
 </pre>
 
@@ -97,9 +97,9 @@ sp.touchEnabled=true;//开启触点事件
 sp.addEventListener(egret.TouchEvent.TOUCH_TAP,(e)=>{
     console.log("我单击了圆",e.stageX,e.stageY);
     //全局侦听发送消息和自定义事件,这里的自定义事件,也可以自己封装成强类型即可,比如LEvent.MYCIRCLE
-    Lcp.LListener.getInstance().dispatchEvent(new Lcp.LEvent("mycircle",.1,false));
+    lcp.LListener.getInstance().dispatchEvent(new lcp.LEvent("mycircle",.1,false));
     //元件自身发送消息和自定义事件,同上
-    sp.dispatchEvent(new Lcp.LEvent("mycircle1",.5));
+    sp.dispatchEvent(new lcp.LEvent("mycircle1",.5));
 },this);
 //当前元件侦听自定义事件获取数据
 sp.addEventListener("mycircle1",(e)=>{
@@ -107,7 +107,7 @@ sp.addEventListener("mycircle1",(e)=>{
    sp.y=1000*parseFloat(e.param);
 },this);
 //全局侦听自定义事件获取数据
-Lcp.LListener.getInstance().addEventListener("mycircle",(e)=>{
+lcp.LListener.getInstance().addEventListener("mycircle",(e)=>{
     console.log(e.param);//同上
     sp.alpha=parseFloat(e.param);
 },this);

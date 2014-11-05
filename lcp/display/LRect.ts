@@ -4,7 +4,7 @@
  * @class LRect
  * @constructor
  **/
-module Lcp{
+module lcp{
     /**
      * 绘制矩形
      */
@@ -13,8 +13,13 @@ module Lcp{
 
         constructor(vars?:IGraphics){
             super(vars);
-            this.x = vars.x + vars.width/2;
-            this.y = vars.y + vars.height/2;
+
+            this.x = this.vars.x;
+            this.y = this.vars.y;
+            this.width = this.vars.width;
+            this.height = this.vars.height;
+            this.touchEnabled = this.vars.touchEnabled;
+            this.name = this.vars.name;
         }
 
         public drawShape():void{
@@ -22,7 +27,7 @@ module Lcp{
         }
 
         public clone():LRect{
-            return new LRect(this.vars);
+            return arguments.callee(this.vars);
         }
     }
 }

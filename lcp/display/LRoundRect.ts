@@ -4,7 +4,7 @@
  * @class LRoundRect
  * @constructor
  **/
-module Lcp {
+module lcp {
     /**
      * 绘制圆角矩形
      */
@@ -13,10 +13,14 @@ module Lcp {
 
         constructor(vars?:IGraphics){
             super(vars);
-            this.x = vars.x + vars.width / 2;
-            this.y = vars.y + vars.height / 2;
-            this.vars.ellipseWidth = vars.ellipseWidth ? vars.ellipseWidth : 5;
-            this.vars.ellipseHeight = vars.ellipseHeight ? vars.ellipseHeight : vars.ellipseWidth;
+
+            this.x = this.vars.x;
+            this.y = this.vars.y;
+            this.width = this.vars.width;
+            this.height = this.vars.height;
+            this.touchEnabled = this.vars.touchEnabled;
+            this.name = this.vars.name;
+
         }
 
         public drawShape():void{
@@ -24,7 +28,7 @@ module Lcp {
         }
 
         public clone():LRoundRect{
-            return new LRoundRect(this.vars);
+            return arguments.callee(this.vars);
         }
     }
 }

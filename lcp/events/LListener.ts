@@ -4,7 +4,7 @@
  * @class LListener
  * @constructor
  */
-module Lcp{
+module lcp{
     /**
      * 全局侦听类及消息处理
      */
@@ -21,7 +21,7 @@ module Lcp{
 
         public static getInstance():LListener{
             if(this._instance==null)
-                this._instance = new Lcp.LListener();
+                this._instance = arguments.callee();
             return this._instance;
         }
 
@@ -43,7 +43,7 @@ module Lcp{
 			return this._dispatcher.willTrigger(type);
 		}
 
-        public dispatchEvent(event:Lcp.LEvent):boolean {
+        public dispatchEvent(event:LEvent):boolean {
 			return this._dispatcher.dispatchEvent(event);
 		}
 

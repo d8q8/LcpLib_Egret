@@ -4,11 +4,11 @@
  * @class LGlobal
  * @constructor
  **/
-module Lcp {
+module lcp {
     export class LGlobal {
         public CLASS_NAME:string = "LGlobal";
 
-        private static _app:Object;
+        public static _app:Object;
         public static get app():Object{
             return this._app;
         }
@@ -16,7 +16,7 @@ module Lcp {
             this._app = value;
         }
 
-        private static _root:egret.DisplayObjectContainer;
+        public static _root:egret.DisplayObjectContainer;
         public static get root():egret.DisplayObjectContainer{
             return this._root;
         }
@@ -24,7 +24,7 @@ module Lcp {
             this._root = value;
         }
 
-        private static _stage:egret.Stage;
+        public static _stage:egret.Stage;
         public static get stage():egret.Stage{
             return this._stage;
         }

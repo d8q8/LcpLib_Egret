@@ -4,7 +4,7 @@
  * @class IGraphics
  * @constructor
  **/
-module Lcp {
+module lcp {
     /**
      * 绘图基本属性接口
      */
@@ -17,6 +17,7 @@ module Lcp {
         height?:number;//元件高度
         anchorX?:number;//元件x锚点,旋转时会用到
         anchorY?:number;//元件y锚点,旋转时会用到
+        touchEnabled?:boolean;//是否有触点事件
         //样式属性
         thickness?:number;//一个整数，以点为单位表示线条的粗细，有效值为 0 到 255.
         linecolor?:number;//线条的十六进制颜色值（例如，红色为 0xFF0000，蓝色为 0x0000FF 等）。
@@ -37,6 +38,8 @@ module Lcp {
         ratio?:number;//多角星比率
 
         petal?:number;//花瓣数,偶数翻倍,奇数不变
+
+
     }
 
 }
