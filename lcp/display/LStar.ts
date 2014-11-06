@@ -12,15 +12,10 @@ module lcp{
         public CLASS_NAME:string = "LStar";
 
         public constructor(vars?:IGraphics){
-            super(vars);
-
-            this.x = this.vars.x;
-            this.y = this.vars.y;
-            this.width = this.vars.width;
-            this.height = this.vars.height;
-            this.touchEnabled = this.vars.touchEnabled;
-            this.name = this.vars.name;
-            super.draw();
+            super();
+            if(vars){
+                super.init(vars);
+            }
         }
 
 		public drawShape():void

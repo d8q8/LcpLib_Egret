@@ -10,15 +10,12 @@ module lcp {
      */
     export class LEllipse extends LGraphics{
         public CLASS_NAME:string = "LEllipse";
-        public constructor(vars?:IGraphics) {
-            super(vars);
 
-            this.x = this.vars.x;
-            this.y = this.vars.y;
-            this.width = this.vars.width;
-            this.height = this.vars.height;
-            this.touchEnabled = this.vars.touchEnabled;
-            this.name = this.vars.name;
+        public constructor(vars?:IGraphics) {
+            super();
+            if(vars){
+                super.init(vars);
+            }
         }
         public drawShape():void{
             this.graphics.drawEllipse(this.vars.width/2,this.vars.height/2,this.vars.width/2,this.vars.height/2);

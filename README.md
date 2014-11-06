@@ -26,9 +26,12 @@ lcp
 │   └─LListener     //全局侦听消息类
 ├─interfaces
 │   ├─GraphicsType  //绘制枚举类(暂未用到)
+│   ├─IActivatable  //激活类(暂未用到)
+│   ├─IDisposable   //销毁类(暂未用到)
 │   └─IGraphics     //绘制图形接口类
 └─utils
     ├─LGlobal       //全局静态类
+    ├─LHelper       //辅助帮助类
     ├─LString       //字符处理类(待完善)
     └─LTrace        //跟踪捕获类(待完善)
 </pre>
@@ -72,21 +75,21 @@ lcp
 
 <pre class="brush:ts;toolbar:false">
 //圆
-var sp = new lcp.LCircle({name:"sp",x:300,y:600,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+var sp = new lcp.LCircle({name:"sp",x:100,y:200,radius:100,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 //方
-//var sp= new lcp.LRect({name:"sp",x:300,y:600,width:400,height:300,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp= new lcp.LRect({name:"sp",x:100,y:200,width:200,height:100,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 //圆角矩形
-//var sp = new lcp.LRoundRect({name:"sp",x:300,y:600,width:400,height:300,ellipseWidth:100,ellipseHeight:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LRoundRect({name:"sp",x:100,y:200,width:200,height:100,ellipseWidth:30,ellipseHeight:20,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 //椭圆
-//var sp = new lcp.LEllipse({name:"sp",x:300,y:600,width:200,height:100,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LEllipse({name:"sp",x:100,y:200,width:200,height:100,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 //多边形,如三角形
-//var sp = new lcp.LPolygon({name:"sp",x:300,y:600,width:300,height:300,corner:3,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LPolygon({name:"sp",x:100,y:200,width:200,height:200,corner:3,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 //心形
-//var sp = new lcp.LHeart({name:"sp",x:200,y:400,radius:50,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LHeart({name:"sp",x:100,y:200,radius:100,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 //玫瑰形,花瓣偶数翻倍,奇数不变
-//var sp = new lcp.LRose({name:"sp",x:200,y:350,radius:100,petal:4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LRose({name:"sp",x:100,y:200,radius:100,petal:4,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 //多角星,如五角星
-//var sp = new lcp.LStar({name:"sp",x:300,y:600,width:300,height:300,corner:5,ratio:.4,fillcolor:0xff0000,thickness:10,linecolor:0x00ff00});
+//var sp = new lcp.LStar({name:"sp",x:100,y:200,width:200,height:200,corner:5,ratio:.4,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 this.addChild(sp);
 </pre>
 

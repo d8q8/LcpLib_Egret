@@ -13,15 +13,31 @@ module lcp {
 
         public constructor(public vars?:IGraphics) {
             super();
-            this.initValue();
+            this.vars = {};
+            this.initValue();//初始化属性值
+        }
+
+        /**
+         * 初始化图形子类处理方法
+         * @param vars
+         */
+        public init(vars?:IGraphics){
             if(vars){
-                this.init(vars);
+                LVars.some(this.vars,vars);
+                this.x = this.vars.x;
+                this.y = this.vars.y;
+                this.name = this.vars.name;
+                this.width = this.vars.width;
+                this.height = this.vars.height;
+                this.touchEnabled = this.vars.touchEnabled;
             }
             this.draw();
         }
 
+        /**
+         * 初始化默认值
+         */
         public initValue():void{
-            this.vars = {};
             this.vars.x = 0;
             this.vars.y = 0;
             this.vars.name = this.CLASS_NAME;
@@ -44,17 +60,16 @@ module lcp {
             this.vars.fillalpha = 1;
 
             this.vars.radius = 5;
-            this.vars.ellipseWidth = 5;
+            this.vars.ellipseWidth = 20;
             this.vars.ellipseHeight = this.vars.ellipseWidth;
             this.vars.corner = 3;
             this.vars.ratio = .5;
             this.vars.petal = 4;
         }
 
-        public init(vars:IGraphics):void{
-            LVars.some(this.vars,vars);
-        }
-
+        /**
+         * 绘制图形
+         */
         public draw():void {
             this.graphics.clear();
             this.graphics.lineStyle(this.vars.thickness, this.vars.linecolor, this.vars.linealpha, this.vars.pixelHinting, this.vars.scaleMode, this.vars.caps, this.vars.joints, this.vars.miterLimit);
@@ -63,6 +78,9 @@ module lcp {
             this.graphics.endFill();
         }
 
+        /**
+         * 重写图形方法
+         */
         public drawShape():void {
 
         }

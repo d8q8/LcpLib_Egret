@@ -14,7 +14,7 @@ module lcp{
         public _vars:Object;
         public constructor(vars?:Object) {
             this._vars = {};
-            if(vars != null){
+            if(vars){
                 for(var p in vars){
                     this._vars[p] = vars[p];
                 }
@@ -35,27 +35,37 @@ module lcp{
             return this._vars;
         }
 
-
-        public static some($target:Object,$proper:Object):void
+        /**
+         * 简单遍历并调用对象集属性
+         * @param $target
+         * @param $proper
+         *
+         * 使用方法如下:
+         * --CODE: lcp.LVars.some(mc1, {alpha:0, scaleX:.5 ,touchEnabled:true});
+         */
+        public static some($target:any,$proper?:any):void
         {
-            for (var properties in $proper )
-            {
-                if ($target.hasOwnProperty(properties))
-                {
-                    $target[properties] = $proper[properties];
-                    if ($proper[properties] != null)
-                    {
-                        if ($proper[properties] instanceof Array)
-                        {
-                            $target[properties].apply(null, $proper[properties]);
+            if(!$proper) return;
+            for (var properties in $proper ){
+                if ($target.hasOwnProperty(properties)){
+                    try {
+                        $target[properties] = $proper[properties];
+                    }catch (e){
+                        if ($proper[properties] != null){
+                            if ($proper[properties] instanceof Array){
+                                try {
+                                    $target[properties].apply(null, $proper[properties]);
+                                }catch (e){}
+                            }else{
+                                $target[properties]($proper[properties]);
+                            }
+                        }else {
+                            $target[properties]();
                         }
                     }
                 }
             }
         }
-
-
-
 
     }
 }

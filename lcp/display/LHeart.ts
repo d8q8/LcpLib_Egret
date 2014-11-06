@@ -13,14 +13,12 @@ module lcp {
         public CLASS_NAME:string = 'LHeart';
 
         public constructor(vars?:IGraphics) {
-            super(vars);
-
-            this.x = this.vars.x;
-            this.y = this.vars.y;
-            this.width = this.vars.radius * 2;
-            this.height = this.vars.radius * 2;
-            this.touchEnabled = this.vars.touchEnabled;
-            this.name = this.vars.name;
+            super();
+            if(vars){
+                vars.width = vars.radius * 2;
+                vars.height = vars.radius * 2;
+                super.init(vars);
+            }
         }
 
         public drawShape():void{
