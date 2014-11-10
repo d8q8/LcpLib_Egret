@@ -30,6 +30,7 @@ lcp
 │   ├─IDisposable   //销毁类(暂未用到)
 │   └─IGraphics     //绘制图形接口类
 └─utils
+    ├─LArray        //数组处理类(暂时处理升/降序/字段排序/自定义排序)
     ├─LGlobal       //全局静态类
     ├─LHelper       //辅助帮助类
     ├─LString       //字符处理类(待完善)
