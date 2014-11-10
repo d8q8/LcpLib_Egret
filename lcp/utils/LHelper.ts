@@ -11,6 +11,7 @@ module lcp {
         UP_LAYER = Number.POSITIVE_INFINITY,
         DOWN_LAYER = Number.NEGATIVE_INFINITY
     }
+
     /**
      * 辅助帮助类
      */
@@ -35,7 +36,7 @@ module lcp {
          */
         public static addChildAndInit($container:egret.DisplayObjectContainer, $target:egret.DisplayObject, $proper?:Object, $depth:number = -1 ):any{
             $container.addChild($target);
-            lcp.LVars.some($target, $proper);
+            LVars.some($target, $proper);
 
             if ($depth != -1)
                 LHelper.toLayer($target, $depth);
