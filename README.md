@@ -118,6 +118,32 @@ lcp.LListener.getInstance().addEventListener("mycircle",(e)=>{
 },this);
 </pre>
 
+4> 数组排序处理
+<pre class="brush:ts;toolbar:false">
+//数字数组排序
+var num_Arr = [1,22,14,2,54,21,6,8,3,9];
+lcp.LArray.sort(num_Arr);//默认升序
+//lcp.LArray.sort(num_Arr,lcp.OrderByType.DESCENDING);//降序
+console.log(num_Arr);
+
+//字符数组排序
+var str_Arr:Array<string> = ["AAA","son","baby","123456","hellokitty"];
+lcp.LArray.sort(str_Arr);//默认升序
+//lcp.LArray.sort(str_Arr,lcp.OrderByType.DESCENDING);//降序
+console.log(str_Arr);
+
+//字典数组排序
+var key_Arr:Array<any> = [
+    {name:"George", age:32, retiredate:"March 12, 2014"},
+    {name:"Edward", age:17, retiredate:"June 2, 2023"},
+    {name:"Christine", age:58, retiredate:"December 20, 2036"},
+    {name:"Sarah", age:62, retiredate:"April 30, 2020"}
+];
+lcp.LArray.sortOn(key_Arr,"age");//默认升序
+//lcp.LArray.sortOn(key_Arr,"age",lcp.OrderByType.DESCENDING);//降序
+console.log(key_Arr);
+</pre>
+
 使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. <br />
 <a href="http://bbs.egret-labs.org/thread-592-1-1.html" target="_blank">
 http://bbs.egret-labs.org/thread-592-1-1.html
