@@ -10,7 +10,6 @@ module lcp {
         Rect,
         Ellipse,
         Polygon,
-        Ellipse,
         Rose,
         RoundRect,
         Star,
