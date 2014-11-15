@@ -1,7 +1,7 @@
 LcpLib_Egret
 ============
 
-Egret引擎的封装库v1.0.3(目前完美支持最新版egret1.1.2)
+Egret引擎的封装库v1.0.4(目前完美支持最新版egret1.1.3)
 
 <span style="color:#ff0000">(注:修正了根据官方偏移的问题)</span>
 
