@@ -31,6 +31,7 @@ lcp
 │   └─IGraphics     //绘制图形接口类
 └─utils
     ├─LArray        //数组处理类(暂时处理升/降序/字段排序/自定义排序)
+    ├─LDictionary   //字典类
     ├─LGlobal       //全局静态类
     ├─LHelper       //辅助帮助类
     ├─LString       //字符处理类(待完善)
@@ -142,6 +143,19 @@ var key_Arr:Array<any> = [
 lcp.LArray.sortOn(key_Arr,"age");//默认升序
 //lcp.LArray.sortOn(key_Arr,"age",lcp.OrderByType.DESCENDING);//降序
 console.log(key_Arr);
+</pre>
+
+5> 字典类用法
+<pre class="brush:ts;toolbar:false">
+//字典类用法
+var dic = new lcp.LDictionary({"d":4});
+dic.set("a",1);
+dic.set("b",2);
+dic.set("c","3");
+if(dic.has("c")){
+    dic.remove("c");
+}
+console.log(dic,dic.get("d"));
 </pre>
 
 使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. <br />
