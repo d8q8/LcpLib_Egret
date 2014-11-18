@@ -40,7 +40,7 @@ module lcp {
             }
         }
 
-        public clone(vars?:LHeart):LHeart{
+        public clone(vars?:IGraphics):LHeart{
             return new LHeart(vars?vars:this.vars);
         }
     }

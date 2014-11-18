@@ -5,21 +5,26 @@
  * @constructor
  **/
 module lcp {
+    interface IActivatable{
+        isActive: boolean;
+        activate():void;
+        deactivate():void;
+    }
     /**
      * 激活类
      */
-    export class IActivatable {
-        public CLASS_NAME:string = "IActivatable";
+    export class Activatable implements IActivatable{
+        public CLASS_NAME:string = "Activatable";
         public isActive: boolean;
 
         public constructor() {
 
         }
 
-        public activate() {
+        public activate():void {
             this.isActive = true;
         }
-        public deactivate() {
+        public deactivate():void {
             this.isActive = false;
         }
 

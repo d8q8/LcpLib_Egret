@@ -9,6 +9,14 @@ Egret引擎的封装库v1.0.4(目前完美支持最新版egret1.1.3)
 
 <pre class="brush:ts;toolbar:false">
 lcp
+├─collection
+│   ├─IList         //列表接口类
+│   └─List          //列表类
+├─core
+│   ├─Activatable   //激活类(暂未用到)
+│   ├─Disposable    //销毁类(暂未用到)
+│   ├─Resumable     //恢复类(暂未用到)
+│   └─Runnable      //运行类(暂未用到)
 ├─data
 │   └─LVars         //全局变参类(待完善)
 ├─display
@@ -26,11 +34,13 @@ lcp
 │   └─LListener     //全局侦听消息类
 ├─interfaces
 │   ├─GraphicsType  //绘制枚举类(暂未用到)
-│   ├─IActivatable  //激活类(暂未用到)
-│   ├─IDisposable   //销毁类(暂未用到)
 │   └─IGraphics     //绘制图形接口类
+├─math
+│   └─Percent       //百分比类
 └─utils
-    ├─LArray        //数组处理类(暂时处理升/降序/字段排序/自定义排序)
+    ├─ArrayUtil     //数组工具类
+    ├─NumberUtil    //数字工具类
+    ├─LOrder        //排序类(暂时处理升/降序/字段排序/自定义排序)
     ├─LDictionary   //字典类
     ├─LGlobal       //全局静态类
     ├─LHelper       //辅助帮助类
@@ -123,14 +133,14 @@ lcp.LListener.getInstance().addEventListener("mycircle",(e)=>{
 <pre class="brush:ts;toolbar:false">
 //数字数组排序
 var num_Arr = [1,22,14,2,54,21,6,8,3,9];
-lcp.LArray.sort(num_Arr);//默认升序
-//lcp.LArray.sort(num_Arr,lcp.OrderByType.DESCENDING);//降序
+lcp.LOrder.sort(num_Arr);//默认升序
+//lcp.LOrder.sort(num_Arr,lcp.OrderByType.DESCENDING);//降序
 console.log(num_Arr);
 
 //字符数组排序
 var str_Arr:Array<string> = ["AAA","son","baby","123456","hellokitty"];
-lcp.LArray.sort(str_Arr);//默认升序
-//lcp.LArray.sort(str_Arr,lcp.OrderByType.DESCENDING);//降序
+lcp.LOrder.sort(str_Arr);//默认升序
+//lcp.LOrder.sort(str_Arr,lcp.OrderByType.DESCENDING);//降序
 console.log(str_Arr);
 
 //字典数组排序
@@ -140,8 +150,8 @@ var key_Arr:Array<any> = [
     {name:"Christine", age:58, retiredate:"December 20, 2036"},
     {name:"Sarah", age:62, retiredate:"April 30, 2020"}
 ];
-lcp.LArray.sortOn(key_Arr,"age");//默认升序
-//lcp.LArray.sortOn(key_Arr,"age",lcp.OrderByType.DESCENDING);//降序
+lcp.LOrder.sortOn(key_Arr,"age");//默认升序
+//lcp.LOrder.sortOn(key_Arr,"age",lcp.OrderByType.DESCENDING);//降序
 console.log(key_Arr);
 </pre>
 

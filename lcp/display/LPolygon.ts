@@ -29,7 +29,7 @@ module lcp{
 			}
 		}
 
-        public clone(vars?:LPolygon):LPolygon{
+        public clone(vars?:IGraphics):LPolygon{
             return new LPolygon(vars?vars:this.vars);
         }
     }

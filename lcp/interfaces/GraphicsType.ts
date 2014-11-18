@@ -5,7 +5,7 @@
  * @constructor
  **/
 module lcp {
-    enum GraphicsType{
+    export enum GraphicsType{
         Circle,
         Rect,
         Ellipse,

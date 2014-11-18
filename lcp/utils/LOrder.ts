@@ -1,7 +1,7 @@
 /**
- * Created by d8q8 on 2014/11/7.
+ * Created by d8q8 on 2014/11/18.
  * @module Lcp
- * @class LArray
+ * @class LOrder
  * @constructor
  **/
 module lcp {
@@ -13,8 +13,8 @@ module lcp {
         NUMERIC = 16                //指定 Array 类排序方法为数值（而不是字符串）排序。
     }
 
-    export class LArray {
-        public CLASS_NAME:string = "LArray";
+    export class LOrder {
+        public CLASS_NAME:string = "LOrder";
 
         public constructor() {
 
@@ -67,15 +67,15 @@ module lcp {
                 }
                 else {
                     if(orderBy == OrderByType.DESCENDING){
-                        temp_arr.sort(LArray.desc);
+                        temp_arr.sort(LOrder.desc);
                     }
                     else{
-                        temp_arr.sort(LArray.asc);
+                        temp_arr.sort(LOrder.asc);
                     }
                 }
             }
             else{
-                temp_arr.sort(LArray.asc);
+                temp_arr.sort(LOrder.asc);
             }
             return temp_arr;
         }
@@ -100,15 +100,15 @@ module lcp {
                         }
                         else {
                             if(orderBy == OrderByType.DESCENDING){
-                                return LArray.desc(a,b);
+                                return LOrder.desc(a,b);
                             }
                             else{
-                                return LArray.asc(a,b);
+                                return LOrder.asc(a,b);
                             }
                         }
                     }
                     else{
-                        return LArray.asc(a,b);
+                        return LOrder.asc(a,b);
                     }
                 }
                 else {
