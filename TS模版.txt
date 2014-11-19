@@ -1,0 +1,78 @@
+
+1>TS类模版
+/**
+ * Created by ${USER} on ${DATE}.
+ * @class ${NAME}
+ * @constructor
+ **/
+class ${NAME} {
+    private CLASS_NAME:string = "${NAME}";
+    public constructor() {
+        this.init();
+    }
+    /**
+    * 初始化
+    **/
+    private init(){
+        //todo code
+        
+    }
+    /**
+     * 类名
+     * @returns {string}
+     */
+    public toString():string{
+        //console.log("ClassName",this.CLASS_NAME);
+        return this.CLASS_NAME;
+    }
+}
+
+2>TS枚举类模版
+/**
+ * Created by ${USER} on ${DATE}.
+ * @module lcp
+ * @class ${NAME}
+ * @constructor
+ **/
+module lcp{
+    export enum ${NAME} {
+        
+    }
+}
+
+3>TS接口类模版
+/**
+ * Created by ${USER} on ${DATE}.
+ * @module lcp
+ * @class ${NAME}
+ * @constructor
+ **/
+module lcp{
+    export interface ${NAME} {
+        constructor()
+    }
+}
+
+4>TS模块类模版
+/**
+ * Created by ${USER} on ${DATE}.
+ * @module lcp
+ * @class ${NAME}
+ * @constructor
+ **/
+module lcp{
+    export class ${NAME} {
+        public CLASS_NAME:string = "${NAME}";
+        public constructor() {
+            
+        }
+        /**
+         * 类名
+         * @returns {string}
+         */
+        public toString():string{
+            //console.log("ClassName",this.CLASS_NAME);
+            return this.CLASS_NAME;
+        }
+    }
+}
