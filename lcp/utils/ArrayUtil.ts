@@ -62,7 +62,7 @@ module lcp {
          *        ];
          *        var blondeFemales = ArrayUtil.getItemsByKeys(people, {sex: "Female", hair: "Brown"});
          *        for (var p in blondeFemales) {
-		 *			console.log(p.name);
+		 *			console.log(blondeFemales[p].name);
 		 *		}
          *    </code>
          *
@@ -137,7 +137,7 @@ module lcp {
          *        var brownOrFemales = lcp.ArrayUtil.getItemsByAnyKey(people, {sex: "Female", hair: "Brown"});
          *
          *        for (var p in brownOrFemales) {
-		 *			console.log(p.name);
+		 *			console.log(brownOrFemales[p].name);
 		 *		}
          *    </code>
          *
@@ -299,7 +299,7 @@ module lcp {
             var args:Array<any> = items.concat();
             args.splice(0, 0, index, 0);
 
-            tarArray.splice.apply(null, args);
+            tarArray.splice.apply(tarArray, args);
 
             return true;
         }
@@ -526,10 +526,10 @@ module lcp {
             var t:Array<any> = [];
             var r:Array<any> = inArray.sort(ArrayUtil._sortRandom);
             var i:number = -1;
-
-            while (++i < inArray.length)
-                t.push(inArray[r[i]]);
-
+            var l:number = inArray.length;
+            while (++i < l){
+                t.push(r[i]);
+            }
             return t;
         }
 
@@ -588,7 +588,7 @@ module lcp {
          *
          */
         public static getLowestValue(inArray:Array<any>):number {
-            return inArray[LOrder.sort(inArray)[0]];
+            return inArray[LOrder.index(inArray).sort()[0]];
         }
 
         /**
@@ -603,7 +603,7 @@ module lcp {
          *
          */
         public static getHighestValue(inArray:Array<any>):number {
-            return inArray[LOrder.sort(inArray)[inArray.length - 1]];
+            return inArray[LOrder.index(inArray).sort(LOrder.desc)[0]];
         }
 
         /**

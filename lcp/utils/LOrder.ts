@@ -26,7 +26,7 @@ module lcp {
          * @param b
          * @returns {number}
          */
-        private static desc(a:Object,b:Object):number{
+        public static desc(a:Object,b:Object):number{
             if (a === b) {
                 return 0;
             }
@@ -42,7 +42,7 @@ module lcp {
          * @param b
          * @returns {number}
          */
-        private static asc(a:Object,b:Object):number{
+        public static asc(a:Object,b:Object):number{
             if (a === b) {
                 return 0;
             }
@@ -50,6 +50,32 @@ module lcp {
                 return a < b ? -1 : 1;
             }
             return typeof a < typeof b ? -1 : 1;
+        }
+
+        /**
+         * 获取数组中选定值索引值
+         * @param arr
+         * @param val
+         * @returns {number}
+         */
+        public static indexOf(arr:Array<any>, val:any):number{
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i] == val) return i;
+            }
+            return -1;
+        }
+
+        /**
+         * 获取数组的索引值数组
+         * @param arr
+         * @returns {Array<any>}
+         */
+        public static index(arr:Array<any>):Array<any>{
+            var temp_arr:Array<any> = [];
+            for (var i = 0; i < arr.length; i++) {
+                temp_arr[i] = i;
+            }
+            return temp_arr;
         }
 
         /**
@@ -68,6 +94,9 @@ module lcp {
                 else {
                     if(orderBy == OrderByType.DESCENDING){
                         temp_arr.sort(LOrder.desc);
+                    }
+                    else if(orderBy == OrderByType.RETURNINDEXEDARRAY){
+                        LOrder.index(temp_arr);
                     }
                     else{
                         temp_arr.sort(LOrder.asc);
@@ -101,6 +130,9 @@ module lcp {
                         else {
                             if(orderBy == OrderByType.DESCENDING){
                                 return LOrder.desc(a,b);
+                            }
+                            else if(orderBy == OrderByType.RETURNINDEXEDARRAY){
+                                LOrder.index(temp_arr);
                             }
                             else{
                                 return LOrder.asc(a,b);
