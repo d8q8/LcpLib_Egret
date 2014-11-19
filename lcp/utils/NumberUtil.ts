@@ -1,10 +1,16 @@
+/**
+ * Created by d8q8 on 2014/11/18.
+ * @module lcp
+ * @class ArrayUtil
+ * @constructor
+ **/
 module lcp {
 
     /**
-     * 数字工具类
+     * 算术工具类
      */
     export class NumberUtil {
-
+        public CLASS_NAME:string = "NumberUtil";
         /**
          * 如果两值相等,由精度定义决定
          * @param val1 值1
@@ -492,6 +498,15 @@ module lcp {
                 return 'Zero';
 
             return spelling;
+        }
+
+        /**
+         * 类名
+         * @returns {string}
+         */
+        public toString():string {
+            //console.log("ClassName",this.CLASS_NAME);
+            return this.CLASS_NAME;
         }
     }
 }

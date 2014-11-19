@@ -39,7 +39,7 @@ lcp
 │   └─Percent       //百分比类
 └─utils
     ├─ArrayUtil     //数组工具类
-    ├─NumberUtil    //数字工具类
+    ├─NumberUtil    //算术工具类
     ├─LOrder        //排序类(暂时处理升/降序/字段排序/自定义排序)
     ├─LDictionary   //字典类
     ├─LGlobal       //全局静态类
