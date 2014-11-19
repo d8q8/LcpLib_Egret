@@ -117,6 +117,15 @@ module lcp {
         }
 
         /**
+         * 判断是否数字
+         * @param value
+         * @returns {boolean}
+         */
+        public static isNumber(value:any):Boolean {
+            return typeof(value) === "number" && !isNaN(value);
+        }
+
+        /**
          * 判断一个数是否是整数
          * @param value
          * @returns {boolean}
