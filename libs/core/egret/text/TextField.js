@@ -128,7 +128,7 @@ var egret;
              * 表示字段是否为多行文本字段。
              * 如果值为 true，则文本字段为多行文本字段；如果值为 false，则文本字段为单行文本字段。在类型为 TextFieldType.INPUT 的字段中，multiline 值将确定 Enter 键是否创建新行（如果值为 false，则将忽略 Enter 键）。
              * 默认值为 false。
-             * @member {number} egret.TextField#multiline
+             * @member {boolean} egret.TextField#multiline
              */
             this._multiline = false;
             this.measuredWidths = [];
@@ -513,9 +513,13 @@ var egret;
         TextField.prototype.drawText = function (renderContext, forMeasure) {
             var lines = this.getTextLines(renderContext);
             if (!lines) {
+                this._numLines = 0;
+                this._textHeight = 0;
+                this._textWidth = 0;
                 return egret.Rectangle.identity.initialize(0, 0, 0, 0);
             }
             var length = lines.length;
+            this._numLines = length;
             var drawY = this._size * 0.5;
             var hGap = this._size + this._lineSpacing;
             var textHeight = length * hGap - this._lineSpacing;
@@ -530,7 +534,7 @@ var egret;
                 drawY += valign * (explicitHeight - textHeight);
             }
             drawY = Math.round(drawY);
-            var minY = drawY;
+            //            var minY:number = drawY;
             var halign = 0;
             if (this._textAlign == egret.HorizontalAlign.CENTER) {
                 halign = 0.5;
@@ -546,20 +550,19 @@ var egret;
             else {
                 maxWidth = this._textWidth;
             }
-            var minX = Number.POSITIVE_INFINITY;
             for (var i = 0; i < length; i++) {
                 var line = lines[i];
                 var measureW = measuredWidths[i];
                 var drawX = Math.round((maxWidth - measureW) * halign);
-                if (drawX < minX) {
-                    minX = drawX;
-                }
+                //                if (drawX < minX) {
+                //                    minX = drawX;
+                //                }
                 if (!forMeasure && drawY < explicitHeight) {
                     renderContext.drawText(this, line, drawX, drawY, maxWidth);
                 }
                 drawY += hGap;
             }
-            return egret.Rectangle.identity.initialize(minX, minY, maxWidth, textHeight);
+            return egret.Rectangle.identity.initialize(0, 0, maxWidth, textHeight);
         };
         TextField.prototype.getTextLines = function (renderContext) {
             var text = this._drawText ? this._drawText.toString() : "";

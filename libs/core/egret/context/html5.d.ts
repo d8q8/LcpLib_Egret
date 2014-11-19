@@ -57,7 +57,7 @@ declare module egret {
 }
 declare module egret_html5_localStorage {
     function getItem(key: string): string;
-    function setItem(key: string, value: string): void;
+    function setItem(key: string, value: string): boolean;
     function removeItem(key: string): void;
     function clear(): void;
     function init(): void;

@@ -132,7 +132,8 @@ var egret;
         HTML5TouchContext.prototype.inOutOfCanvas = function (event) {
             var location = this.getLocation(this.rootDiv, event);
             var x = location.x, y = location.y;
-            if (x < 0 || y < 0 || x > egret.MainContext.instance.stage.width || y > egret.MainContext.instance.stage.height) {
+            var stage = egret.MainContext.instance.stage;
+            if (x < 0 || y < 0 || x > stage.stageWidth || y > stage.stageHeight) {
                 return true;
             }
             return false;

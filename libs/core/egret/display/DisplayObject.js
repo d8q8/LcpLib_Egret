@@ -638,6 +638,10 @@ var egret;
             var rect = this._measureBounds();
             var w = this._hasWidthSet ? this._explicitWidth : rect.width;
             var h = this._hasHeightSet ? this._explicitHeight : rect.height;
+            //记录测量宽高
+            this._rectW = rect.width;
+            this._rectH = rect.height;
+            this._clearSizeDirty();
             var x = rect.x;
             var y = rect.y;
             var anchorX = 0, anchorY = 0;
@@ -848,7 +852,6 @@ var egret;
             egret.DisplayObjectContainer.__EVENT__ADD_TO_STAGE_LIST.push(this);
         };
         DisplayObject.prototype._onRemoveFromStage = function () {
-            this._stage = null;
             egret.DisplayObjectContainer.__EVENT__REMOVE_FROM_STAGE_LIST.push(this);
         };
         Object.defineProperty(DisplayObject.prototype, "stage", {
@@ -872,7 +875,7 @@ var egret;
             var isEnterFrame = (type == egret.Event.ENTER_FRAME);
             if (isEnterFrame || type == egret.Event.RENDER) {
                 var list = isEnterFrame ? DisplayObject._enterFrameCallBackList : DisplayObject._renderCallBackList;
-                this._insertEventBin(list, listener, thisObject, priority);
+                this._insertEventBin(list, listener, thisObject, priority, this);
             }
         };
         DisplayObject.prototype.removeEventListener = function (type, listener, thisObject, useCapture) {
@@ -881,7 +884,7 @@ var egret;
             var isEnterFrame = (type == egret.Event.ENTER_FRAME);
             if (isEnterFrame || type == egret.Event.RENDER) {
                 var list = isEnterFrame ? DisplayObject._enterFrameCallBackList : DisplayObject._renderCallBackList;
-                this._removeEventBin(list, listener, thisObject);
+                this._removeEventBin(list, listener, thisObject, this);
             }
         };
         DisplayObject.prototype.dispatchEvent = function (event) {

@@ -117,9 +117,14 @@ var egret;
                 if (!document[hidden]) {
                     onFocusHandler();
                 }
+                else {
+                    onBlurHandler();
+                }
             };
-            window.onfocus = onFocusHandler;
-            window.onblur = onBlurHandler;
+            //            window.onfocus = onFocusHandler;
+            //            window.onblur = onBlurHandler;
+            window.addEventListener("focus", onFocusHandler, false);
+            window.addEventListener("blur", onBlurHandler, false);
             var hidden, visibilityChange;
             if (typeof document.hidden !== "undefined") {
                 hidden = "hidden";
@@ -136,6 +141,10 @@ var egret;
             else if (typeof document["webkitHidden"] !== "undefined") {
                 hidden = "webkitHidden";
                 visibilityChange = "webkitvisibilitychange";
+            }
+            else if (typeof document["oHidden"] !== "undefined") {
+                hidden = "oHidden";
+                visibilityChange = "ovisibilitychange";
             }
             if ("onpageshow" in window && "onpagehide" in window) {
                 window.addEventListener("pageshow", onFocusHandler, false);
@@ -158,7 +167,14 @@ var egret_html5_localStorage;
     }
     egret_html5_localStorage.getItem = getItem;
     function setItem(key, value) {
-        window.localStorage.setItem(key, value);
+        try {
+            window.localStorage.setItem(key, value);
+            return true;
+        }
+        catch (e) {
+            console.log("egret_html5_localStorage.setItem保存失败,key=" + key + "&value=" + value);
+            return false;
+        }
     }
     egret_html5_localStorage.setItem = setItem;
     function removeItem(key) {

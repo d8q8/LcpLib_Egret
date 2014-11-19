@@ -35,6 +35,46 @@ var egret;
     var gui;
     (function (gui) {
         /**
+            * @class egret.gui.ViewportScroller
+            * @classdesc
+            * 适用Viewport的滑动类
+            * @extends egret.Scroller
+            */
+        var ViewportScroller = (function (_super) {
+            __extends(ViewportScroller, _super);
+            /**
+                * @method egret.gui.GroupBase#constructor
+                */
+            function ViewportScroller(content) {
+                _super.call(this, content);
+                this.content = content;
+                this._content = content;
+            }
+            ViewportScroller.prototype._updateContentPosition = function () {
+                var content = this.content;
+                content.horizontalScrollPosition = this._scrollLeft;
+                content.verticalScrollPosition = this._scrollTop;
+                content.width = this.width;
+                content.height = this.height;
+                this.dispatchEvent(new egret.Event(egret.Event.CHANGE));
+            };
+            ViewportScroller.prototype.getMaxScrollLeft = function () {
+                var content = this.content;
+                return content.contentWidth - content.width;
+            };
+            ViewportScroller.prototype.getMaxScrollTop = function () {
+                var content = this.content;
+                return content.contentHeight - content.height;
+            };
+            ViewportScroller.prototype._getContentWidth = function () {
+                return this._content.contentWidth;
+            };
+            ViewportScroller.prototype._getContentHeight = function () {
+                return this._content.contentHeight;
+            };
+            return ViewportScroller;
+        })(egret.ScrollView);
+        /**
          * @class egret.gui.Scroller
          * @classdesc
          * 滚动条组件
@@ -51,12 +91,32 @@ var egret;
                 _super.call(this);
                 this._verticalScrollPolicy = "auto";
                 this._horizontalScrollPolicy = "auto";
-                this.ignoreTouchBegin = false;
-                this._velocityX = 0;
-                this._velocityY = 0;
-                this._previousVelocityX = [];
-                this._previousVelocityY = [];
+                this.hostComponentKey = "egret.gui.Scroller";
             }
+            Object.defineProperty(Scroller.prototype, "hBar", {
+                get: function () {
+                    egret.Logger.warning("Scroller.hBar已废弃，请使用Scroller.horizontalScrollBar");
+                    return this.horizontalScrollBar;
+                },
+                set: function (value) {
+                    egret.Logger.warning("Scroller.hBar已废弃，请使用Scroller.horizontalScrollBar设置");
+                    this.horizontalScrollBar = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
+            Object.defineProperty(Scroller.prototype, "vBar", {
+                get: function () {
+                    egret.Logger.warning("Scroller.vBar已废弃，请使用Scroller.verticalScrollBar");
+                    return this.verticalScrollBar;
+                },
+                set: function (value) {
+                    egret.Logger.warning("Scroller.vBar已废弃，请使用Scroller.verticalScrollBar设置");
+                    this.verticalScrollBar = value;
+                },
+                enumerable: true,
+                configurable: true
+            });
             /**
              * @method egret.gui.Scroller#measure
              */
@@ -72,18 +132,23 @@ var egret;
              * @param unscaledHeight {number}
              */
             Scroller.prototype.updateDisplayList = function (unscaledWidth, unscaledHeight) {
-                this._viewport.setLayoutBoundsSize(unscaledWidth, unscaledHeight);
-                if (this.hBar) {
-                    this.hBar._setViewportMetric(unscaledWidth, this._viewport.contentWidth);
-                    this.hBar._setWidth(unscaledWidth - 2);
-                    this.hBar.x = 1;
-                    this.hBar.y = unscaledHeight - this.hBar._height - 1;
+                this._scroller._setWidth(unscaledWidth);
+                this._scroller._setHeight(unscaledHeight);
+                if (this.horizontalScrollBar) {
+                    if (this._horizontalScrollPolicy != "off") {
+                        this.horizontalScrollBar._setViewportMetric(unscaledWidth, this._viewport.contentWidth);
+                        this.horizontalScrollBar._setWidth(unscaledWidth - 2);
+                        this.horizontalScrollBar.x = 1;
+                        this.horizontalScrollBar.y = unscaledHeight - this.horizontalScrollBar._height - 1;
+                    }
                 }
-                if (this.vBar) {
-                    this.vBar._setViewportMetric(unscaledHeight, this._viewport.contentHeight);
-                    this.vBar._setHeight(unscaledHeight - 2);
-                    this.vBar.y = 1;
-                    this.vBar.x = unscaledWidth - this.vBar.width - 1;
+                if (this.verticalScrollBar) {
+                    if (this._verticalScrollPolicy != "off") {
+                        this.verticalScrollBar._setViewportMetric(unscaledHeight, this._viewport.contentHeight);
+                        this.verticalScrollBar._setHeight(unscaledHeight - 2);
+                        this.verticalScrollBar.y = 1;
+                        this.verticalScrollBar.x = unscaledWidth - this.verticalScrollBar.width - 1;
+                    }
                 }
             };
             Object.defineProperty(Scroller.prototype, "verticalScrollPolicy", {
@@ -95,10 +160,12 @@ var egret;
                     return this._verticalScrollPolicy;
                 },
                 set: function (value) {
-                    if (value = this._verticalScrollPolicy)
+                    if (value == this._verticalScrollPolicy)
                         return;
                     this._verticalScrollPolicy = value;
                     this._checkVbar();
+                    if (this._scroller)
+                        this._scroller.verticalScrollPolicy = value;
                 },
                 enumerable: true,
                 configurable: true
@@ -116,6 +183,8 @@ var egret;
                         return;
                     this._horizontalScrollPolicy = value;
                     this._checkHbar();
+                    if (this._scroller)
+                        this._scroller.horizontalScrollPolicy = value;
                 },
                 enumerable: true,
                 configurable: true
@@ -145,12 +214,17 @@ var egret;
             Scroller.prototype.installViewport = function () {
                 if (this.viewport) {
                     this.viewport.clipAndEnableScrolling = true;
-                    this.viewport.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
-                    this.viewport.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
-                    this.viewport.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
-                    this._addToDisplayListAt(this.viewport, 0);
+                    this._scroller = new ViewportScroller(this.viewport);
+                    this._scroller.addEventListener(egret.Event.CHANGE, this._scrollerChangedHandler, this);
+                    this._scroller.horizontalScrollPolicy = this._horizontalScrollPolicy;
+                    this._scroller.verticalScrollPolicy = this._verticalScrollPolicy;
+                    this._addToDisplayListAt(this._scroller, 0);
                 }
-                this._addScrollBars();
+                //this._addScrollBars();
+            };
+            Scroller.prototype._onAddToStage = function () {
+                _super.prototype._onAddToStage.call(this);
+                this._scroller._stage = this.stage;
             };
             /**
              * 卸载视域组件
@@ -158,344 +232,25 @@ var egret;
             Scroller.prototype.uninstallViewport = function () {
                 if (this.viewport) {
                     this.viewport.clipAndEnableScrolling = false;
-                    this.viewport.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBegin, this);
-                    this.viewport.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this.onTouchBeginCapture, this, true);
-                    this.viewport.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEndCapture, this, true);
                     this._removeFromDisplayList(this.viewport);
                 }
                 this._removeScrollBars();
             };
-            Scroller.prototype.onTouchEndCapture = function (event) {
-                if (!this.delayTouchBeginEvent) {
-                    return;
-                }
-                this.onTouchBeginTimer();
+            Scroller.prototype._scrollerChangedHandler = function (e) {
+                this.setViewportHScrollPosition(this._scroller.scrollLeft);
+                this.setViewportVScrollPosition(this._scroller.scrollTop);
             };
-            Scroller.prototype.dispatchPropagationEvent = function (event) {
-                var list = [];
-                var target = event._target;
-                while (target) {
-                    list.push(target);
-                    target = target.parent;
-                }
-                var viewport = this._viewport;
-                for (var i = 1;; i += 2) {
-                    target = list[i];
-                    if (!target || target === viewport) {
-                        break;
-                    }
-                    list.unshift(target);
-                }
-                this._dispatchPropagationEvent(event, list);
+            Scroller.prototype.setViewportVScrollPosition = function (pos) {
+                if (this._scroller.scrollTop != pos)
+                    this._scroller.scrollTop = pos;
+                if (this.verticalScrollBar && this.verticalScrollBar.value != pos)
+                    this.verticalScrollBar.setPosition(pos);
             };
-            //todo 此处代码是为了兼容之前的实现，应该尽快更优化的实现后删除
-            Scroller.prototype._dispatchPropagationEvent = function (event, list, targetIndex) {
-                var length = list.length;
-                for (var i = 0; i < length; i++) {
-                    var currentTarget = list[i];
-                    event._currentTarget = currentTarget;
-                    event._target = this;
-                    if (i < targetIndex)
-                        event._eventPhase = 1;
-                    else if (i == targetIndex)
-                        event._eventPhase = 2;
-                    else
-                        event._eventPhase = 3;
-                    currentTarget._notifyListener(event);
-                    if (event._isPropagationStopped || event._isPropagationImmediateStopped) {
-                        break;
-                    }
-                }
-            };
-            /**
-             * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
-             */
-            Scroller.prototype.onTouchBeginCapture = function (event) {
-                var canScroll = this.checkScrollPolicy();
-                if (!canScroll) {
-                    return;
-                }
-                var target = event.target;
-                while (target != this) {
-                    if (target instanceof Scroller) {
-                        canScroll = target.checkScrollPolicy();
-                        if (canScroll) {
-                            return;
-                        }
-                    }
-                    target = target.parent;
-                }
-                event.stopPropagation();
-                var evt = this.cloneTouchEvent(event);
-                this.delayTouchBeginEvent = evt;
-                if (!this.touchBeginTimer) {
-                    this.touchBeginTimer = new egret.Timer(100, 1);
-                    this.touchBeginTimer.addEventListener(egret.TimerEvent.TIMER_COMPLETE, this.onTouchBeginTimer, this);
-                }
-                this.touchBeginTimer.start();
-                this.onTouchBegin(event);
-            };
-            Scroller.prototype.cloneTouchEvent = function (event) {
-                var evt = new egret.TouchEvent(event._type, event._bubbles, event.cancelable);
-                evt.touchPointID = event.touchPointID;
-                evt._stageX = event._stageX;
-                evt._stageY = event._stageY;
-                evt.ctrlKey = event.ctrlKey;
-                evt.altKey = event.altKey;
-                evt.shiftKey = event.shiftKey;
-                evt.touchDown = event.touchDown;
-                evt._isDefaultPrevented = false;
-                evt._target = event._target;
-                return evt;
-            };
-            Scroller.prototype.onTouchBeginTimer = function (e) {
-                this.touchBeginTimer.stop();
-                var event = this.delayTouchBeginEvent;
-                this.delayTouchBeginEvent = null;
-                this.dispatchPropagationEvent(event);
-            };
-            /**
-             * 检查当前滚动策略，若有一个方向可以滚动，返回true。
-             */
-            Scroller.prototype.checkScrollPolicy = function () {
-                var viewport = this._viewport;
-                var hCanScroll;
-                switch (this._horizontalScrollPolicy) {
-                    case "auto":
-                        if (viewport.contentWidth > viewport.width) {
-                            hCanScroll = true;
-                        }
-                        else {
-                            hCanScroll = false;
-                        }
-                        break;
-                    case "on":
-                        hCanScroll = true;
-                        break;
-                    case "off":
-                        hCanScroll = false;
-                        break;
-                }
-                this._horizontalCanScroll = hCanScroll;
-                var vCanScroll;
-                switch (this._verticalScrollPolicy) {
-                    case "auto":
-                        if (viewport.contentHeight > viewport.height) {
-                            vCanScroll = true;
-                        }
-                        else {
-                            vCanScroll = false;
-                        }
-                        break;
-                    case "on":
-                        vCanScroll = true;
-                        break;
-                    case "off":
-                        vCanScroll = false;
-                        break;
-                }
-                this._verticalCanScroll = vCanScroll;
-                return hCanScroll || vCanScroll;
-            };
-            Scroller.prototype.onTouchBegin = function (event) {
-                if (event._isDefaultPrevented) {
-                    return;
-                }
-                var canScroll = this.checkScrollPolicy();
-                if (!canScroll) {
-                    return;
-                }
-                if (this.verticalAnimator && this.verticalAnimator.isPlaying)
-                    this.verticalAnimator.stop();
-                if (this.horizontalAnimator && this.horizontalAnimator.isPlaying)
-                    this.horizontalAnimator.stop();
-                var viewport = this._viewport;
-                var hsp = viewport.horizontalScrollPosition;
-                var vsp = viewport.verticalScrollPosition;
-                this._offsetPointX = hsp + event.stageX;
-                this._offsetPointY = vsp + event.stageY;
-                this._velocityX = 0;
-                this._velocityY = 0;
-                this._previousVelocityX.length = 0;
-                this._previousVelocityY.length = 0;
-                this._previousTouchTime = egret.getTimer();
-                this._previousTouchX = this._startTouchX = this._currentTouchX = event.stageX;
-                this._previousTouchY = this._startTouchY = this._currentTouchY = event.stageY;
-                this._startHorizontalScrollPosition = hsp;
-                this._startVerticalScrollPosition = vsp;
-                gui.UIGlobals.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-                gui.UIGlobals.stage.addEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
-                gui.UIGlobals.stage.addEventListener(egret.Event.LEAVE_STAGE, this.onTouchEnd, this);
-                this.addEventListener(egret.Event.ENTER_FRAME, this.enterFrameHandler, this);
-                event.preventDefault();
-            };
-            Scroller.prototype.onTouchMove = function (event) {
-                if (this._currentTouchX == event.stageX && this._currentTouchY == event.stageY) {
-                    return;
-                }
-                this._currentTouchX = event.stageX;
-                this._currentTouchY = event.stageY;
-                if (this.delayTouchBeginEvent) {
-                    this.delayTouchBeginEvent = null;
-                    this.touchBeginTimer.stop();
-                }
-                var viewport = this._viewport;
-                if (this._horizontalCanScroll) {
-                    var hsp = this._offsetPointX - event.stageX;
-                    if (hsp < 0) {
-                        hsp *= 0.5;
-                    }
-                    if (hsp > viewport.contentWidth - viewport.width) {
-                        hsp = (hsp + viewport.contentWidth - viewport.width) * 0.5;
-                    }
-                    this.setViewportHScrollPosition(hsp);
-                }
-                if (this._verticalCanScroll) {
-                    var vsp = this._offsetPointY - event.stageY;
-                    if (vsp < 0) {
-                        vsp *= 0.5;
-                    }
-                    if (vsp > viewport.contentHeight - viewport.height) {
-                        vsp = (vsp + viewport.contentHeight - viewport.height) * 0.5;
-                    }
-                    this.setViewportVScrollPosition(vsp);
-                }
-            };
-            Scroller.prototype.onTouchEnd = function (event) {
-                gui.UIGlobals.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this.onTouchMove, this);
-                gui.UIGlobals.stage.removeEventListener(egret.TouchEvent.TOUCH_END, this.onTouchEnd, this);
-                gui.UIGlobals.stage.removeEventListener(egret.Event.LEAVE_STAGE, this.onTouchEnd, this);
-                this.removeEventListener(egret.Event.ENTER_FRAME, this.enterFrameHandler, this);
-                if (this._horizontalCanScroll) {
-                    this.checkHorizontalScrollPosition();
-                }
-                if (this._verticalCanScroll) {
-                    this.checkVerticalScrollPosition();
-                }
-            };
-            Scroller.easeOut = function (ratio) {
-                var invRatio = ratio - 1.0;
-                return invRatio * invRatio * invRatio + 1;
-            };
-            Scroller.prototype.enterFrameHandler = function (event) {
-                var now = egret.getTimer();
-                var maxVelocityCount = 4;
-                var timeOffset = now - this._previousTouchTime;
-                if (timeOffset > 0) {
-                    this._previousVelocityX[this._previousVelocityX.length] = this._velocityX;
-                    if (this._previousVelocityX.length > maxVelocityCount) {
-                        this._previousVelocityX.shift();
-                    }
-                    this._previousVelocityY[this._previousVelocityY.length] = this._velocityY;
-                    if (this._previousVelocityY.length > maxVelocityCount) {
-                        this._previousVelocityY.shift();
-                    }
-                    this._velocityX = (this._currentTouchX - this._previousTouchX) / timeOffset;
-                    this._velocityY = (this._currentTouchY - this._previousTouchY) / timeOffset;
-                    this._previousTouchTime = now;
-                    this._previousTouchX = this._currentTouchX;
-                    this._previousTouchY = this._currentTouchY;
-                }
-                var horizontalInchesMoved = Math.abs(this._currentTouchX - this._startTouchX);
-                var verticalInchesMoved = Math.abs(this._currentTouchY - this._startTouchY);
-                var minimumDragDistance = 0.04;
-                if (this._horizontalCanScroll && horizontalInchesMoved >= minimumDragDistance) {
-                    this._startTouchX = this._currentTouchX;
-                    this._startHorizontalScrollPosition = this._viewport.horizontalScrollPosition;
-                }
-                if (this._verticalCanScroll && verticalInchesMoved >= minimumDragDistance) {
-                    this._startTouchY = this._currentTouchY;
-                    this._startVerticalScrollPosition = this._viewport.verticalScrollPosition;
-                }
-            };
-            Scroller.prototype.checkHorizontalScrollPosition = function () {
-                var viewport = this._viewport;
-                var hsp = viewport.horizontalScrollPosition;
-                var maxHsp = viewport.contentWidth - viewport.width;
-                maxHsp = Math.max(0, maxHsp);
-                var sum = this._velocityX * 2.33;
-                var velocityCount = this._previousVelocityX.length;
-                var totalWeight = 2.33;
-                for (var i = 0; i < velocityCount; i++) {
-                    var weight = Scroller.VELOCITY_WEIGHTS[i];
-                    sum += this._previousVelocityX.shift() * weight;
-                    totalWeight += weight;
-                }
-                var pixelsPerMS = sum / totalWeight;
-                var absPixelsPerMS = Math.abs(pixelsPerMS);
-                if (absPixelsPerMS <= 0.02) {
-                    this.finishScrollingHorizontally();
-                }
-                else {
-                    var result = this.getAnimationDatas(pixelsPerMS, hsp, maxHsp);
-                    this.throwHorizontally(result[0], result[1]);
-                }
-            };
-            Scroller.prototype.checkVerticalScrollPosition = function () {
-                var viewport = this._viewport;
-                var vsp = viewport.verticalScrollPosition;
-                var maxVsp = viewport.contentHeight - viewport.height;
-                var sum = this._velocityY * 2.33;
-                var velocityCount = this._previousVelocityY.length;
-                var totalWeight = 2.33;
-                for (var i = 0; i < velocityCount; i++) {
-                    var weight = Scroller.VELOCITY_WEIGHTS[i];
-                    sum += this._previousVelocityY.shift() * weight;
-                    totalWeight += weight;
-                }
-                var pixelsPerMS = sum / totalWeight;
-                var absPixelsPerMS = Math.abs(pixelsPerMS);
-                if (absPixelsPerMS <= 0.02) {
-                    this.finishScrollingVertically();
-                }
-                else {
-                    var result = this.getAnimationDatas(pixelsPerMS, vsp, maxVsp);
-                    this.throwVertically(result[0], result[1]);
-                }
-            };
-            Scroller.prototype.getAnimationDatas = function (pixelsPerMS, curPos, maxPos) {
-                var absPixelsPerMS = Math.abs(pixelsPerMS);
-                var extraFricition = 0.95;
-                var duration = 0;
-                var friction = 0.998;
-                var minVelocity = 0.02;
-                var posTo = curPos + (pixelsPerMS - minVelocity) / Math.log(friction);
-                if (posTo < 0 || posTo > maxPos) {
-                    posTo = curPos;
-                    while (Math.abs(pixelsPerMS) > minVelocity) {
-                        posTo -= pixelsPerMS;
-                        if (posTo < 0 || posTo > maxPos) {
-                            pixelsPerMS *= friction * extraFricition;
-                        }
-                        else {
-                            pixelsPerMS *= friction;
-                        }
-                        duration++;
-                    }
-                }
-                else {
-                    duration = Math.log(minVelocity / absPixelsPerMS) / Math.log(friction);
-                }
-                if (!Scroller.animationData) {
-                    Scroller.animationData = [0, 0];
-                }
-                var result = Scroller.animationData;
-                result[0] = posTo;
-                result[1] = duration;
-                return result;
-            };
-            Scroller.prototype.finishScrollingHorizontally = function (animation) {
-                var viewport = this._viewport;
-                var hsp = viewport.horizontalScrollPosition;
-                var maxHsp = viewport.contentWidth - viewport.width;
-                var hspTo = hsp;
-                if (hsp < 0) {
-                    hspTo = 0;
-                }
-                if (hsp > maxHsp) {
-                    hspTo = maxHsp;
-                }
-                this.throwHorizontally(hspTo, 300);
+            Scroller.prototype.setViewportHScrollPosition = function (pos) {
+                if (this._scroller.scrollLeft != pos)
+                    this._scroller.scrollLeft = pos;
+                if (this.horizontalScrollBar && this.horizontalScrollBar.value != pos)
+                    this.horizontalScrollBar._setValue(pos);
             };
             /**
              * 缓动到水平滚动位置
@@ -505,40 +260,9 @@ var egret;
              */
             Scroller.prototype.throwHorizontally = function (hspTo, duration) {
                 if (duration === void 0) { duration = 500; }
-                var hsp = this._viewport.horizontalScrollPosition;
-                if (hsp == hspTo) {
+                if (!this._scroller)
                     return;
-                }
-                if (!this.horizontalAnimator) {
-                    this.horizontalAnimator = new gui.Animation(this.horizontalUpdateHandler, this);
-                    this.horizontalAnimator.endFunction = this.finishScrollingHorizontally;
-                    this.horizontalAnimator.easerFunction = Scroller.easeOut;
-                }
-                if (this.horizontalAnimator.isPlaying)
-                    this.horizontalAnimator.stop();
-                this.horizontalAnimator.duration = duration;
-                this.horizontalAnimator.motionPaths = [{ prop: "hsp", from: hsp, to: hspTo }];
-                this.horizontalAnimator.play();
-            };
-            /**
-             * 更新水平滚动位置
-             */
-            Scroller.prototype.horizontalUpdateHandler = function (animation) {
-                this.setViewportHScrollPosition(animation.currentValue["hsp"]);
-            };
-            Scroller.prototype.finishScrollingVertically = function (animation) {
-                var viewport = this._viewport;
-                var vsp = viewport.verticalScrollPosition;
-                var maxVsp = viewport.contentHeight - viewport.height;
-                maxVsp = Math.max(0, maxVsp);
-                var vspTo = vsp;
-                if (vsp < 0) {
-                    vspTo = 0;
-                }
-                if (vsp > maxVsp) {
-                    vspTo = maxVsp;
-                }
-                this.throwVertically(vspTo, 300);
+                this._scroller.setScrollLeft(hspTo, duration);
             };
             /**
              * 缓动到垂直滚动位置
@@ -548,40 +272,9 @@ var egret;
              */
             Scroller.prototype.throwVertically = function (vspTo, duration) {
                 if (duration === void 0) { duration = 500; }
-                var vsp = this._viewport.verticalScrollPosition;
-                if (vsp == vspTo) {
+                if (!this._scroller)
                     return;
-                }
-                if (!this.verticalAnimator) {
-                    this.verticalAnimator = new gui.Animation(this.verticalUpdateHandler, this);
-                    this.verticalAnimator.endFunction = this.finishScrollingVertically;
-                    this.verticalAnimator.easerFunction = Scroller.easeOut;
-                }
-                if (this.verticalAnimator.isPlaying)
-                    this.verticalAnimator.stop();
-                this.verticalAnimator.duration = duration;
-                this.verticalAnimator.motionPaths = [{ prop: "vsp", from: vsp, to: vspTo }];
-                this.verticalAnimator.play();
-            };
-            /**
-             * 更新垂直滚动位置
-             */
-            Scroller.prototype.verticalUpdateHandler = function (animation) {
-                this.setViewportVScrollPosition(animation.currentValue["vsp"]);
-            };
-            Scroller.prototype.setViewportVScrollPosition = function (pos) {
-                if (this._viewport.verticalScrollPosition == pos)
-                    return;
-                this._viewport.verticalScrollPosition = pos;
-                if (this.vBar && this.vBar.value != pos)
-                    this.vBar.setPosition(pos);
-            };
-            Scroller.prototype.setViewportHScrollPosition = function (pos) {
-                if (this._viewport.horizontalScrollPosition == pos)
-                    return;
-                this._viewport.horizontalScrollPosition = pos;
-                if (this.hBar && this.hBar.value != pos)
-                    this.hBar._setValue(pos);
+                this._scroller.setScrollTop(vspTo, duration);
             };
             Object.defineProperty(Scroller.prototype, "numElements", {
                 /**
@@ -778,64 +471,67 @@ var egret;
             Scroller.prototype.swapChildrenAt = function (index1, index2) {
                 this.throwNotSupportedError();
             };
+            Scroller.prototype._checkHbar = function () {
+                if (this._horizontalScrollPolicy == "off") {
+                    if (this.horizontalScrollBar) {
+                        this._removeFromDisplayList(this.horizontalScrollBar);
+                    }
+                    return;
+                }
+                var bar = this.horizontalScrollBar;
+                bar.addEventListener(egret.Event.CHANGE, this.hBarChanged, this, false);
+                bar._setViewportMetric(this._viewport.width, this._viewport.contentWidth);
+                this.horizontalScrollBar = bar;
+                this._addToDisplayList(this.horizontalScrollBar);
+            };
+            Scroller.prototype._checkVbar = function () {
+                if (this._verticalScrollPolicy == "off") {
+                    if (this.verticalScrollBar) {
+                        this._removeFromDisplayList(this.verticalScrollBar);
+                    }
+                    return;
+                }
+                var vbar = this.verticalScrollBar;
+                vbar.addEventListener(egret.Event.CHANGE, this.vBarChanged, this, false);
+                vbar._setViewportMetric(this._viewport.height, this._viewport.contentHeight);
+                this.verticalScrollBar = vbar;
+                this._addToDisplayList(this.verticalScrollBar);
+            };
             /**
-             * @method egret.gui.SliderBase#partAdded
+             * 若皮肤是ISkin,则调用此方法附加皮肤中的公共部件
+             * @method egret.gui.Scroller#partAdded
              * @param partName {string}
              * @param instance {any}
              */
-            Scroller.prototype._addScrollBars = function () {
-                this._checkHbar();
-                this._checkVbar();
-            };
-            Scroller.prototype._checkHbar = function () {
-                if (this._horizontalScrollPolicy != "off") {
-                    var bar = new gui.HScrollBar();
-                    bar.createChildren();
-                    if (bar.thumb == null)
-                        return;
-                    bar.addEventListener(egret.Event.CHANGE, this.hBarChanged, this, false);
-                    bar._setViewportMetric(this._viewport.width, this._viewport.contentWidth);
-                    this.hBar = bar;
-                    this._addToDisplayList(this.hBar);
+            Scroller.prototype.partAdded = function (partName, instance) {
+                _super.prototype.partAdded.call(this, partName, instance);
+                if (instance == this.horizontalScrollBar) {
+                    this._checkHbar();
                 }
-            };
-            Scroller.prototype._checkVbar = function () {
-                if (this._verticalScrollPolicy != "off") {
-                    var vbar = new gui.VScrollBar();
-                    vbar.createChildren();
-                    if (vbar.thumb == null)
-                        return;
-                    vbar.addEventListener(egret.Event.CHANGE, this.vBarChanged, this, false);
-                    vbar._setViewportMetric(this._viewport.height, this._viewport.contentHeight);
-                    this.vBar = vbar;
-                    this._addToDisplayList(this.vBar);
+                if (instance == this.verticalScrollBar) {
+                    this._checkVbar();
                 }
             };
             Scroller.prototype._removeScrollBars = function () {
-                if (this.hBar) {
-                    this._removeFromDisplayList(this.hBar);
-                    this.hBar.removeEventListener(egret.Event.CHANGE, this.hBarChanged, this, false);
-                    this.hBar = null;
+                if (this.horizontalScrollBar) {
+                    this._removeFromDisplayList(this.horizontalScrollBar);
+                    this.horizontalScrollBar.removeEventListener(egret.Event.CHANGE, this.hBarChanged, this, false);
+                    this.horizontalScrollBar = null;
                 }
-                if (this.vBar) {
-                    this._removeFromDisplayList(this.vBar);
-                    this.vBar.removeEventListener(egret.Event.CHANGE, this.vBarChanged, this, false);
-                    this.vBar = null;
+                if (this.verticalScrollBar) {
+                    this._removeFromDisplayList(this.verticalScrollBar);
+                    this.verticalScrollBar.removeEventListener(egret.Event.CHANGE, this.vBarChanged, this, false);
+                    this.verticalScrollBar = null;
                 }
             };
             Scroller.prototype.hBarChanged = function (e) {
-                if (this.horizontalAnimator && this.horizontalAnimator.isPlaying)
-                    this.horizontalAnimator.stop();
-                this.setViewportHScrollPosition(this.hBar._getValue());
+                this.setViewportHScrollPosition(this.horizontalScrollBar._getValue());
             };
             Scroller.prototype.vBarChanged = function (e) {
-                if (this.verticalAnimator && this.verticalAnimator.isPlaying)
-                    this.verticalAnimator.stop();
-                this.setViewportVScrollPosition(this.vBar.getPosition());
+                this.setViewportVScrollPosition(this.verticalScrollBar.getPosition());
             };
-            Scroller.VELOCITY_WEIGHTS = [1, 1.33, 1.66, 2];
             return Scroller;
-        })(gui.UIComponent);
+        })(gui.SkinnableComponent);
         gui.Scroller = Scroller;
         Scroller.prototype.__class__ = "gui.Scroller";
     })(gui = egret.gui || (egret.gui = {}));

@@ -56,6 +56,7 @@ var egret;
              * @member egret.RendererContext#texture_scale_factor
              */
             this.texture_scale_factor = 1;
+            this.profiler = egret.Profiler.getInstance();
         }
         /**
          * @method egret.RendererContext#clearScreen
@@ -69,7 +70,7 @@ var egret;
          * @param x {number}
          * @param y {number}
          * @param w {number}
-         * @param h {numbe}
+         * @param h {number}
          */
         RendererContext.prototype.clearRect = function (x, y, w, h) {
         };
@@ -88,12 +89,12 @@ var egret;
          */
         RendererContext.prototype.drawImage = function (texture, sourceX, sourceY, sourceWidth, sourceHeight, destX, destY, destWidth, destHeight, repeat) {
             if (repeat === void 0) { repeat = "no-repeat"; }
-            egret.Profiler.getInstance().onDrawImage();
+            this.profiler.onDrawImage();
         };
         /**
          * 变换Context的当前渲染矩阵
          * @method egret.RendererContext#setTransform
-         * @param matrix {egret.Matri}
+         * @param matrix {egret.Matrix}
          */
         RendererContext.prototype.setTransform = function (matrix) {
         };
@@ -101,7 +102,7 @@ var egret;
          * 设置渲染alpha
          * @method egret.RendererContext#setAlpha
          * @param value {number}
-         * @param blendMode {egret.BlendMod}
+         * @param blendMode {egret.BlendMode}
          */
         RendererContext.prototype.setAlpha = function (value, blendMode) {
         };
@@ -129,10 +130,10 @@ var egret;
          * @param text {string}
          * @param x {number}
          * @param y {number}
-         * @param maxWidth {numbe}
+         * @param maxWidth {number}
          */
         RendererContext.prototype.drawText = function (textField, text, x, y, maxWidth) {
-            egret.Profiler.getInstance().onDrawImage();
+            this.profiler.onDrawImage();
         };
         RendererContext.prototype.strokeRect = function (x, y, w, h, color) {
         };

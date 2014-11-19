@@ -1,6 +1,6 @@
 /**
  * Created by d8q8 on 2014/8/15.
- * @module Lcp
+ * @module lcp
  * @class LRect
  * @constructor
  **/

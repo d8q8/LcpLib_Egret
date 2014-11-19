@@ -131,7 +131,10 @@ var egret;
                 return child;
             }
             if (host) {
-                host.removeChild(child);
+                var index = host._children.indexOf(child);
+                if (index >= 0) {
+                    host._doRemoveChild(index);
+                }
             }
             this._children.splice(index, 0, child);
             child._parentChanged(this);
@@ -192,6 +195,7 @@ var egret;
                 while (list.length > 0) {
                     var childAddToStage = list.shift();
                     childAddToStage.dispatchEventWith(egret.Event.REMOVED_FROM_STAGE);
+                    childAddToStage._stage = null;
                 }
             }
             child._parentChanged(null);

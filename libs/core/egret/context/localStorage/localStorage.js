@@ -42,8 +42,10 @@ var egret;
          * @method egret.localStorage.setItem
          * @param key {string} 要保存的键名称
          * @param value {string} 要保存的值
+         * @returns {boolean} 数据保存是否成功
          */
         function setItem(key, value) {
+            return false;
         }
         localStorage.setItem = setItem;
         /**

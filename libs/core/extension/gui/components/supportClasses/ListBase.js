@@ -617,8 +617,14 @@ var egret;
                     }
                 }
                 else if (event.kind == gui.CollectionEventKind.REFRESH) {
-                    this._setSelectedIndex(ListBase.NO_SELECTION, false);
+                    this.dataProviderRefreshed();
                 }
+            };
+            /**
+             * 数据源刷新
+             */
+            ListBase.prototype.dataProviderRefreshed = function () {
+                this._setSelectedIndex(ListBase.NO_SELECTION, false);
             };
             /**
              * 未选中任何项时的索引值

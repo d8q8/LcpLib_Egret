@@ -109,12 +109,13 @@ var egret;
         /**
          * 在一个事件列表中按优先级插入事件对象
          */
-        EventDispatcher.prototype._insertEventBin = function (list, listener, thisObject, priority) {
+        EventDispatcher.prototype._insertEventBin = function (list, listener, thisObject, priority, display) {
+            if (display === void 0) { display = undefined; }
             var insertIndex = -1;
             var length = list.length;
             for (var i = 0; i < length; i++) {
                 var bin = list[i];
-                if (bin.listener === listener && bin.thisObject === thisObject) {
+                if (bin.listener === listener && bin.thisObject === thisObject && bin.display === display) {
                     return false;
                 }
                 if (insertIndex == -1 && bin.priority < priority) {
@@ -122,6 +123,9 @@ var egret;
                 }
             }
             var eventBin = { listener: listener, thisObject: thisObject, priority: priority };
+            if (display) {
+                eventBin.display = display;
+            }
             if (insertIndex != -1) {
                 list.splice(insertIndex, 0, eventBin);
             }
@@ -155,11 +159,12 @@ var egret;
         /**
          * 在一个事件列表中按优先级插入事件对象
          */
-        EventDispatcher.prototype._removeEventBin = function (list, listener, thisObject) {
+        EventDispatcher.prototype._removeEventBin = function (list, listener, thisObject, display) {
+            if (display === void 0) { display = undefined; }
             var length = list.length;
             for (var i = 0; i < length; i++) {
                 var bin = list[i];
-                if (bin.listener === listener && bin.thisObject === thisObject) {
+                if (bin.listener === listener && bin.thisObject === thisObject && bin.display === display) {
                     list.splice(i, 1);
                     return true;
                 }

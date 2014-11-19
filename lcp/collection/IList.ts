@@ -1,6 +1,6 @@
 /**
  * Created by d8q8 on 2014/11/18.
- * @module Lcp
+ * @module lcp
  * @class IList
  * @constructor
  **/

@@ -58,7 +58,7 @@ var egret;
             }
             var request = loader._request;
             var xhr = this.getXHR();
-            xhr.onload = onLoadComplete;
+            //            xhr.onload = onLoadComplete;
             xhr.onreadystatechange = onReadyStateChange;
             var url = egret.NetContext._getUrl(request);
             xhr.open(request.method, url, true);
@@ -84,9 +84,12 @@ var egret;
                     if (xhr.status >= 400 || xhr.status == 0) {
                         egret.IOErrorEvent.dispatchIOErrorEvent(loader);
                     }
+                    else {
+                        onLoadComplete();
+                    }
                 }
             }
-            function onLoadComplete(event) {
+            function onLoadComplete() {
                 switch (loader.dataFormat) {
                     case egret.URLLoaderDataFormat.TEXT:
                         loader.data = xhr.responseText;

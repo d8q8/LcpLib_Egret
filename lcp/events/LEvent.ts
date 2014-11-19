@@ -1,6 +1,6 @@
 /**
  * Created by d8q8 on 2014/8/12.
- * @module Lcp
+ * @module lcp
  * @class LEvent
  * @constructor
  */

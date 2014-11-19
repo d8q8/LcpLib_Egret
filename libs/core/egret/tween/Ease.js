@@ -80,8 +80,7 @@ var egret;
         };
         Ease.getBackOut = function (amount) {
             return function (t) {
-                t = t - 1;
-                return (t * t * ((amount + 1) * t + amount) + 1);
+                return (--t * t * ((amount + 1) * t + amount) + 1);
             };
         };
         Ease.getBackInOut = function (amount) {
@@ -96,7 +95,7 @@ var egret;
             return -(Math.sqrt(1 - t * t) - 1);
         };
         Ease.circOut = function (t) {
-            return Math.sqrt(1 - (t) * t);
+            return Math.sqrt(1 - (--t) * t);
         };
         Ease.circInOut = function (t) {
             if ((t *= 2) < 1) {

@@ -1,7 +1,7 @@
 /**
  * Created by d8q8 on 2014/11/6.
- * @module Lcp
- * @class IActivatable
+ * @module lcp
+ * @class Activatable
  * @constructor
  **/
 module lcp {

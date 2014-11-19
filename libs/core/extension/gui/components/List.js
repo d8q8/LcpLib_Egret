@@ -304,6 +304,15 @@ var egret;
                 renderer.addEventListener(egret.TouchEvent.TOUCH_END, this.item_mouseUpHandler, this);
             };
             /**
+             * 数据源发生刷新
+             */
+            List.prototype.dataProviderRefreshed = function () {
+                if (this._allowMultipleSelection) {
+                    return;
+                }
+                _super.prototype.dataProviderRefreshed.call(this);
+            };
+            /**
              * @method egret.gui.List#dataGroup_rendererRemoveHandler
              * @param event {RendererExistenceEvent}
              */

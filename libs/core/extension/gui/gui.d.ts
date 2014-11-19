@@ -2746,6 +2746,32 @@ declare module egret.gui {
         newInstance(): any;
     }
 }
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 declare module egret.gui {
     class NavigationUnit {
         static DOWN: number;
@@ -7666,6 +7692,10 @@ declare module egret.gui {
          * @param event {CollectionEvent}
          */
         dataProvider_collectionChangeHandler(event: CollectionEvent): void;
+        /**
+         * 数据源刷新
+         */
+        dataProviderRefreshed(): void;
     }
 }
 /**
@@ -8456,6 +8486,10 @@ declare module egret.gui {
          * @param event {RendererExistenceEvent}
          */
         dataGroup_rendererAddHandler(event: RendererExistenceEvent): void;
+        /**
+         * 数据源发生刷新
+         */
+        dataProviderRefreshed(): void;
         /**
          * @method egret.gui.List#dataGroup_rendererRemoveHandler
          * @param event {RendererExistenceEvent}
@@ -9363,14 +9397,23 @@ declare module egret.gui {
      * @extends egret.gui.UIComponent
      * @implements egret.gui.IVisualElementContainer
      */
-    class Scroller extends UIComponent implements IVisualElementContainer {
+    class Scroller extends SkinnableComponent implements IVisualElementContainer {
         /**
          * 构造函数
          * @method egret.gui.Scroller#constructor
          */
         constructor();
+        /**
+         * [SkinPart]水平滚动条
+         */
+        horizontalScrollBar: HScrollBar;
+        /**
+         * [SkinPart]垂直滚动条
+         */
+        verticalScrollBar: VScrollBar;
         hBar: HScrollBar;
         vBar: VScrollBar;
+        _scroller: ScrollView;
         /**
          * @method egret.gui.Scroller#measure
          */
@@ -9403,61 +9446,14 @@ declare module egret.gui {
          * 安装并初始化视域组件
          */
         private installViewport();
+        _onAddToStage(): void;
         /**
          * 卸载视域组件
          */
         private uninstallViewport();
-        private onTouchEndCapture(event);
-        private dispatchPropagationEvent(event);
-        _dispatchPropagationEvent(event: Event, list: DisplayObject[], targetIndex?: number): void;
-        private touchBeginTimer;
-        private delayTouchBeginEvent;
-        /**
-         * 若这个Scroller可以滚动，阻止当前事件，延迟100ms再抛出。
-         */
-        private onTouchBeginCapture(event);
-        private cloneTouchEvent(event);
-        private onTouchBeginTimer(e?);
-        /**
-         * 鼠标按下时的偏移量
-         */
-        private _offsetPointX;
-        private _offsetPointY;
-        private _horizontalCanScroll;
-        private _verticalCanScroll;
-        /**
-         * 检查当前滚动策略，若有一个方向可以滚动，返回true。
-         */
-        private checkScrollPolicy();
-        private ignoreTouchBegin;
-        private onTouchBegin(event);
-        private onTouchMove(event);
-        private onTouchEnd(event);
-        private static VELOCITY_WEIGHTS;
-        private static easeOut(ratio);
-        private _previousTouchTime;
-        private _velocityX;
-        private _velocityY;
-        private _previousVelocityX;
-        private _previousVelocityY;
-        private _currentTouchX;
-        private _currentTouchY;
-        private _previousTouchX;
-        private _previousTouchY;
-        _startTouchX: number;
-        _startTouchY: number;
-        _startHorizontalScrollPosition: number;
-        _startVerticalScrollPosition: number;
-        private enterFrameHandler(event);
-        private checkHorizontalScrollPosition();
-        private checkVerticalScrollPosition();
-        private static animationData;
-        private getAnimationDatas(pixelsPerMS, curPos, maxPos);
-        /**
-         * 停止触摸时继续滚动的动画实例
-         */
-        private horizontalAnimator;
-        private finishScrollingHorizontally(animation?);
+        private _scrollerChangedHandler(e);
+        private setViewportVScrollPosition(pos);
+        private setViewportHScrollPosition(pos);
         /**
          * 缓动到水平滚动位置
          * @method egret.gui.Scroller#throwHorizontally
@@ -9466,27 +9462,12 @@ declare module egret.gui {
          */
         throwHorizontally(hspTo: number, duration?: number): void;
         /**
-         * 更新水平滚动位置
-         */
-        private horizontalUpdateHandler(animation);
-        /**
-         * 滚动回正确位置的动画实例
-         */
-        private verticalAnimator;
-        private finishScrollingVertically(animation?);
-        /**
          * 缓动到垂直滚动位置
          * @method egret.gui.Scroller#throwVertically
          * @param vspTo {number}
          * @param duration {number}
          */
         throwVertically(vspTo: number, duration?: number): void;
-        /**
-         * 更新垂直滚动位置
-         */
-        private verticalUpdateHandler(animation);
-        private setViewportVScrollPosition(pos);
-        private setViewportHScrollPosition(pos);
         /**
          * @member egret.gui.Scroller#numElements
          */
@@ -9619,14 +9600,15 @@ declare module egret.gui {
          * @param index2 {number}
          */
         swapChildrenAt(index1: number, index2: number): void;
+        _checkHbar(): void;
+        _checkVbar(): void;
         /**
-         * @method egret.gui.SliderBase#partAdded
+         * 若皮肤是ISkin,则调用此方法附加皮肤中的公共部件
+         * @method egret.gui.Scroller#partAdded
          * @param partName {string}
          * @param instance {any}
          */
-        _addScrollBars(): void;
-        _checkHbar(): void;
-        _checkVbar(): void;
+        partAdded(partName: string, instance: any): void;
         _removeScrollBars(): void;
         private hBarChanged(e);
         private vBarChanged(e);

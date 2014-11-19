@@ -42,8 +42,8 @@ var egret;
         function MovieClip(data, texture) {
             _super.call(this);
             /**
-             * @member {number} egret.MovieClip#frameRate
              * 动画的播放帧频
+             * @member {number} egret.MovieClip#frameRate
              */
             this.frameRate = 60;
             if (data instanceof DefaultMovieClipDelegate) {

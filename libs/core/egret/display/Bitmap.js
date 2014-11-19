@@ -122,7 +122,7 @@ var egret;
                     var scaleY = destH / textureHeight;
                     offsetY = Math.round(offsetY * scaleY);
                     destH = Math.round(bitmapHeight * scaleY);
-                    egret.RenderFilter.getInstance().drawImage(renderContext, thisObject, texture._bitmapX, texture._bitmapY, bitmapWidth, bitmapHeight, offsetX, offsetY, destW, destH);
+                    Bitmap.renderFilter.drawImage(renderContext, thisObject, texture._bitmapX, texture._bitmapY, bitmapWidth, bitmapHeight, offsetX, offsetY, destW, destH);
                 }
             }
             else {
@@ -224,6 +224,7 @@ var egret;
          * @member {boolean} egret.Bitmap.debug
          */
         Bitmap.debug = false;
+        Bitmap.renderFilter = egret.RenderFilter.getInstance();
         return Bitmap;
     })(egret.DisplayObject);
     egret.Bitmap = Bitmap;

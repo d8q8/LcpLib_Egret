@@ -84,8 +84,8 @@ var egret;
         });
         Object.defineProperty(Stage.prototype, "stageWidth", {
             /**
-             * @member {number} egret.Stage#stageWidth
              * 舞台宽度（坐标系宽度，非设备宽度）
+             * @member {number} egret.Stage#stageWidth
              */
             get: function () {
                 return this._stageWidth;
@@ -95,8 +95,8 @@ var egret;
         });
         Object.defineProperty(Stage.prototype, "stageHeight", {
             /**
-             * @member {number} egret.Stage#stageHeight
              * 舞台高度（坐标系高度，非设备高度）
+             * @member {number} egret.Stage#stageHeight
              */
             get: function () {
                 return this._stageHeight;

@@ -160,7 +160,9 @@ var egret;
                 this._content = content;
                 if (oldContent !== content) {
                     if (oldContent instanceof egret.DisplayObject) {
-                        this._removeFromDisplayList(oldContent);
+                        if (oldContent.parent == this) {
+                            this._removeFromDisplayList(oldContent);
+                        }
                     }
                     if (content instanceof egret.DisplayObject) {
                         this._addToDisplayListAt(content, 0);
@@ -221,8 +223,8 @@ var egret;
                         h = this._height;
                     }
                     else {
-                        w = texture.textureWidth;
-                        h = texture.textureHeight;
+                        w = texture._textureWidth;
+                        h = texture._textureHeight;
                     }
                     egret.Bitmap._drawBitmap(renderContext, w, h, this);
                 }
