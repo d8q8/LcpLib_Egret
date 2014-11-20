@@ -18,7 +18,7 @@ class ${NAME} {
         
     }
     /**
-     * 类名
+     * 转字符
      * @returns {string}
      */
     public toString():string{
@@ -67,7 +67,7 @@ module lcp{
             
         }
         /**
-         * 类名
+         * 转字符
          * @returns {string}
          */
         public toString():string{

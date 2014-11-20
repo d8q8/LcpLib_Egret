@@ -80,7 +80,7 @@ module lcp {
         /**
          * 在默认范围内创建一个随机整数
          * @param min 最小值
-         * @param max 最大值
+         * @param max 最大值randomWithinRange
          * @returns {number}
          */
         public static randomIntegerWithinRange(min:number, max:number = 0):number {
