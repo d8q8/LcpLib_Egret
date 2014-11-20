@@ -1,5 +1,5 @@
-
-1>TS类模版
+针对WebStorm的TS模版
+1>TS类模版 TypeScript Class
 /**
  * Created by ${USER} on ${DATE}.
  * @class ${NAME}
@@ -27,7 +27,7 @@ class ${NAME} {
     }
 }
 
-2>TS枚举类模版
+2>TS枚举类模版 TypeScript Enum
 /**
  * Created by ${USER} on ${DATE}.
  * @module lcp
@@ -40,7 +40,7 @@ module lcp{
     }
 }
 
-3>TS接口类模版
+3>TS接口类模版 TypeScript Interface
 /**
  * Created by ${USER} on ${DATE}.
  * @module lcp
@@ -53,7 +53,7 @@ module lcp{
     }
 }
 
-4>TS模块类模版
+4>TS模块类模版 TypeScript Module
 /**
  * Created by ${USER} on ${DATE}.
  * @module lcp
