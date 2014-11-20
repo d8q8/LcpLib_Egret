@@ -11,7 +11,7 @@ module lcp {
     export class LSprite extends egret.Sprite {
         public CLASS_NAME:string = 'LSprite';
 
-        private clickOffset:egret.Point;
+        private clickOffset:egret.Point;//拖拽起始坐标
         private _mouseX:number;//舞台x坐标
         private _mouseY:number;//舞台y坐标
         private _target:any;//当前元件
