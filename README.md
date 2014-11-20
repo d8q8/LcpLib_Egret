@@ -23,11 +23,12 @@ lcp
 │   ├─LCircle       //绘制圆形类
 │   ├─LEllipse      //绘制椭圆类
 │   ├─LGraphics     //绘制图形基类
+│   ├─LHeart        //绘制心形类
 │   ├─LPolygon      //绘制多边形类
 │   ├─LRect         //绘制矩形类
-│   ├─LRoundRect    //绘制圆角矩形类
-│   ├─LHeart        //绘制心形类
 │   ├─LRose         //绘制玫瑰类
+│   ├─LRoundRect    //绘制圆角矩形类
+│   ├─LSprite       //精灵辅助类(完善简单拖拽功能)
 │   └─LStar         //绘制多角星类
 ├─events
 │   ├─LEvent        //自定义事件类
