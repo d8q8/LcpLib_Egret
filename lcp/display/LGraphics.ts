@@ -8,7 +8,7 @@ module lcp {
     /**
      * 绘图基类
      */
-    export class LGraphics extends egret.Sprite {
+    export class LGraphics extends LSprite {
         public CLASS_NAME:string = "LGraphics";
 
         public constructor(public vars?:IGraphics) {
