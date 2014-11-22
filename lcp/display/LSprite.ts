@@ -29,6 +29,8 @@ module lcp {
         public startDrag(e:egret.TouchEvent):void {
             this._target = e.currentTarget;
             this.clickOffset = new egret.Point(e.localX, e.localY);
+            this._mouseX = e.stageX;
+            this._mouseY = e.stageY;
             this._moveFunc = (e)=> {
                 this._mouseX = e.stageX;
                 this._mouseY = e.stageY;
@@ -52,8 +54,8 @@ module lcp {
          */
         private enter_frame(e:egret.Event):void {
             if (this.clickOffset != null) {
-                this.x = this._mouseX - this.clickOffset.x;
-                this.y = this._mouseY - this.clickOffset.y;
+                this._target.x = this._mouseX - this.clickOffset.x;
+                this._target.y = this._mouseY - this.clickOffset.y;
             }
         }
 
