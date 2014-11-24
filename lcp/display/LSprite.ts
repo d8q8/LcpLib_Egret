@@ -95,6 +95,38 @@ module lcp {
         }
 
         /**
+         * 两个矩形元件碰撞检测
+         * @param o1
+         * @param o2
+         * @returns {boolean}
+         */
+        public static hitTestObject(o1:egret.DisplayObject,o2:egret.DisplayObject):boolean
+        {
+            var rect1:egret.Rectangle = o1.getBounds();
+            var rect2:egret.Rectangle = o2.getBounds();
+            rect1.x = o1.x;
+            rect1.y = o1.y;
+            rect2.x = o2.x;
+            rect2.y = o2.y;
+            return rect1.intersects(rect2);
+        }
+
+        /**
+         * 两个元件碰撞检测
+         * @param o1
+         * @param o2
+         * @returns {boolean}
+         */
+        public static hitTest(o1:egret.DisplayObject,o2:egret.DisplayObject):boolean{
+            var dx:number = o1.x - o2.x;
+            var dy:number = o1.y - o2.y;
+            var dist:number = Math.sqrt(dx*dx+dy*dy);
+            if(dist < o1.width/2 + o2.width/2||dist < o1.height/2 + o2.height/2){
+                return true;
+            }
+        }
+
+        /**
          * 类名
          * @returns {string}
          */
