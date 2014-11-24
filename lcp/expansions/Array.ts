@@ -29,3 +29,7 @@ Array.prototype.avg = function () {
     if(len==0) return 0;
     return this.sum()/len;
 }
+
+
+Array.sum = lcp.ArrayUtil.sum;
+Array.avg = lcp.ArrayUtil.average;
