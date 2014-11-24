@@ -147,6 +147,15 @@ module lcp {
             return value >> 0;
         }
         /**
+         * 取整型
+         * @param value
+         * @returns {number}
+         */
+        public static int(value:number):number{
+            return value >> 0;
+        }
+
+        /**
          * 判断一个数是否为质数
          * @param value
          * @returns {boolean}
@@ -364,7 +373,7 @@ module lcp {
             if (kDelim != null && num.length > 3) {
                 var totalDelim:number = Math.floor(num.length / 3);
                 var totalRemain:number = num.length % 3;
-                var numSplit:Array<any> = num.split('');
+                var numSplit:string[] = num.split('');
                 var i:number = -1;
 
                 while (++i < totalDelim)
