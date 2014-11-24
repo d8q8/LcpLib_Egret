@@ -138,7 +138,14 @@ module lcp {
         public static isInteger(value:number):boolean {
             return (value % 1) == 0;
         }
-
+        /**
+         * 取整
+         * @param value
+         * @returns {number}
+         */
+        public static int(value:number):number{
+            return value >> 0;
+        }
         /**
          * 判断一个数是否为质数
          * @param value
