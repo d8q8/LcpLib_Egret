@@ -15,10 +15,31 @@ module lcp {
         private _mouseX:number;//舞台x坐标
         private _mouseY:number;//舞台y坐标
         private _target:any;//当前元件
-        private _moveFunc:Function;
+        private _moveFunc:Function;//移动回调
+        private _isDrag:boolean;//判断是否拖拽
+
+        /**
+         * 更简化拖拽为一个属性判断
+         * @returns {boolean}
+         */
+        public get isDrag():boolean{
+            return this._isDrag;
+        }
+        public set isDrag(value:boolean){
+            this._isDrag = value;
+        }
 
         constructor() {
             super();
+            this._isDrag=false;
+            this.startDrag();
+        }
+
+        /**
+         * 简化开始拖拽
+         */
+        private startDrag():void {
+            this.addEventListener(egret.TouchEvent.TOUCH_BEGIN, this._startDrag, this);
         }
 
         /**
@@ -26,23 +47,37 @@ module lcp {
          * @param lockCenter
          * @param bounds
          */
-        public startDrag(e:egret.TouchEvent):void {
-            this._target = e.currentTarget;
-            this.clickOffset = new egret.Point(e.localX, e.localY);
-            this._mouseX = e.stageX;
-            this._mouseY = e.stageY;
-            this._moveFunc = (e)=> {
+        private _startDrag(e:egret.TouchEvent):void {
+            //console.log(this._isDrag);
+            if(this._isDrag==true) {
+                this._target = e.currentTarget;
+                this.clickOffset = new egret.Point(e.localX, e.localY);
                 this._mouseX = e.stageX;
                 this._mouseY = e.stageY;
-            };
-            this._target.addEventListener(egret.Event.ENTER_FRAME, this.enter_frame, this);
-            this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._moveFunc, this);
+                this._moveFunc = (e)=> {
+                    this._mouseX = e.stageX;
+                    this._mouseY = e.stageY;
+                    this.stopDrag();
+                };
+                this._target.addEventListener(egret.Event.ENTER_FRAME, this.enter_frame, this);
+                this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._moveFunc, this);
+            }
+            else{
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this._startDrag,this);
+            }
+        }
+
+        /**
+         * 简化停止拖拽
+         */
+        private stopDrag():void{
+            this.addEventListener(egret.TouchEvent.TOUCH_END,this._stopDrag,this);
         }
 
         /**
          * 拖拽结束
          */
-        public stopDrag(e:egret.TouchEvent):void {
+        private _stopDrag(e:egret.TouchEvent):void {
             this.clickOffset = null;
             this._target.removeEventListener(egret.Event.ENTER_FRAME, this.enter_frame, this);
             this.stage.removeEventListener(egret.TouchEvent.TOUCH_MOVE, this._moveFunc, this);
