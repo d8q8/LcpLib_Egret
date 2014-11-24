@@ -71,7 +71,7 @@ module lcp {
          * 在默认范围创建一个随机数
          * @param min 最小值
          * @param max 最大值
-         * @returns {any}
+         * @returns {number}
          */
         public static randomWithinRange(min:number, max:number):number {
             return min + (Math.random() * (max - min));

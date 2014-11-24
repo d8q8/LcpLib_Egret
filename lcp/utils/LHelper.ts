@@ -35,8 +35,8 @@ module lcp {
          *
          */
         public static addChildAndInit($container:egret.DisplayObjectContainer, $target:egret.DisplayObject, $proper?:Object, $depth:number = -1 ):any{
-            $container.addChild($target);
             LVars.some($target, $proper);
+            $container.addChild($target);
 
             if ($depth != -1)
                 LHelper.toLayer($target, $depth);
