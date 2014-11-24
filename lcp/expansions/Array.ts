@@ -24,7 +24,7 @@ Array.prototype.sum = function () {
  * 求平均值
  * @returns {number}
  */
-Array.prototype.avg = function () {
+Array.prototype.average = function () {
     var len = this.length;
     if(len==0) return 0;
     return this.sum()/len;
@@ -32,4 +32,6 @@ Array.prototype.avg = function () {
 
 
 Array.sum = lcp.ArrayUtil.sum;
-Array.avg = lcp.ArrayUtil.average;
+Array.average = lcp.ArrayUtil.average;
+Array.random = lcp.ArrayUtil.random;
+Array.randomize = lcp.ArrayUtil.randomize;
