@@ -6,7 +6,7 @@
  **/
 module lcp {
     /**
-     * 精灵辅助类(主要完善精灵拖拽方法)
+     * 精灵辅助类(主要完善精灵拖拽方法/增加简单拖拽方法)
      */
     export class LSprite extends egret.Sprite {
         public CLASS_NAME:string = 'LSprite';
