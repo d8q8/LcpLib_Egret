@@ -226,7 +226,7 @@ console.log("自己封装任意两点间距离:",lcp.LPoint.twodis(100,100,50,50
         console.log("我点击试试");
     },this);
 2.简单碰撞
-    //定义两个对象sp1,sp2
+    //定义两个显示对象sp1,sp2
     if(egret.Sprite.hitTestObject(sp1,sp2)){
         console.log("碰撞了哟西");
     }
