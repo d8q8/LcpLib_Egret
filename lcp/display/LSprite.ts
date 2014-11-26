@@ -18,6 +18,8 @@ module lcp {
         private _moveFunc:Function;//移动回调
         private _isDrag:boolean;//判断是否拖拽
 
+        private static _instance:LSprite;
+
         /**
          * 更简化拖拽为一个属性判断
          * @returns {boolean}
@@ -33,6 +35,16 @@ module lcp {
             super();
             this._isDrag=false;
             this.startDrag();
+        }
+
+        /**
+         * 统一入口
+         * @returns {LSprite}
+         */
+        public static getInstance():LSprite{
+            if(this._instance == null)
+                this._instance = new LSprite();
+            return this._instance;
         }
 
         /**
@@ -136,3 +148,7 @@ module lcp {
 
     }
 }
+
+//扩展碰撞检测
+egret.Sprite.hitTestObject = lcp.LSprite.hitTestObject;
+egret.Sprite.hitTest = lcp.LSprite.hitTest;
