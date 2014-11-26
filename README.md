@@ -191,8 +191,8 @@ console.log(people);
 var numberArray:Array<any> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 console.log(numberArray);
 console.log(lcp.ArrayUtil.getHighestValue(numberArray));
-console.log("数组求和:",Array.sum(numberArray),"数组求平均值:",Array.average(numberArray));
-console.log("数组随机:",Array.randomize(numberArray));
+console.log("数组求和:",lcp.ArrayUtil.sum(numberArray),"数组求平均值:",lcp.ArrayUtil.average(numberArray));
+console.log("数组随机:",lcp.ArrayUtil.randomize(numberArray));
 
 var color:Array<any>     = ["Red", "Blue", "Green", "Indigo", "Violet"];
 var colorsAlt:Array<any> = ["Red", "Blue", "Green", "Violet"];
@@ -226,8 +226,7 @@ console.log(lcp.ArrayUtil.getIndexOfDifference(color, colorsAlt));
 <pre class="brush:ts;toolbar:false">
 //扩展点方法与原官方点方法
 console.log("官方提供任意两点间距离:",egret.Point.distance(new egret.Point(100,100),new egret.Point(50,50)));
-console.log("自己扩展任意两点间距离:",egret.Point.twodis(100,100,50,50));
-console.log("自己封装任意两点间距离:",lcp.LPoint.twodis(100,100,50,50));//与上面是一样的
+console.log("自己扩展任意两点间距离:",lcp.LPoint.twodis(100,100,50,50));
 </pre>
 
 8>扩展精灵类(简单拖拽和碰撞检测)
@@ -250,13 +249,10 @@ console.log("自己封装任意两点间距离:",lcp.LPoint.twodis(100,100,50,50
     },this);
 2.简单碰撞
     //定义两个显示对象sp1,sp2
-    if(egret.Sprite.hitTestObject(sp1,sp2)){
+    if(lcp.LSprite.hitTestObject(sp1,sp2)){
         console.log("碰撞了哟西");
     }
-    //下面写法跟上面一样,自己选择吧
-    //if(lcp.LSprite.hitTestObject(sp1,sp2)){
-    //    console.log("碰撞了哟西");
-    //}
+
 </pre>
 
 使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. <br />
