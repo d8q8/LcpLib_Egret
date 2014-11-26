@@ -108,8 +108,8 @@ module lcp {
          * @returns {boolean}
          *
          *    <code>
-         *        console.log(lcp.NumberUtil.isEven(7)); // 输出 true
-         *        console.log(lcp.NumberUtil.isEven(12)); // 输出 false
+         *        console.log(lcp.NumberUtil.isOdd(7)); // 输出 true
+         *        console.log(lcp.NumberUtil.isOdd(12)); // 输出 false
          *    </code>
          */
         public static isOdd(value:number):boolean {
