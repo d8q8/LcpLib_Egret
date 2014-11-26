@@ -150,5 +150,5 @@ module lcp {
 }
 
 //扩展碰撞检测
-egret.Sprite.hitTestObject = lcp.LSprite.hitTestObject;
-egret.Sprite.hitTest = lcp.LSprite.hitTest;
+//egret.Sprite.hitTestObject = lcp.LSprite.hitTestObject;
+//egret.Sprite.hitTest = lcp.LSprite.hitTest;
