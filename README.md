@@ -230,6 +230,10 @@ console.log("自己封装任意两点间距离:",lcp.LPoint.twodis(100,100,50,50
     if(egret.Sprite.hitTestObject(sp1,sp2)){
         console.log("碰撞了哟西");
     }
+    //下面写法跟上面一样,自己选择吧
+    //if(lcp.LSprite.hitTestObject(sp1,sp2)){
+    //    console.log("碰撞了哟西");
+    //}
 </pre>
 
 使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. <br />
