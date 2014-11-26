@@ -169,6 +169,69 @@ if(dic.has("c")){
 console.log(dic,dic.get("d"));
 </pre>
 
+6>数组工具类使用
+<pre class="brush:ts;toolbar:false">
+//数组扩展处理工具类使用
+var people:Array<any> = [
+    {name: "Aaron", sex: "Male", hair: "Brown"},
+    {name: "Linda", sex: "Female", hair: "Blonde"},
+    {name: "Katie", sex: "Female", hair: "Brown"},
+    {name: "Nikki", sex: "Female", hair: "Blonde"}
+];
+var person = lcp.ArrayUtil.getItemsByAnyKey(people, {sex: "Female", hair: "Brown"});
+//console.log(person.name);
+//for(var p in person){
+//    console.log(person[p].name);
+//}
+//指定位置插入
+console.log(lcp.ArrayUtil.addItemsAt(people,[{name:"白菜",sex:"保密",hair:"黑色"}],1));
+console.log(people);
+
+//数组的处理方法
+var numberArray:Array<any> = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+console.log(numberArray);
+console.log(lcp.ArrayUtil.getHighestValue(numberArray));
+console.log("数组求和:",Array.sum(numberArray),"数组求平均值:",Array.average(numberArray));
+console.log("数组随机:",Array.randomize(numberArray));
+
+var color:Array<any>     = ["Red", "Blue", "Green", "Indigo", "Violet"];
+var colorsAlt:Array<any> = ["Red", "Blue", "Green", "Violet"];
+console.log(lcp.ArrayUtil.getIndexOfDifference(color, colorsAlt));
+</pre>
+
+7>扩展点方法与原官方点方法
+<pre class="brush:ts;toolbar:false">
+//扩展点方法与原官方点方法
+console.log("官方提供任意两点间距离:",egret.Point.distance(new egret.Point(100,100),new egret.Point(50,50)));
+console.log("自己扩展任意两点间距离:",egret.Point.twodis(100,100,50,50));
+console.log("自己封装任意两点间距离:",lcp.LPoint.twodis(100,100,50,50));//与上面是一样的
+</pre>
+
+8>扩展精灵类(简单拖拽和碰撞检测)
+<pre class="brush:ts;toolbar:false">
+1.简单拖拽
+    var sp2 = new lcp.LSprite();//继承lcp.LSprite
+    this.addChild(sp2);
+    sp2.graphics.beginFill(0xff0000);
+    sp2.graphics.drawRect(0,0,100,50);
+    sp2.graphics.endFill();
+    sp2.name="sp2";
+    sp2.x=300;
+    sp2.y=300;
+    sp2.width=100;
+    sp2.height=50;
+    sp2.touchEnabled=true;
+    sp2.isDrag=true;//给拖拽属性为true就可以拖拽了,是不是很简单
+    sp2.addEventListener(egret.TouchEvent.TOUCH_BEGIN,(e)=>{
+        console.log("我点击试试");
+    },this);
+2.简单碰撞
+    //定义两个对象sp1,sp2
+    if(egret.Sprite.hitTestObject(sp1,sp2)){
+        console.log("碰撞了哟西");
+    }
+</pre>
+
 使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. <br />
 <a href="http://bbs.egret-labs.org/thread-592-1-1.html" target="_blank">
 http://bbs.egret-labs.org/thread-592-1-1.html
