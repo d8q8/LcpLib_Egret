@@ -124,7 +124,7 @@ module lcp {
         }
 
         /**
-         * 两个元件碰撞检测
+         * 两个元件碰撞检测(待修正)
          * @param o1
          * @param o2
          * @returns {boolean}
@@ -133,7 +133,7 @@ module lcp {
             var dx:number = o1.x - o2.x;
             var dy:number = o1.y - o2.y;
             var dist:number = Math.sqrt(dx*dx+dy*dy);
-            if(dist < o1.width/2 + o2.width/2||dist < o1.height/2 + o2.height/2){
+            if(dist < (o1.width/2 + o2.width/2) || dist < (o1.height/2 + o2.height/2)){
                 return true;
             }
         }
