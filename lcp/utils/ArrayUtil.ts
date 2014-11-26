@@ -618,7 +618,7 @@ module lcp {
 }
 
 //扩展方法绑定到数组类
-Array.sum = lcp.ArrayUtil.sum;
-Array.average = lcp.ArrayUtil.average;
-Array.random = lcp.ArrayUtil.random;
-Array.randomize = lcp.ArrayUtil.randomize;
+//Array.sum = lcp.ArrayUtil.sum;
+//Array.average = lcp.ArrayUtil.average;
+//Array.random = lcp.ArrayUtil.random;
+//Array.randomize = lcp.ArrayUtil.randomize;
