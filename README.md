@@ -169,9 +169,9 @@ if(dic.has("c")){
 console.log(dic,dic.get("d"));
 </pre>
 
-6>数组工具类使用
+6>数组/算术工具类使用(更多用法见源码,基本都有案例)
 <pre class="brush:ts;toolbar:false">
-//数组扩展处理工具类使用
+1.数组扩展处理工具类使用
 var people:Array<any> = [
     {name: "Aaron", sex: "Male", hair: "Brown"},
     {name: "Linda", sex: "Female", hair: "Blonde"},
@@ -197,6 +197,29 @@ console.log("数组随机:",Array.randomize(numberArray));
 var color:Array<any>     = ["Red", "Blue", "Green", "Indigo", "Violet"];
 var colorsAlt:Array<any> = ["Red", "Blue", "Green", "Violet"];
 console.log(lcp.ArrayUtil.getIndexOfDifference(color, colorsAlt));
+
+2.算术工具扩展使用方法(更多使用看源码)
+    1)判断奇数
+    console.log(lcp.NumberUtil.isOdd(7)); // 输出 false
+    console.log(lcp.NumberUtil.isOdd(12)); // 输出 true
+    2)判断偶数
+    console.log(lcp.NumberUtil.isEven(7)); // 输出 false
+    console.log(lcp.NumberUtil.isEven(12)); // 输出 true
+    3)判断数字
+    console.log(lcp.NumberUtil.isNumber(7));// 输出 true
+    console.log(lcp.NumberUtil.isNumber("a"));// 输出 false
+    4)取整
+    console.log(lcp.NumberUtil.int(7.5));// 输出 7
+    5)数字转英文数字
+    console.log(lcp.NumberUtil.convertNum("3.4556645445E7"));// 输出 34556645.445
+    console.log(lcp.NumberUtil.spell(0)); // 输出 Zero
+    console.log(lcp.NumberUtil.spell(23)); // 输出 Twenty-Three
+    console.log(lcp.NumberUtil.spell(2005678)); // 输出 Two Million, Five Thousand, Six Hundred Seventy-Eight
+    6)循环获取数值
+    var colors:Array<any> = ["红", "绿", "蓝"];
+    console.log(colors[lcp.NumberUtil.loopIndex(2, colors.length)]); // 输出 蓝
+    console.log(colors[lcp.NumberUtil.loopIndex(4, colors.length)]); // 输出 绿
+    console.log(colors[lcp.NumberUtil.loopIndex(-6, colors.length)]); // 输出 红
 </pre>
 
 7>扩展点方法与原官方点方法
