@@ -112,7 +112,7 @@ module lcp {
                             break;
                         // 网络时间
                         case 'B' :
-                            returnString += NumberUtil.format(this.getInternetTime(dateToFormat), null, 3)
+                            returnString += NumberUtil.format(this.getInternetTime(dateToFormat), null, 3);
                             break;
                         // 12小时格式,不包含前置0
                         case 'g' :
@@ -209,11 +209,11 @@ module lcp {
             var parts:Array<string> = iso8601.toUpperCase().split('T');
             var date:Array<string> = parts[0].split('-');
             var time:Array<string> = (parts.length <= 1) ? [] : parts[1].split(':');
-            var year:number = ObjectUtil.isEmpty(date[0]) ? 0 : <number><any> (date[0]);
-            var month:number = ObjectUtil.isEmpty(date[1]) ? 0 : <number><any> (date[1] - 1);
-            var day:number = ObjectUtil.isEmpty(date[2]) ? 1 : <number><any> (date[2]);
-            var hour:number = ObjectUtil.isEmpty(time[0]) ? 0 : <number><any> (time[0]);
-            var minute:number = ObjectUtil.isEmpty(time[1]) ? 0 : <number><any> (time[1]);
+            var year:number = ObjectUtil.isEmpty(date[0]) ? 0 : <number> (date[0]);
+            var month:number = ObjectUtil.isEmpty(date[1]) ? 0 : <number> (date[1] - 1);
+            var day:number = ObjectUtil.isEmpty(date[2]) ? 1 : <number> (date[2]);
+            var hour:number = ObjectUtil.isEmpty(time[0]) ? 0 : <number> (time[0]);
+            var minute:number = ObjectUtil.isEmpty(time[1]) ? 0 : <number> (time[1]);
             var second:number = 0;
             var millisecond:number = 0;
 
@@ -255,7 +255,7 @@ module lcp {
         /**
          * 转换月为英文字符串
          * @param month
-         * @returns {any}
+         * @returns {string}
          *
          *  <code>
          *      var myDate:Date = new Date(2000, 0, 1);
@@ -264,7 +264,7 @@ module lcp {
          *
          */
         public static getMonthAsString(month:number):string {
-            var monthNamesFull:Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+            var monthNamesFull:Array<string> = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             return monthNamesFull[month];
         }
 
@@ -285,7 +285,7 @@ module lcp {
         /**
          * 转换天为英文字符
          * @param day
-         * @returns {any}
+         * @returns {string}
          *
          *  <code>
          *      var myDate:Date = new Date(2000, 0, 1);
@@ -293,7 +293,7 @@ module lcp {
          *  </code>
          */
         public static getDayAsString(day:number):string {
-            var dayNamesFull:Array<any> = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            var dayNamesFull:Array<string> = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
             return dayNamesFull[day];
         }
 
@@ -371,7 +371,7 @@ module lcp {
             var secsUntil:number = ConversionUtil.minutesToSeconds(minsUntil % 1);
             var milliUntil:number = ConversionUtil.secondsToMilliseconds(secsUntil % 1);
 
-            var result:Object = {
+            var result:any = {
                 days: parseInt(daysUntil.toString()),
                 hours: parseInt(hoursUntil.toString()),
                 minutes: parseInt(minsUntil.toString()),
@@ -414,14 +414,14 @@ module lcp {
         /**
          * 获取时间时区
          * @param d
-         * @returns {any}
+         * @returns {string}
          *
          *  <code>
          *      console.log(DateUtil.getTimezone(new Date()));
          *  </code>
          */
         public static getTimezone(d:Date):string {
-            var timeZones:Array<any> = ['IDLW', 'NT', 'HST', 'AKST', 'PST', 'MST', 'CST', 'EST', 'AST', 'ADT', 'AT', 'WAT', 'GMT', 'CET', 'EET', 'MSK', 'ZP4', 'ZP5', 'ZP6', 'WAST', 'WST', 'JST', 'AEST', 'AEDT', 'NZST'];
+            var timeZones:Array<string> = ['IDLW', 'NT', 'HST', 'AKST', 'PST', 'MST', 'CST', 'EST', 'AST', 'ADT', 'AT', 'WAT', 'GMT', 'CET', 'EET', 'MSK', 'ZP4', 'ZP5', 'ZP6', 'WAST', 'WST', 'JST', 'AEST', 'AEDT', 'NZST'];
             var hour:number = Math.round(12 + -(d.getTimezoneOffset() / 60));
 
             if (this.isDaylightSavings(d))
