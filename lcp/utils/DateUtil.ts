@@ -206,9 +206,9 @@ module lcp {
          *
          */
         public static iso8601ToDate(iso8601:string):Date {
-            var parts:Array<any> = <Array<any>>iso8601.toUpperCase().split('T');
-            var date:Array<any> = parts[0].split('-');
-            var time:Array<any> = (parts.length <= 1) ? [] : parts[1].split(':');
+            var parts:Array<string> = iso8601.toUpperCase().split('T');
+            var date:Array<string> = parts[0].split('-');
+            var time:Array<string> = (parts.length <= 1) ? [] : parts[1].split(':');
             var year:number = ObjectUtil.isEmpty(date[0]) ? 0 : <number><any> (date[0]);
             var month:number = ObjectUtil.isEmpty(date[1]) ? 0 : <number><any> (date[1] - 1);
             var day:number = ObjectUtil.isEmpty(date[2]) ? 1 : <number><any> (date[2]);
