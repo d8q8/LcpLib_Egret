@@ -15,10 +15,11 @@ module lcp {
          * @returns {boolean}
          */
         public static contains(obj:any, member:any):boolean {
-            for (var prop in obj)
-                if (obj[prop] == member)
+            for (var prop in obj){
+                if (obj.hasOwnProperty(prop) && obj[prop] == member){
                     return true;
-
+                }
+            }
             return false;
         }
 
@@ -27,13 +28,13 @@ module lcp {
          * @param obj
          * @returns {any}
          */
-        //public static clone(obj:any):any {
-        //    var byteArray = new egret.ByteArray();
-        //    byteArray.writeObject(obj);
-        //    byteArray.position = 0;
-        //
-        //    return byteArray.readObject();
-        //}
+        public static clone(obj:any):any {
+            var byteArray = new egret.ByteArray();
+            byteArray.writeByte(obj);
+            byteArray.position = 0;
+
+            return byteArray.readByte();
+        }
 
         /**
          * 获取对象所有键存成数组
@@ -44,8 +45,8 @@ module lcp {
             var keys:Array<any> = [];
 
             for (var i in obj)
-                keys.push(i);
-
+                if(obj.hasOwnProperty(i))
+                    keys.push(i);
             return keys;
         }
 
@@ -109,7 +110,8 @@ module lcp {
 
             if (obj instanceof Object) {
                 for (var prop in obj)
-                    return false;
+                    if(!obj.hasOwnProperty(prop))
+                        return false;
                 return true;
             }
 
