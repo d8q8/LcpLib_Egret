@@ -15,7 +15,7 @@ module lcp {
          * 创建一个新的List表
          * @param collection
          */
-        public constructor(collection:Array<any> = null) {
+        public constructor(collection?:Array<any>) {
             this._collection = (collection == null) ? [] : collection.concat();
         }
 
