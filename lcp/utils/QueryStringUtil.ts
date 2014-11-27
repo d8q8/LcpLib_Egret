@@ -27,9 +27,9 @@ module lcp {
                         if (query != '' && query != null) {
                             this._query = query.substring(1);
 
-                            var pairs:Array<any> = <Array<any>>this._query.split('&');
+                            var pairs:Array<string> = this._query.split('&');
                             var i:number         = -1;
-                            var pair:Array<any> = [];
+                            var pair:Array<string> = [];
 
                             this._pairMap = {};
 
