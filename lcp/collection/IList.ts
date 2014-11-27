@@ -10,27 +10,27 @@ module lcp {
      */
     export interface IList {
         addItem(item:any):boolean;
-        addItemAt(item:any, index:number = 0):boolean;
+        addItemAt(item:any, index:number):boolean;
         addItems(items:IList):boolean;
-        addItemsAt(items:IList, index:number = 0x7fffffff):boolean;
+        addItemsAt(items:IList, index:number):boolean;
         clear():void;
         contains(item:any):boolean;
         containsAll(items:IList):boolean;
         equals(list:IList):boolean;
-        getItemAt(index:number = 0):any;
-        subList(startIndex:number = 0, endIndex:number = 16777215):IList;
-        indexOf(item:any, fromIndex:number = 0):number;
+        getItemAt(index:number):any;
+        subList(startIndex:number, endIndex:number):IList;
+        indexOf(item:any, fromIndex:number):number;
         isEmpty():boolean;
-        lastIndexOf(item:any, fromIndex:number = 0x7fffffff):number;
+        lastIndexOf(item:any, fromIndex:number):number;
         size:number;
         removeAllInstancesOfItem(item:any):boolean;
         removeItem(item:any):boolean;
-        removeItemAt(index:number = 0):any;
+        removeItemAt(index:number):any;
         removeItems(items:IList):boolean;
         retainItems(items:IList):boolean;
-        setItem(item:any, index:number = 0):any;
+        setItem(item:any, index:number):any;
         toArray():Array<any>;
         clone():IList;
-        toString():string
+        toString():string;
     }
 }
