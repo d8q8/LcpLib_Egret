@@ -20,33 +20,37 @@ lcp
 ├─data
 │   └─LVars         //全局变参类(待完善)
 ├─display
-│   ├─LCircle       //绘制圆形类
-│   ├─LEllipse      //绘制椭圆类
-│   ├─LGraphics     //绘制图形基类
-│   ├─LHeart        //绘制心形类
-│   ├─LPolygon      //绘制多边形类
-│   ├─LRect         //绘制矩形类
-│   ├─LRose         //绘制玫瑰类
-│   ├─LRoundRect    //绘制圆角矩形类
-│   ├─LSprite       //精灵辅助类(完善简单拖拽/碰撞检测功能)
-│   └─LStar         //绘制多角星类
+│   ├─LCircle           //绘制圆形类
+│   ├─LEllipse          //绘制椭圆类
+│   ├─LGraphics         //绘制图形基类
+│   ├─LHeart            //绘制心形类
+│   ├─LPolygon          //绘制多边形类
+│   ├─LRect             //绘制矩形类
+│   ├─LRose             //绘制玫瑰类
+│   ├─LRoundRect        //绘制圆角矩形类
+│   ├─LSprite           //精灵辅助类(完善简单拖拽/碰撞检测功能)
+│   └─LStar             //绘制多角星类
 ├─events
-│   ├─LEvent        //自定义事件类
-│   └─LListener     //全局侦听消息类
+│   ├─LEvent            //自定义事件类
+│   └─LListener         //全局侦听消息类
 ├─interfaces
-│   ├─GraphicsType  //绘制枚举类(暂未用到)
-│   └─IGraphics     //绘制图形接口类
+│   ├─GraphicsType      //绘制枚举类(暂未用到)
+│   └─IGraphics         //绘制图形接口类
 ├─math
-│   └─Percent       //百分比类
+│   └─Percent           //百分比类
 └─utils
-    ├─ArrayUtil     //数组工具类
-    ├─NumberUtil    //算术工具类
-    ├─LOrder        //排序类(暂时处理升/降序/字段排序/自定义排序)
-    ├─LDictionary   //字典类
-    ├─LGlobal       //全局静态类
-    ├─LHelper       //辅助帮助类
-    ├─LString       //字符处理类(待完善)
-    └─LTrace        //跟踪捕获类(待完善)
+    ├─ArrayUtil         //数组工具类
+    ├─NumberUtil        //算术工具类
+    ├─ConversionUtil    //转换工具类
+    ├─DateUtil          //日期工具类
+    ├─ObjectUtil        //对象工具类
+    ├─QueryStringUtil   //查询字符串类
+    ├─LOrder            //排序类(暂时处理升/降序/字段排序/自定义排序)
+    ├─LDictionary       //字典类
+    ├─LGlobal           //全局静态类
+    ├─LHelper           //辅助帮助类
+    ├─LString           //字符处理类(待完善)
+    └─LTrace            //跟踪捕获类(待完善)
 </pre>
 
 1> 绘制参数
