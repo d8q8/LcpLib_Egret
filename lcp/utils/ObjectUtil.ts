@@ -43,7 +43,6 @@ module lcp {
          */
         public static getKeys(obj:any):Array<any> {
             var keys:Array<any> = [];
-
             for (var i in obj)
                 if(obj.hasOwnProperty(i))
                     keys.push(i);
@@ -59,7 +58,6 @@ module lcp {
         public static isMethod(obj:any, methodName:string):boolean {
             if (obj.hasOwnProperty(methodName))
                 return obj[methodName] instanceof Function;
-
             return false;
         }
 
@@ -69,7 +67,7 @@ module lcp {
          * @returns {boolean}
          */
         public static isUndefined(obj:any):boolean {
-            return obj instanceof undefined;
+            return obj instanceof undefined || typeof obj === 'undefined';
         }
 
         /**
@@ -91,10 +89,10 @@ module lcp {
          *      var testArray:Array<any>   = [];
          *      var testString:string = "";
          *      var testObject:Object = {};
-         *      console.log(ObjectUtil.isEmpty(testNumber)); // 输出 "true"
-         *      console.log(ObjectUtil.isEmpty(testArray));  // 输出 "true"
-         *      console.log(ObjectUtil.isEmpty(testString)); // 输出 "true"
-         *      console.log(ObjectUtil.isEmpty(testObject)); // 输出 "true"
+         *      console.log(lcp.ObjectUtil.isEmpty(testNumber)); // 输出 "true"
+         *      console.log(lcp.ObjectUtil.isEmpty(testArray));  // 输出 "true"
+         *      console.log(lcp.ObjectUtil.isEmpty(testString)); // 输出 "true"
+         *      console.log(lcp.ObjectUtil.isEmpty(testObject)); // 输出 "true"
          *  </code>
          *
          */
@@ -103,14 +101,14 @@ module lcp {
                 return true;
 
             if (typeof(obj) == "number")
-                return isNaN(obj);
+                return isNaN(obj) || obj == 0;
 
             if (obj instanceof Array || typeof(obj) == "string")
                 return obj.length == 0;
 
             if (obj instanceof Object) {
                 for (var prop in obj)
-                    if(!obj.hasOwnProperty(prop))
+                    if(obj.hasOwnProperty(prop))
                         return false;
                 return true;
             }
