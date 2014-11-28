@@ -28,13 +28,13 @@ module lcp {
          * @param obj
          * @returns {any}
          */
-        public static clone(obj:any):any {
+        /*public static clone(obj:any):any {
             var byteArray = new egret.ByteArray();
             byteArray.writeByte(obj);
             byteArray.position = 0;
 
             return byteArray.readByte();
-        }
+        }*/
 
         /**
          * 获取对象所有键存成数组
