@@ -209,11 +209,11 @@ module lcp {
             var parts:Array<string> = iso8601.toUpperCase().split('T');
             var date:Array<string> = parts[0].split('-');
             var time:Array<string> = (parts.length <= 1) ? [] : parts[1].split(':');
-            var year:number = ObjectUtil.isEmpty(date[0]) ? 0 : <number> (date[0]);
-            var month:number = ObjectUtil.isEmpty(date[1]) ? 0 : <number> (date[1] - 1);
-            var day:number = ObjectUtil.isEmpty(date[2]) ? 1 : <number> (date[2]);
-            var hour:number = ObjectUtil.isEmpty(time[0]) ? 0 : <number> (time[0]);
-            var minute:number = ObjectUtil.isEmpty(time[1]) ? 0 : <number> (time[1]);
+            var year:number = ObjectUtil.isEmpty(date[0]) ? 0 : parseInt(date[0]);
+            var month:number = ObjectUtil.isEmpty(date[1]) ? 0 : parseInt(date[1]) - 1;
+            var day:number = ObjectUtil.isEmpty(date[2]) ? 1 : parseInt(date[2]);
+            var hour:number = ObjectUtil.isEmpty(time[0]) ? 0 : parseInt(time[0]);
+            var minute:number = ObjectUtil.isEmpty(time[1]) ? 0 : parseInt(time[1]);
             var second:number = 0;
             var millisecond:number = 0;
 
