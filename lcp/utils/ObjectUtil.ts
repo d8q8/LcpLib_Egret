@@ -105,7 +105,7 @@ module lcp {
             if (typeof(obj) == "number")
                 return isNaN(obj);
 
-            if (obj instanceof Array<any> || typeof(obj) == "string")
+            if (obj instanceof Array || typeof(obj) == "string")
                 return obj.length == 0;
 
             if (obj instanceof Object) {
