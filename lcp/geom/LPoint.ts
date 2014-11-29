@@ -35,4 +35,4 @@ module lcp {
 }
 
 //扩展点类方法
-egret.Point.twodis = lcp.LPoint.twodis;
+//egret.Point.twodis = lcp.LPoint.twodis;
