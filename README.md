@@ -44,7 +44,7 @@ lcp
     ├─ConversionUtil    //转换工具类
     ├─DateUtil          //日期工具类
     ├─ObjectUtil        //对象工具类
-    ├─QueryStringUtil   //查询字符串类
+    ├─QueryStringUtil   //查询字符串类(目前官方的针对HTML不可用,这个方法待完善)
     ├─SingletonUtil     //单例工具类
     ├─LOrder            //排序类(暂时处理升/降序/字段排序/自定义排序)
     ├─LDictionary       //字典类
