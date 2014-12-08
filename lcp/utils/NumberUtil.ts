@@ -11,6 +11,7 @@ module lcp {
      */
     export class NumberUtil {
         public CLASS_NAME:string = "NumberUtil";
+
         /**
          * 如果两值相等,由精度定义决定
          * @param val1 值1
@@ -71,7 +72,7 @@ module lcp {
          * 在默认范围创建一个随机数
          * @param min 最小值
          * @param max 最大值
-         * @returns {number}
+         * @returns {any}
          */
         public static randomWithinRange(min:number, max:number):number {
             return min + (Math.random() * (max - min));
@@ -140,11 +141,11 @@ module lcp {
         }
 
         /**
-         * 取整型
+         * 取整
          * @param value
          * @returns {number}
          */
-        public static int(value:number):number{
+        public static int(value:number):number {
             return value >> 0;
         }
 
@@ -198,7 +199,7 @@ module lcp {
          * @returns {number}
          *
          *    <code>
-         *        var colors:Array<any> = ["红", "绿", "蓝"];
+         *        var colors:Array<ant> = ["红", "绿", "蓝"];
          *        console.log(colors[lcp.NumberUtil.loopIndex(2, colors.length)]); // 输出 蓝
          *        console.log(colors[lcp.NumberUtil.loopIndex(4, colors.length)]); // 输出 绿
          *        console.log(colors[lcp.NumberUtil.loopIndex(-6, colors.length)]); // 输出 红
@@ -366,7 +367,7 @@ module lcp {
             if (kDelim != null && num.length > 3) {
                 var totalDelim:number = Math.floor(num.length / 3);
                 var totalRemain:number = num.length % 3;
-                var numSplit:string[] = num.split('');
+                var numSplit:Array<any> = num.split('');
                 var i:number = -1;
 
                 while (++i < totalDelim)
@@ -458,7 +459,7 @@ module lcp {
          *    <code>
          *        console.log(lcp.NumberUtil.spell(0)); // 输出 Zero
          *        console.log(lcp.NumberUtil.spell(23)); // 输出 Twenty-Three
-         *        console.log(lcp.NumberUtil.spell(2005678)); // 输出 Two Million, Five Thousand, Six Hundred Seventy-Eight
+         *        console.log(lcp.NumberUtil.spell(2005678)); // 输出 Two Million,Five Thousand,Six Hundred And Seventy-Eight
          *    </code>
          *
          */

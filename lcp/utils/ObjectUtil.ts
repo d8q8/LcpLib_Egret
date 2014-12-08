@@ -32,7 +32,6 @@ module lcp {
             var byteArray = new egret.ByteArray();
             byteArray.writeByte(obj);
             byteArray.position = 0;
-
             return byteArray.readByte();
         }*/
 
@@ -67,7 +66,7 @@ module lcp {
          * @returns {boolean}
          */
         public static isUndefined(obj:any):boolean {
-            return obj instanceof undefined || typeof obj === 'undefined';
+            return this.isNull(obj) || obj === undefined || typeof obj === 'undefined';
         }
 
         /**
@@ -76,7 +75,7 @@ module lcp {
          * @returns {boolean}
          */
         public static isNull(obj:any):boolean {
-            return obj === null;
+            return obj === null || typeof obj === 'null' || obj == 0;
         }
 
         /**

@@ -6,10 +6,6 @@ interface Array<T>{
     average():any;
 }
 
-/**
- * 求和
- * @returns {number}
- */
 Array.prototype.sum = function () {
     var len = this.length;
     if(len==0) return 0;
@@ -19,10 +15,6 @@ Array.prototype.sum = function () {
     return sum;
 }
 
-/**
- * 求平均值
- * @returns {number}
- */
 Array.prototype.average = function () {
     var len = this.length;
     if(len==0) return 0;

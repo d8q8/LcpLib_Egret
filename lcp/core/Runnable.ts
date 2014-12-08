@@ -5,10 +5,6 @@
  * @constructor
  **/
 module lcp {
-    export interface IRunnable{
-        start():void;
-        stop():void;
-    }
     /**
      * 运行类
      */

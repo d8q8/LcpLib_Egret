@@ -5,11 +5,6 @@
  * @constructor
  **/
 module lcp {
-    interface IActivatable{
-        isActive: boolean;
-        activate():void;
-        deactivate():void;
-    }
     /**
      * 激活类
      */

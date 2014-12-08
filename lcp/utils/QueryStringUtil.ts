@@ -13,7 +13,7 @@ module lcp {
         public static _pairMap:any;
 
         /**
-         * 获取浏览器URL的键值对(目前官方的针对HTML不可用,这个方法待完善)
+         * 获取浏览器URL的键值对
          * @returns {string}
          */
         public static get queryString():string {

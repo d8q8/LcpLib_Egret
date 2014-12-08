@@ -10,15 +10,15 @@ Egret引擎的封装库v1.0.4(目前完美支持最新版egret1.1.4)
 <pre class="brush:ts;toolbar:false">
 lcp
 ├─collection
-│   ├─IList         //列表接口类
-│   └─List          //列表类
+│   ├─IList             //列表接口类
+│   └─List              //列表类
 ├─core
-│   ├─Activatable   //激活类(暂未用到)
-│   ├─Disposable    //销毁类(暂未用到)
-│   ├─Resumable     //恢复类(暂未用到)
-│   └─Runnable      //运行类(暂未用到)
+│   ├─Activatable       //激活类(暂未用到)
+│   ├─Destroyable       //销毁类(暂未用到)
+│   ├─Resumable         //恢复类(暂未用到)
+│   └─Runnable          //运行类(暂未用到)
 ├─data
-│   └─LVars         //全局变参类(待完善)
+│   └─LVars             //全局变参类(待完善)
 ├─display
 │   ├─LCircle           //绘制圆形类
 │   ├─LEllipse          //绘制椭圆类
@@ -28,30 +28,42 @@ lcp
 │   ├─LRect             //绘制矩形类
 │   ├─LRose             //绘制玫瑰类
 │   ├─LRoundRect        //绘制圆角矩形类
-│   ├─LSprite           //精灵辅助类(完善简单拖拽/碰撞检测功能)
+│   ├─CSprite           //精灵扩展类(增加移除元件/侦听/销毁等方法)
+│   ├─LSprite           //精灵辅助类实现于CSprite(完善简单拖拽/碰撞检测功能)
 │   └─LStar             //绘制多角星类
 ├─events
-│   ├─LEvent            //自定义事件类
-│   └─LListener         //全局侦听消息类
+│   ├─LEvent                        //自定义事件类
+│   ├─RemovableEventDispatcher      //自定义事件类
+│   ├─ListenerManager               //侦听管理器类
+│   └─LListener                     //全局侦听消息类
+├─extensions
+│   └─Array             //数组原生扩展类
+├─geom
+│   └─LPoint            //点扩展类
 ├─interfaces
-│   ├─GraphicsType      //绘制枚举类(暂未用到)
-│   └─IGraphics         //绘制图形接口类
+│   ├─IActivatable                   //激活类接口
+│   ├─IDestroyable                   //销毁类接口
+│   ├─IRemovableEventDispatcher      //移除事件派发器类接口
+│   ├─IResumable                     //恢复类接口
+│   ├─IRunnable                      //运行类接口
+│   └─IGraphics                      //绘制图形接口类
 ├─math
 │   └─Percent           //百分比类
 └─utils
-    ├─ArrayUtil         //数组工具类
-    ├─NumberUtil        //算术工具类
-    ├─ConversionUtil    //转换工具类
-    ├─DateUtil          //日期工具类
-    ├─ObjectUtil        //对象工具类
-    ├─QueryStringUtil   //查询字符串类(目前官方的针对HTML不可用,这个方法待完善)
-    ├─SingletonUtil     //单例工具类
-    ├─LOrder            //排序类(暂时处理升/降序/字段排序/自定义排序)
-    ├─LDictionary       //字典类
-    ├─LGlobal           //全局静态类
-    ├─LHelper           //辅助帮助类
-    ├─LString           //字符处理类(待完善)
-    └─LTrace            //跟踪捕获类(待完善)
+    ├─ArrayUtil              //数组工具类
+    ├─ConversionUtil         //转换工具类
+    ├─DateUtil               //日期工具类
+    ├─DisplayObjectUtil      //显示对象工具类
+    ├─LDictionary            //字典处理类
+    ├─LGlobal                //全局静态类
+    ├─LHelper                //辅助帮助类
+    ├─LOrder                 //排序类(暂时处理升/降序/字段排序/自定义排序)
+    ├─LString                //字符处理类(待完善)
+    ├─LTrace                 //跟踪捕获类(待完善)
+    ├─NumberUtil             //算术工具类
+    ├─ObjectUtil             //对象工具类
+    ├─QueryStringUtil        //查询字符串类(目前官方的针对HTML不可用,这个方法待完善)
+    └─SingletonUtil          //单例工具类
 </pre>
 
 1> 绘制参数

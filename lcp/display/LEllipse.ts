@@ -17,6 +17,7 @@ module lcp {
                 super.init(vars);
             }
         }
+
         public drawShape():void{
             this.graphics.drawEllipse(this.vars.width/2,this.vars.height/2,this.vars.width/2,this.vars.height/2);
         }

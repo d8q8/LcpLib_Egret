@@ -5,9 +5,6 @@
  * @constructor
  **/
 module lcp {
-    interface IResumable extends IRunnable{
-        resume():void;
-    }
     /**
      * 恢复类
      */

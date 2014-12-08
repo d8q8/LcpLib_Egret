@@ -6,6 +6,9 @@
  **/
 
 module lcp {
+    /**
+     * 点扩展类
+     */
     export class LPoint extends egret.HashObject{
         /**
          * 计算两点间距离

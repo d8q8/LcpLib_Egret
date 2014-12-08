@@ -8,7 +8,7 @@ module lcp {
     /**
      * 精灵辅助类(主要完善精灵拖拽方法/增加简单拖拽方法)
      */
-    export class LSprite extends egret.Sprite {
+    export class LSprite extends CSprite {
         public CLASS_NAME:string = 'LSprite';
 
         private clickOffset:egret.Point;//拖拽起始坐标
@@ -24,16 +24,17 @@ module lcp {
          * 更简化拖拽为一个属性判断
          * @returns {boolean}
          */
-        public get isDrag():boolean{
+        public get isDrag():boolean {
             return this._isDrag;
         }
-        public set isDrag(value:boolean){
+
+        public set isDrag(value:boolean) {
             this._isDrag = value;
         }
 
         constructor() {
             super();
-            this._isDrag=false;
+            this._isDrag = false;
             this.startDrag();
         }
 
@@ -41,8 +42,8 @@ module lcp {
          * 统一入口
          * @returns {LSprite}
          */
-        public static getInstance():LSprite{
-            if(this._instance == null)
+        public static getInstance():LSprite {
+            if (this._instance == null)
                 this._instance = new LSprite();
             return this._instance;
         }
@@ -56,12 +57,12 @@ module lcp {
 
         /**
          * 开始拖拽
-         * @param lockCenter
-         * @param bounds
+         * @param e
+         * @private
          */
         private _startDrag(e:egret.TouchEvent):void {
             //console.log(this._isDrag);
-            if(this._isDrag==true) {
+            if (this._isDrag == true) {
                 this._target = e.currentTarget;
                 this.clickOffset = new egret.Point(e.localX, e.localY);
                 this._mouseX = e.stageX;
@@ -74,16 +75,16 @@ module lcp {
                 this._target.addEventListener(egret.Event.ENTER_FRAME, this.enter_frame, this);
                 this.stage.addEventListener(egret.TouchEvent.TOUCH_MOVE, this._moveFunc, this);
             }
-            else{
-                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN,this._startDrag,this);
+            else {
+                this.removeEventListener(egret.TouchEvent.TOUCH_BEGIN, this._startDrag, this);
             }
         }
 
         /**
          * 简化停止拖拽
          */
-        private stopDrag():void{
-            this.addEventListener(egret.TouchEvent.TOUCH_END,this._stopDrag,this);
+        private stopDrag():void {
+            this.addEventListener(egret.TouchEvent.TOUCH_END, this._stopDrag, this);
         }
 
         /**
@@ -112,8 +113,7 @@ module lcp {
          * @param o2
          * @returns {boolean}
          */
-        public static hitTestObject(o1:egret.DisplayObject,o2:egret.DisplayObject):boolean
-        {
+        public static hitTestObject(o1:egret.DisplayObject, o2:egret.DisplayObject):boolean {
             var rect1:egret.Rectangle = o1.getBounds();
             var rect2:egret.Rectangle = o2.getBounds();
             rect1.x = o1.x;
@@ -129,11 +129,11 @@ module lcp {
          * @param o2
          * @returns {boolean}
          */
-        public static hitTest(o1:egret.DisplayObject,o2:egret.DisplayObject):boolean{
+        public static hitTestElement(o1:egret.DisplayObject, o2:egret.DisplayObject):boolean {
             var dx:number = o1.x - o2.x;
             var dy:number = o1.y - o2.y;
-            var dist:number = Math.sqrt(dx*dx+dy*dy);
-            if(dist < (o1.width/2 + o2.width/2) || dist < (o1.height/2 + o2.height/2)){
+            var dist:number = Math.sqrt(dx * dx + dy * dy);
+            if (dist < (o1.width / 2 + o2.width / 2) || dist < (o1.height / 2 + o2.height / 2)) {
                 return true;
             }
         }
@@ -147,6 +147,7 @@ module lcp {
         }
 
     }
+
 }
 
 //扩展碰撞检测

@@ -8,7 +8,7 @@ module lcp {
     /**
      * 绘图基类
      */
-    export class LGraphics extends LSprite {
+    export class LGraphics extends LSprite implements IGraphics{
         public CLASS_NAME:string = "LGraphics";
 
         public constructor(public vars?:IGraphics) {
@@ -61,7 +61,7 @@ module lcp {
 
             this.vars.radius = 5;
             this.vars.ellipseWidth = 20;
-            this.vars.ellipseHeight = this.vars.ellipseWidth;
+            this.vars.ellipseHeight = this.vars.ellipseHeight?this.vars.ellipseHeight:this.vars.ellipseWidth;
             this.vars.corner = 3;
             this.vars.ratio = .5;
             this.vars.petal = 4;
@@ -93,6 +93,20 @@ module lcp {
             return this.CLASS_NAME;
         }
 
+    }
+
+    /**
+     * 图形类型
+     */
+    export enum GraphicsType{
+        Circle,
+        Rect,
+        Ellipse,
+        Polygon,
+        Rose,
+        RoundRect,
+        Star,
+        Heart
     }
 
 }

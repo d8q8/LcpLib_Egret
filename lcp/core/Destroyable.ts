@@ -5,23 +5,19 @@
  * @constructor
  **/
 module lcp {
-    interface IDisposable{
-        isDisposed:boolean;
-        dispose():void;
-    }
     /**
      * 销毁类
      */
-    export class Disposable implements IDisposable {
-        public CLASS_NAME:string = "Disposable";
-        public isDisposed: boolean;
+    export class Destroyable implements IDestroyable {
+        public CLASS_NAME:string = "Destroyable";
+        public isDestroyed: boolean;
 
         public constructor() {
-            super();
+
         }
 
-        public dispose():void {
-            this.isDisposed = true;
+        public destroy():void {
+            this.isDestroyed = true;
         }
 
         /**
