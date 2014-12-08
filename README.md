@@ -14,11 +14,11 @@ lcp
 │   └─List              //列表类
 ├─core
 │   ├─Activatable       //激活类(暂未用到)
-│   ├─Destroyable       //销毁类(暂未用到)
+│   ├─Destroyable       //销毁类
 │   ├─Resumable         //恢复类(暂未用到)
 │   └─Runnable          //运行类(暂未用到)
 ├─data
-│   └─LVars             //全局变参类(待完善)
+│   └─LVars             //全局变参类(可扩展)
 ├─display
 │   ├─LCircle           //绘制圆形类
 │   ├─LEllipse          //绘制椭圆类
@@ -58,8 +58,8 @@ lcp
     ├─LGlobal                //全局静态类
     ├─LHelper                //辅助帮助类
     ├─LOrder                 //排序类(暂时处理升/降序/字段排序/自定义排序)
-    ├─LString                //字符处理类(待完善)
-    ├─LTrace                 //跟踪捕获类(待完善)
+    ├─LString                //字符处理类(可扩展)
+    ├─LTrace                 //跟踪捕获类(可扩展)
     ├─NumberUtil             //算术工具类
     ├─ObjectUtil             //对象工具类
     ├─QueryStringUtil        //查询字符串类(目前官方的针对HTML不可用,这个方法待完善)
