@@ -33,7 +33,7 @@ lcp
 │   └─LStar             //绘制多角星类
 ├─events
 │   ├─LEvent                        //自定义事件类
-│   ├─RemovableEventDispatcher      //自定义事件类
+│   ├─RemovableEventDispatcher      //移除事件派发器类
 │   ├─ListenerManager               //侦听管理器类
 │   └─LListener                     //全局侦听消息类
 ├─extensions
