@@ -48,6 +48,8 @@ lcp
 │   ├─IResumable                     //恢复类接口
 │   ├─IRunnable                      //运行类接口
 │   └─IGraphics                      //绘制图形接口类
+├─layout
+│   └─Distribution      //分布类
 ├─math
 │   └─Percent           //百分比类
 └─utils
