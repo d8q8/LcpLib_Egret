@@ -51,6 +51,7 @@ lcp
 │   └─Percent           //百分比类
 └─utils
     ├─ArrayUtil              //数组工具类
+    ├─ColorUtil              //颜色转换类
     ├─ConversionUtil         //转换工具类
     ├─DateUtil               //日期工具类
     ├─DisplayObjectUtil      //显示对象工具类
@@ -63,6 +64,7 @@ lcp
     ├─NumberUtil             //算术工具类
     ├─ObjectUtil             //对象工具类
     ├─QueryStringUtil        //查询字符串类(目前官方的针对HTML不可用,这个方法待完善)
+    ├─StageReference         //舞台引用类
     └─SingletonUtil          //单例工具类
 </pre>
 

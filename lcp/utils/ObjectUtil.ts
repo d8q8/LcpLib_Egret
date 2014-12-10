@@ -15,8 +15,8 @@ module lcp {
          * @returns {boolean}
          */
         public static contains(obj:any, member:any):boolean {
-            for (var prop in obj){
-                if (obj.hasOwnProperty(prop) && obj[prop] == member){
+            for (var prop in obj) {
+                if (obj.hasOwnProperty(prop) && obj[prop] == member) {
                     return true;
                 }
             }
@@ -24,17 +24,170 @@ module lcp {
         }
 
         /**
-         * 克隆一个副本
+         * 克隆一个深副本(官方暂时不支持对象写入和读取,先放着吧)
          * @param obj
          * @returns {any}
          */
         /*public static clone(obj:any):any {
-            var byteArray = new egret.ByteArray();
-            byteArray.writeByte(obj);
-            byteArray.position = 0;
-            return byteArray.readByte();
-        }*/
+         var byteArray = new egret.ByteArray();
+         byteArray.writeObject(obj);
+         byteArray.position = 0;
+         return byteArray.readObject();
+         }*/
+        /**
+         * 换一种方式对象克隆
+         * @param obj
+         * @param deep
+         * @returns {any}
+         */
+        public static clone(obj:any, deep:boolean = false):any {
+            if (obj instanceof Array) {
+                return ObjectUtil.arrayClone(obj, deep);
+            }
+            else if (typeof obj == "function") {
+                return ObjectUtil.functionClone(obj, deep);
+            }
+            else if (obj instanceof Date) {
+                return ObjectUtil.dateClone(obj, deep);
+            }
+            else if (obj instanceof Object) {
+                return ObjectUtil.objectClone(obj, deep);
+            }
+            else {
+                return obj;
+            }
+        }
 
+        /**
+         * 属性克隆
+         * @param obj
+         * @returns {*}
+         */
+        public static propClone(obj:any):any{
+            if (obj instanceof Array) {
+                return ObjectUtil.arrayPrototypeClone(obj);
+            }
+            else if (typeof obj == "function") {
+                return ObjectUtil.functionPrototypeClone(obj);
+            }
+            else if (obj instanceof Date) {
+                return ObjectUtil.datePrototypeClone(obj);
+            }
+            else if (obj instanceof Object) {
+                return ObjectUtil.objectPrototypeClone(obj);
+            }
+            else {
+                return obj;
+            }
+        }
+
+        /**
+         * 对象克隆
+         * @param obj
+         * @param deep
+         * @returns {any}
+         */
+        public static objectClone(obj:any, deep:boolean = false):any {
+            var buf:any = {};
+            for (var p in obj) {
+                buf[p] = deep ? arguments.callee(obj[p]) : obj[p];
+            }
+            return buf;
+        }
+
+        /**
+         * 对象属性克隆
+         * @param obj
+         * @returns {any}
+         */
+        public static objectPrototypeClone(obj:any):any {
+            var tmp = ()=> {
+            };
+            tmp.prototype = obj;
+            var buf:any = new tmp();
+            return buf;
+        }
+
+        /**
+         * 数组克隆
+         * @param obj
+         * @param deep
+         * @returns {Array<any>}
+         */
+        public static arrayClone(obj:Array<any>, deep:boolean = false):Array<any> {
+            var buf:Array<any> = [];
+            var i = obj.length;
+            while (i--) {
+                buf[i] = deep ? arguments.callee(obj[i]) : obj[i];
+            }
+            return buf;
+        }
+
+        /**
+         * 数组属性克隆
+         * @param obj
+         * @returns {Array<any>}
+         */
+        public static arrayPrototypeClone(obj:any):Array<any> {
+            var tmp:Array<any> = Array.prototype;
+            Array.prototype = obj;
+            var buf:Array<any> = [];
+            Array.prototype = obj;
+            return buf;
+        }
+        /**
+         * 函数克隆
+         * @param obj
+         * @param deep
+         * @returns {Function}
+         */
+        public static functionClone(obj:Function, deep:boolean = false):Function {
+            var buf:Function = Function(<string>("return ") + obj)();
+            for (var p in obj)
+                buf[p] = deep ? arguments.callee(obj[p]) : obj[p];
+            return buf;
+        }
+
+        /**
+         * 函数属性克隆
+         * @param obj
+         * @returns {Function}
+         */
+        public static functionPrototypeClone(obj:Function):Function {
+            var tmp = Function.prototype;
+            Function.prototype = obj;
+            var buf:Function = (new Function(<string>("return ") + this))();
+            Function.prototype = obj;
+            return buf;
+        }
+
+        /**
+         * 时间克隆
+         * @param obj
+         * @param deep
+         * @returns {Date}
+         */
+        public static dateClone(obj:Date, deep:boolean = false):Date {
+            var buf = new Date();
+            buf.setTime(obj.getTime());
+            for (var p in obj)
+                buf[p] = deep ? arguments.callee(obj[p]) : obj[p];
+            return buf;
+        }
+
+        /**
+         * 时间属性克隆
+         * @param obj
+         * @returns {Date}
+         */
+        public static datePrototypeClone(obj:Date):Date {
+            var tmp:Date = Date.prototype;
+            Date.prototype = obj;
+            var buf = new Date();
+            buf.setTime(obj.getTime());
+            Date.prototype = tmp;
+            return buf;
+        }
         /**
          * 获取对象所有键存成数组
          * @param obj
@@ -43,7 +196,7 @@ module lcp {
         public static getKeys(obj:any):Array<any> {
             var keys:Array<any> = [];
             for (var i in obj)
-                if(obj.hasOwnProperty(i))
+                if (obj.hasOwnProperty(i))
                     keys.push(i);
             return keys;
         }
@@ -107,7 +260,7 @@ module lcp {
 
             if (obj instanceof Object) {
                 for (var prop in obj)
-                    if(obj.hasOwnProperty(prop))
+                    if (obj.hasOwnProperty(prop))
                         return false;
                 return true;
             }
