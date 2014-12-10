@@ -39,6 +39,7 @@ lcp
 ├─extensions
 │   └─Array             //数组原生扩展类
 ├─geom
+│   ├─Ellipse           //椭圆类
 │   └─LPoint            //点扩展类
 ├─interfaces
 │   ├─IActivatable                   //激活类接口
@@ -50,11 +51,13 @@ lcp
 ├─math
 │   └─Percent           //百分比类
 └─utils
+    ├─AlignUtil              //对齐工具类
     ├─ArrayUtil              //数组工具类
     ├─ColorUtil              //颜色转换类
     ├─ConversionUtil         //转换工具类
     ├─DateUtil               //日期工具类
     ├─DisplayObjectUtil      //显示对象工具类
+    ├─DrawUtil               //绘制工具类
     ├─LDictionary            //字典处理类
     ├─LGlobal                //全局静态类
     ├─LHelper                //辅助帮助类
@@ -64,6 +67,7 @@ lcp
     ├─NumberUtil             //算术工具类
     ├─ObjectUtil             //对象工具类
     ├─QueryStringUtil        //查询字符串类(目前官方的针对HTML不可用,这个方法待完善)
+    ├─RatioUtil              //比例工具类
     ├─StageReference         //舞台引用类
     └─SingletonUtil          //单例工具类
 </pre>
