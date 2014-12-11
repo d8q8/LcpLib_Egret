@@ -6,7 +6,7 @@
     "collection/IList.ts",
     "collection/List.ts",
     "core/Activatable.ts",
-    "core/Disposable.ts",
+    "core/Destroyable.ts",
     "core/Resumable.ts",
     "core/Runnable.ts",
     "data/LVars.ts",
