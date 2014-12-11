@@ -182,7 +182,7 @@ module lcp {
     /**
      * 事件信息类
      */
-    class EventInfo {
+    export class EventInfo {
         public type:string;
         public listener:Function;
         public thisObject:any;
