@@ -5,6 +5,9 @@
  * @constructor
  **/
 module lcp {
+    /**
+     * 侦听管理器类
+     */
     export class ListenerManager extends Destroyable implements IRemovableEventDispatcher {
 
         public CLASS_NAME:string = "ListenerManager";
