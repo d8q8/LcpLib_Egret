@@ -47,7 +47,7 @@ module lcp {
          * @returns {DisplayObject}
          */
         public addChildWithDimensions(child:egret.DisplayObject, width:number = NaN, height:number = NaN):egret.DisplayObject {
-            this._dimensions[child] = new egret.Point(width, height);
+            this._dimensions[<any>child] = new egret.Point(width, height);
 
             return this.addChild(child);
         }
@@ -155,7 +155,7 @@ module lcp {
 
             while (++i < this.numChildren) {
                 item = this.getChildAt(i);
-                size = (this._dimensions[item] == null) ? new egret.Point(item.width, item.height) : new egret.Point(isNaN(this._dimensions[item].x) ? item.width : this._dimensions[item].x, isNaN(this._dimensions[item].y) ? item.height : this._dimensions[item].y);
+                size = (this._dimensions[<any>item] == null) ? new egret.Point(item.width, item.height) : new egret.Point(isNaN(this._dimensions[<any>item].x) ? item.width : this._dimensions[item].x, isNaN(this._dimensions[<any>item].y) ? item.height : this._dimensions[<any>item].y);
 
                 w = size.x + this._marginLeft + this._marginRight;
                 h = size.y + this._marginTop + this._marginBottom;

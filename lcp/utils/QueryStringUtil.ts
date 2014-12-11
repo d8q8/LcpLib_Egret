@@ -5,6 +5,9 @@
  * @constructor
  **/
 module lcp {
+    /**
+     * 查询字符串类
+     */
     export class QueryStringUtil {
         public CLASS_NAME:string = "QueryStringUtil";
 
@@ -22,8 +25,8 @@ module lcp {
 
                 if (egret.ExternalInterface) {
                     try {
-                        var query:string = egret.ExternalInterface.call('document.location.search.toString');
-
+                        //var query:string = egret.ExternalInterface.call('document.location.search.toString');
+                        var query:string = "";//这里暂时先放着吧.
                         if (query != '' && query != null) {
                             this._query = query.substring(1);
 
