@@ -3,7 +3,7 @@ LcpLib_Egret
 
 Egret引擎的封装库v1.0.4(目前完美支持最新版egret1.1.4)
 
-(注:修正了根据官方绘制与触点偏移的问题)
+(注:修正了根据官方<strong>绘制与触点偏移</strong>的问题)
 
 <strong>类库简称:白菜"内裤".</strong>
 <pre>
