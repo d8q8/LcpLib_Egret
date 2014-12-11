@@ -110,6 +110,8 @@ declare module egret {
         _transformTy: number;
         private blendValue;
         private globalAlpha;
+        private _cacheCanvas;
+        _cacheCanvasContext: any;
         constructor(canvas?: HTMLCanvasElement);
         private createCanvas();
         clearScreen(): void;
@@ -122,7 +124,7 @@ declare module egret {
         private initBlendMode();
         setupFont(textField: TextField): void;
         measureText(text: string): number;
-        drawText(textField: TextField, text: string, x: number, y: number, maxWidth: number): void;
+        drawText(textField: TextField, text: string, x: number, y: number, maxWidth: number, style: Object): void;
         strokeRect(x: any, y: any, w: any, h: any, color: any): void;
         pushMask(mask: Rectangle): void;
         popMask(): void;
@@ -486,9 +488,21 @@ declare module egret {
     class HTML5StageText extends StageText {
         private div;
         private inputElement;
-        private _call;
+        private _shape;
         constructor();
-        private _isShow;
+        private getStageDelegateDiv();
+        _setMultiline(value: boolean): void;
+        private callHandler(e);
+        _add(): void;
+        /**
+         * @method egret.StageText#remove
+         */
+        _remove(): void;
+        private _hasListeners;
+        _addListeners(): void;
+        _removeListeners(): void;
+        private _inputType;
+        private createInput();
         /**
          * @method egret.StageText#open
          * @param x {number}
@@ -497,34 +511,16 @@ declare module egret {
          * @param height {number}
          */
         _open(x: number, y: number, width?: number, height?: number): void;
-        _addListeners(): void;
-        _removeListeners(): void;
-        private addListener(type);
-        private removeListener(type);
-        private onHandler(e);
-        private _canUse;
+        _setScale(x: number, y: number): void;
+        changePosition(x: number, y: number): void;
+        private setStyles();
+        private _isShow;
         /**
          * @method egret.StageText#add
          */
         _show(): void;
         _hide(): void;
-        private _openInput();
-        private _closeInput();
-        private closeKeyboard();
-        private getStageDelegateDiv();
-        _add(): void;
-        /**
-         * @method egret.StageText#remove
-         */
-        _remove(): void;
-        changePosition(x: number, y: number): void;
-        private _inputType;
-        private _isFirstClick;
-        private _createInput();
-        _resetStageText(): void;
-        private setElementValue(value);
-        private _text;
-        private _defaultText;
+        private textValue;
         /**
          * @method egret.StageText#getText
          * @returns {string}
@@ -535,16 +531,7 @@ declare module egret {
          * @param value {string}
          */
         _setText(value: string): void;
-        /**
-         * @method egret.StageText#setTextType
-         * @param type {string}
-         */
-        _setTextType(type: string): void;
-        /**
-         * @method egret.StageText#getTextType
-         * @returns {string}
-         */
-        _getTextType(): string;
+        private resetText();
         private _width;
         _setWidth(value: number): void;
         private _height;

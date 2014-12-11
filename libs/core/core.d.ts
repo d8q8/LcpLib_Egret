@@ -2550,14 +2550,14 @@ declare module egret {
          * @method egret.egret#drawImage
          * @param renderContext {any}
          * @param data {RenderData}
-         * @param sourceX {any}
-         * @param sourceY {any}
-         * @param sourceWidth {any}
-         * @param sourceHeight {any}
-         * @param destX {any}
-         * @param destY {any}
-         * @param destWidth {any}
-         * @param destHeight {any}
+         * @param sourceX {number}
+         * @param sourceY {number}
+         * @param sourceWidth {number}
+         * @param sourceHeight {number}
+         * @param destX {number}
+         * @param destY {number}
+         * @param destWidth {number}
+         * @param destHeight {number}
          */
         drawImage(renderContext: RendererContext, data: RenderData, sourceX: number, sourceY: number, sourceWidth: number, sourceHeight: number, destX: number, destY: number, destWidth: number, destHeight: number, repeat?: any): void;
         private ignoreRender(data, rect, destX, destY);
@@ -2574,14 +2574,15 @@ declare module egret {
      */
     interface RenderData {
         /**
-         * @member egret.RenderData#worldTransform
+         * @member egret.RenderData#_worldTransform
          */
         _worldTransform: Matrix;
         /**
-         * @member egret.RenderData#worldBounds
+         * @member egret.RenderData#_worldBounds
          */
         _worldBounds: Rectangle;
         _texture_to_render: Texture;
+        _getSize(resultRect: Rectangle): Rectangle;
     }
 }
 /**
@@ -2825,6 +2826,7 @@ declare module egret {
          */
         _anchorX: number;
         anchorX: number;
+        _setAnchorX(value: number): void;
         /**
          * 表示从对象相对锚点Y。
          * @member {number} egret.DisplayObject#anchorY
@@ -2832,6 +2834,7 @@ declare module egret {
          */
         _anchorY: number;
         anchorY: number;
+        _setAnchorY(value: number): void;
         /**
          * 显示对象是否可见。
          * 不可见的显示对象已被禁用。例如，如果实例的 visible=false，则无法单击该对象。
@@ -2891,6 +2894,7 @@ declare module egret {
          */
         _scrollRect: Rectangle;
         scrollRect: Rectangle;
+        _setScrollRect(value: Rectangle): void;
         /**
          * 测量宽度
          * @returns {number}
@@ -4080,7 +4084,6 @@ declare module egret {
         private _inputUtils;
         type: string;
         _setType(value: string): void;
-        _drawText: string;
         text: string;
         _getText(): string;
         _setTextDirty(): void;
@@ -4182,7 +4185,16 @@ declare module egret {
         verticalAlign: string;
         _setVerticalAlign(value: string): void;
         maxWidth: any;
-        maxChars: any;
+        /**
+         * 文本字段中最多可包含的字符数（即用户输入的字符数）。
+         * 脚本可以插入比 maxChars 允许的字符数更多的文本；maxChars 属性仅表示用户可以输入多少文本。如果此属性的值为 0，则用户可以输入无限数量的文本。
+         * 默认值为 0。
+         * @type {number}
+         * @private
+         */
+        _maxChars: number;
+        maxChars: number;
+        _setMaxChars(value: number): void;
         maxScrollV: number;
         selectionBeginIndex: number;
         selectionEndIndex: number;
@@ -4205,7 +4217,7 @@ declare module egret {
         private _numLines;
         numLines: number;
         /**
-         * 表示字段是否为多行文本字段。
+         * 表示字段是否为多行文本字段。注意，此属性仅在type为TextFieldType.INPUT时才有效。
          * 如果值为 true，则文本字段为多行文本字段；如果值为 false，则文本字段为单行文本字段。在类型为 TextFieldType.INPUT 的字段中，multiline 值将确定 Enter 键是否创建新行（如果值为 false，则将忽略 Enter 键）。
          * 默认值为 false。
          * @member {boolean} egret.TextField#multiline
@@ -4229,15 +4241,23 @@ declare module egret {
          */
         _measureBounds(): Rectangle;
         /**
+         *
+         * @param textArr [["text1", {"color":0xffffff}], ["text2", {"color":0xff0000}]]
+         * @private
+         */
+        _setTextArray(textArr: any[]): void;
+        private changeToPassText(text);
+        private _textArr;
+        private _isArrayChanged;
+        private setMiddleStyle(textArr);
+        private _linesArr;
+        _getLinesArr(): any[];
+        /**
          * @private
          * @param renderContext
          * @returns {Rectangle}
          */
         private drawText(renderContext, forMeasure);
-        private _textWidth;
-        private _textHeight;
-        private measuredWidths;
-        private getTextLines(renderContext);
     }
 }
 /**
@@ -4464,10 +4484,12 @@ declare module egret {
         private stageText;
         private _isFocus;
         private _text;
+        private _isFirst;
         constructor();
         init(text: TextField): void;
         _addStageText(): void;
         _removeStageText(): void;
+        _getText(): string;
         _setText(value: string): void;
         private onFocusHandler(event);
         private onBlurHandler(event);
@@ -4674,8 +4696,6 @@ declare module egret {
      * @extends egret.HashObject
      */
     class StageText extends EventDispatcher {
-        _multiline: boolean;
-        _maxChars: number;
         constructor();
         /**
          * @method egret.StageText#getText
@@ -4717,6 +4737,9 @@ declare module egret {
         _hide(): void;
         _addListeners(): void;
         _removeListeners(): void;
+        _scaleX: number;
+        _scaleY: number;
+        _setScale(x: number, y: number): void;
         changePosition(x: number, y: number): void;
         _size: number;
         _setSize(value: number): void;
@@ -4734,7 +4757,10 @@ declare module egret {
         _setVisible(value: boolean): void;
         _setWidth(value: number): void;
         _setHeight(value: number): void;
+        _multiline: boolean;
         _setMultiline(value: boolean): void;
+        _maxChars: number;
+        _setMaxChars(value: number): void;
         _resetStageText(): void;
         static create(): StageText;
     }
@@ -5224,6 +5250,11 @@ declare module egret {
          * @member egret.RendererContext#texture_scale_factor
          */
         texture_scale_factor: number;
+        /**
+         * 是否对图像使用平滑处理
+         * 该特性目前只支持Canvas
+         */
+        static imageSmoothingEnabled: boolean;
         private profiler;
         /**
          * @method egret.RendererContext#constructor
@@ -5240,7 +5271,7 @@ declare module egret {
          * @param x {number}
          * @param y {number}
          * @param w {number}
-         * @param h {number}
+         * @param h {numbe}
          */
         clearRect(x: number, y: number, w: number, h: number): void;
         /**
@@ -5260,14 +5291,14 @@ declare module egret {
         /**
          * 变换Context的当前渲染矩阵
          * @method egret.RendererContext#setTransform
-         * @param matrix {egret.Matrix}
+         * @param matrix {egret.Matri}
          */
         setTransform(matrix: Matrix): void;
         /**
          * 设置渲染alpha
          * @method egret.RendererContext#setAlpha
          * @param value {number}
-         * @param blendMode {egret.BlendMode}
+         * @param blendMode {egret.BlendMod}
          */
         setAlpha(value: number, blendMode: string): void;
         /**
@@ -5291,9 +5322,9 @@ declare module egret {
          * @param text {string}
          * @param x {number}
          * @param y {number}
-         * @param maxWidth {number}
+         * @param maxWidth {numbe}
          */
-        drawText(textField: TextField, text: string, x: number, y: number, maxWidth: number): void;
+        drawText(textField: TextField, text: string, x: number, y: number, maxWidth: number, style: Object): void;
         strokeRect(x: any, y: any, w: any, h: any, color: any): void;
         pushMask(mask: Rectangle): void;
         popMask(): void;
