@@ -73,7 +73,7 @@ module lcp {
 		 * @returns {boolean}
 		 */
 		public contains(item:any):boolean {
-			return (this.indexOf(item) == -1) ? false : true;
+			return (this.indexOf(item) != -1);
 		}
 
 		/**
@@ -210,7 +210,7 @@ module lcp {
 
 		/**
 		 * 列表转数组
-		 * @returns {any[]}
+		 * @returns {Array<any>}
 		 */
 		public toArray():Array<any> {
 			return this._collection.concat();
