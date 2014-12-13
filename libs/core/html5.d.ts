@@ -93,6 +93,7 @@ declare module egret {
      * @class egret.HTML5CanvasRenderer
      * @classdesc
      * @extends egret.RendererContext
+     * @private
      */
     class HTML5CanvasRenderer extends RendererContext {
         private canvas;
@@ -114,6 +115,7 @@ declare module egret {
         _cacheCanvasContext: any;
         constructor(canvas?: HTMLCanvasElement);
         private createCanvas();
+        private onResize();
         clearScreen(): void;
         clearRect(x: number, y: number, w: number, h: number): void;
         drawImage(texture: Texture, sourceX: any, sourceY: any, sourceWidth: any, sourceHeight: any, destX: any, destY: any, destWidth: any, destHeight: any, repeat?: any): void;
@@ -122,9 +124,9 @@ declare module egret {
         setAlpha(alpha: number, blendMode: string): void;
         private blendModes;
         private initBlendMode();
-        setupFont(textField: TextField): void;
+        setupFont(textField: TextField, style?: ITextStyle): void;
         measureText(text: string): number;
-        drawText(textField: TextField, text: string, x: number, y: number, maxWidth: number, style: Object): void;
+        drawText(textField: TextField, text: string, x: number, y: number, maxWidth: number, style?: ITextStyle): void;
         strokeRect(x: any, y: any, w: any, h: any, color: any): void;
         pushMask(mask: Rectangle): void;
         popMask(): void;
@@ -181,7 +183,9 @@ declare module egret {
     /**
      * @class egret.WebGLRenderer
      * @classdesc
+     * WebGL的渲染类
      * @extends egret.RendererContext
+     * @private
      */
     class WebGLRenderer extends RendererContext {
         private canvas;
@@ -195,6 +199,7 @@ declare module egret {
         private shaderManager;
         constructor(canvas?: HTMLCanvasElement);
         private createCanvas();
+        private onResize();
         private contextLost;
         private handleContextLost();
         private handleContextRestored();
@@ -226,7 +231,7 @@ declare module egret {
         private colorTransformMatrix;
         setGlobalColorTransform(colorTransformMatrix: any[]): void;
         private canvasContext;
-        setupFont(textField: TextField): void;
+        setupFont(textField: TextField, style?: ITextStyle): void;
         measureText(text: string): number;
         private graphicsPoints;
         private graphicsIndices;
@@ -400,6 +405,7 @@ declare module egret {
      * @class egret.HTML5NetContext
      * @classdesc
      * @extends egret.NetContext
+     * @private
      */
     class HTML5NetContext extends NetContext {
         constructor();
@@ -481,9 +487,9 @@ declare module egret {
  */
 declare module egret {
     /**
-     * @class egret.StageText
      * @classdesc
-     * @extends egret.HashObject
+     * @extends egret.StageText
+     * @private
      */
     class HTML5StageText extends StageText {
         private div;
@@ -494,42 +500,21 @@ declare module egret {
         _setMultiline(value: boolean): void;
         private callHandler(e);
         _add(): void;
-        /**
-         * @method egret.StageText#remove
-         */
         _remove(): void;
         private _hasListeners;
         _addListeners(): void;
         _removeListeners(): void;
         private _inputType;
         private createInput();
-        /**
-         * @method egret.StageText#open
-         * @param x {number}
-         * @param y {number}
-         * @param width {number}
-         * @param height {number}
-         */
         _open(x: number, y: number, width?: number, height?: number): void;
         _setScale(x: number, y: number): void;
         changePosition(x: number, y: number): void;
         private setStyles();
         private _isShow;
-        /**
-         * @method egret.StageText#add
-         */
         _show(): void;
         _hide(): void;
         private textValue;
-        /**
-         * @method egret.StageText#getText
-         * @returns {string}
-         */
         _getText(): string;
-        /**
-         * @method egret.StageText#setText
-         * @param value {string}
-         */
         _setText(value: string): void;
         private resetText();
         private _width;

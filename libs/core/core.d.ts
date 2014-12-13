@@ -72,14 +72,12 @@ declare module egret {
 declare module egret {
     /**
      * @class egret.HashObject
-     * @classdesc
+     * @classdesc 哈希对象。引擎内所有对象的基类，为对象实例提供唯一的hashCode值,提高对象比较的性能。
      * @implements egret.IHashObject
      */
     class HashObject implements IHashObject {
         /**
          * @method egret.HashObject#constructor
-         * @class egret.HashObject
-         * @classdesc 哈希对象。引擎内所有对象的基类，为对象实例提供唯一的hashCode值,提高对象比较的性能。
          */
         constructor();
         /**
@@ -244,7 +242,6 @@ declare module egret {
     var __callAsyncArgsList: any[];
     /**
      * 异步调用函数
-     * @method egret.__callAsync
      * @param method {Function} 要异步调用的函数
      * @param thisObject {any} 函数的this引用
      * @param ...args {any} 函数参数列表
@@ -322,14 +319,11 @@ declare module egret {
          * @class egret.Event
          * @classdesc
          * Event 类作为创建 Event 对象的基类，当发生事件时，Event 对象将作为参数传递给事件侦听器。
-         *
          * Event 类的属性包含有关事件的基本信息，例如事件的类型或者是否可以取消事件的默认行为。
-         *
          * 对于许多事件（如由 Event 类常量表示的事件），此基本信息就足够了。但其他事件可能需要更详细的信息。
          * 例如，与触摸关联的事件需要包括有关触摸事件的位置以及在触摸事件期间是否按下了任何键的其他信息。
          * 您可以通过扩展 Event 类（TouchEvent 类执行的操作）将此类其他信息传递给事件侦听器。
          * Egret API 为需要其他信息的常见事件定义多个 Event 子类。与每个 Event 子类关联的事件将在每个类的文档中加以介绍。
-         *
          * Event 类的方法可以在事件侦听器函数中使用以影响事件对象的行为。
          * 某些事件有关联的默认行为，通过调用 preventDefault() 方法，您的事件侦听器可以取消此行为。
          * 可以通过调用 stopPropagation() 或 stopImmediatePropagation() 方法，将当前事件侦听器作为处理事件的最后一个事件侦听器。
@@ -412,6 +406,16 @@ declare module egret {
          * @constant {string} egret.Event.DEACTIVATE
          */
         static DEACTIVATE: string;
+        /**
+         * Event.CLOSE 常量定义 close 事件对象的 type 属性的值。
+         * @constant {string} egret.Event.CLOSE
+         */
+        static CLOSE: string;
+        /**
+         * Event.CONNECT 常量定义 connect 事件对象的 type 属性的值。
+         * @constant {string} egret.Event.CONNECT
+         */
+        static CONNECT: string;
         data: any;
         _type: string;
         /**
@@ -803,7 +807,7 @@ declare module egret {
     class TimerEvent extends Event {
         /**
          *
-         * @constructor egret.TimerEvent
+         * @method egret.TimerEvent#constructor
          * @param type {string} 事件的类型。事件侦听器可以通过继承的 type 属性访问此信息。
          * @param bubbles {boolean} 确定 Event 对象是否冒泡。事件侦听器可以通过继承的 bubbles 属性访问此信息。
          * @param cancelable {boolean} 确定是否可以取消 Event 对象。事件侦听器可以通过继承的 cancelable 属性访问此信息。
@@ -826,6 +830,61 @@ declare module egret {
          * @param type {string}
          */
         static dispatchTimerEvent(target: IEventDispatcher, type: string): void;
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    class ProgressEvent extends Event {
+        /**
+         * @constant {string} egret.ProgressEvent.PROGRESS
+         */
+        static PROGRESS: string;
+        /**
+         * @constant {string} egret.ProgressEvent.SOCKET_DATA
+         */
+        static SOCKET_DATA: string;
+        bytesLoaded: number;
+        bytesTotal: number;
+        /**
+         * @method egret.ProgressEvent#constructor
+         * @param type {string}
+         * @param bubbles {boolean}
+         * @param cancelable {boolean}
+         * @param bytesLoaded {number}
+         * @param bytesTotal {number}
+         */
+        constructor(type: string, bubbles?: boolean, cancelable?: boolean, bytesLoaded?: number, bytesTotal?: number);
+        /**
+         * 使用指定的EventDispatcher对象来抛出Event事件对象。抛出的对象将会缓存在对象池上，供下次循环复用。
+         * @method egret.ProgressEvent.dispatchIOErrorEvent
+         * @param target {egret.IEventDispatcher}
+         */
+        static dispatchProgressEvent(target: IEventDispatcher, type: string, bytesLoaded?: number, bytesTotal?: number): void;
     }
 }
 /**
@@ -1594,6 +1653,15 @@ declare module egret {
      *  egret.getQualifiedClassName(egret.DisplayObject) //返回 "egret.DisplayObject"
      */
     function getQualifiedClassName(value: any): string;
+    /**
+    * 返回一个对象的父类完全限定名<br/>
+    * @method egret.getQualifiedSuperclassName
+    * @param value {any} 需要取得父类的对象，可以将任何 TypeScript / JavaScript值传递给此方法，包括所有可用的TypeScript / JavaScript类型、对象实例、原始类型（如number）和类对象
+    * @returns {Function}
+    * @example
+    *  egret.getQualifiedSuperclassName(egret.DisplayObjectContainer) //返回 "egret.DisplayObject"
+    */
+    function getQualifiedSuperclassName(value: any): string;
 }
 /**
  * Copyright (c) 2014,Egret-Labs.org
@@ -1791,7 +1859,6 @@ declare module egret {
         ty: number;
         /**
          * @method egret.Matrix#constructor
-         * @constructor
          * @param a {number} 缩放或旋转图像时影响像素沿 x 轴定位的值。
          * @param b {number} 旋转或倾斜图像时影响像素沿 y 轴定位的值。
          * @param c {number} 旋转或倾斜图像时影响像素沿 x 轴定位的值。
@@ -1800,14 +1867,8 @@ declare module egret {
          * @param ty {number} 沿 y 轴平移每个点的距离。
          */
         constructor(a?: number, b?: number, c?: number, d?: number, tx?: number, ty?: number);
-        /**
-         * @member {any} egret.Matrix.
-         */
         static identity: Matrix;
         static DEG_TO_RAD: number;
-        /**
-         * @member {any} egret.Matrix#
-         */
         /**
          * 前置矩阵
          * @method egret.Matrix#prepend
@@ -2268,6 +2329,7 @@ declare module egret {
      * @classdesc
      * StageDelegate负责处理屏幕适配策略
      * @extends egret.HashObject
+     * @private
      */
     class StageDelegate extends HashObject {
         private static instance;
@@ -2277,12 +2339,10 @@ declare module egret {
          */
         static getInstance(): StageDelegate;
         /**
-         * @member egret.StageDelegate.canvas_name
          * @deprecated
          */
         static canvas_name: string;
         /**
-         * @member egret.StageDelegate.canvas_div_name
          */
         static canvas_div_name: string;
         private _designWidth;
@@ -2298,13 +2358,13 @@ declare module egret {
          */
         constructor();
         /**
+         * 设置舞台的宽高
          * @method egret.StageDelegate#setDesignSize
          * @param width {number}
-         * @param height {{number}}
+         * @param height {number}
          */
         setDesignSize(width: number, height: number): void;
         /**
-         * @method egret.StageDelegate#_setResolutionPolicy
          * @param resolutionPolic {any}
          */
         _setResolutionPolicy(resolutionPolicy: ResolutionPolicy): void;
@@ -2322,7 +2382,6 @@ declare module egret {
         getOffSetY(): number;
     }
     /**
-     * @class egret.ResolutionPolicy
      * @classdesc
      */
     class ResolutionPolicy {
@@ -2343,8 +2402,6 @@ declare module egret {
         _apply(view: any, designedResolutionWidth: any, designedResolutionHeight: any): void;
     }
     /**
-     * @class egret.ContainerStrategy
-     * @classdesc
      */
     class ContainerStrategy {
         /**
@@ -2370,7 +2427,6 @@ declare module egret {
         _setupContainer(): void;
     }
     /**
-     * @class egret.EqualToFrame
      * @classdesc
      * @extends egret.ContainerStrategy
      */
@@ -2378,8 +2434,6 @@ declare module egret {
         _apply(view: any): void;
     }
     /**
-     * @class egret.ContentStrategy
-     * @classdesc
      */
     class ContentStrategy {
         /**
@@ -2521,9 +2575,9 @@ declare module egret {
  */
 declare module egret {
     /**
-     * @class egret.RenderFilter
      * @classdesc
      * @extends egret.HashObject
+     * @private
      */
     class RenderFilter extends HashObject {
         constructor();
@@ -2566,6 +2620,10 @@ declare module egret {
          * @returns {Rectangle}
          */
         getDrawAreaList(): Rectangle[];
+        /**
+         * 改变尺寸时使用
+         */
+        private onResize();
     }
     /**
      * @class egret.RenderData
@@ -2728,15 +2786,10 @@ declare module egret {
      * @class egret.DisplayObject
      * @extends egret.EventDispatcher
      * @classdesc 类是可放在显示列表中的所有对象的基类。该显示列表管理运行时显示的所有对象。使用 DisplayObjectContainer 类排列显示列表中的显示对象。
-     *
      * DisplayObjectContainer 对象可以有子显示对象，而其他显示对象是“叶”节点，只有父级和同级，没有子级。
-     *
      * DisplayObject 类支持基本功能（如对象的 x 和 y 位置），也支持更高级的对象属性（如它的转换矩阵），所有显示对象都继承自 DisplayObject 类。
-     *
      * DisplayObject 类包含若干广播事件。通常，任何特定事件的目标均为一个特定的 DisplayObject 实例。
-     *
      * 若只有一个目标，则会将事件侦听器限制为只能放置到该目标上（在某些情况下，可放置到显示列表中该目标的祖代上），这意味着您可以向任何 DisplayObject 实例添加侦听器来侦听广播事件。
-     *
      * 任何继承自DisplayObject的类都必须实现以下方法
      * _render();
      * _measureBounds()
@@ -2885,7 +2938,7 @@ declare module egret {
         /**
          * BlendMode 类中的一个值，用于指定要使用的混合模式。
          * 内部绘制位图的方法有两种。 如果启用了混合模式或外部剪辑遮罩，则将通过向矢量渲染器添加有位图填充的正方形来绘制位图。 如果尝试将此属性设置为无效值，则运行时会将此值设置为 BlendMode.NORMAL。
-         * @member {BlendMode} egret.DisplayObject#blendMode
+         * @member {string} egret.DisplayObject#blendMode
          */
         blendMode: string;
         /**
@@ -3112,6 +3165,7 @@ declare module egret {
  */
 declare module egret {
     /**
+     * @extends egret.DisplayObject
      * @class egret.DisplayObjectContainer
      * @classdesc
      * DisplayObjectContainer 类是可用作显示列表中显示对象容器的所有对象的基类。
@@ -3293,6 +3347,14 @@ declare module egret {
          */
         private _scaleMode;
         scaleMode: string;
+        /**
+         * 当屏幕尺寸改变时调用
+         */
+        changeSize(): void;
+        /**
+         * 设置屏幕适配策略
+         */
+        private setResolutionPolicy();
         private _stageWidth;
         /**
          * 舞台宽度（坐标系宽度，非设备宽度）
@@ -3464,6 +3526,8 @@ declare module egret {
          * @param isOffset {boolean} 可选参数，默认是false，是否是滚动增加量，如 top=1 代表往上滚动1像素
          */
         setScrollPosition(top: number, left: number, isOffset?: boolean): void;
+        private _isOnTheEdge(isVertical?);
+        private _validatePosition(top?, left?);
         /**
          * @inheritDoc
          */
@@ -3584,7 +3648,6 @@ declare module egret {
  */
 declare module egret {
     /**
-     * @class egret.Scroller
      * @classdesc
      * egret.Scroller已废弃，请使用egret.ScrollView
      * @extends egret.DisplayObject
@@ -3696,6 +3759,7 @@ declare module egret {
         /**
          * 全部Bitmap是否开启DEBUG模式
          * @member {boolean} egret.Bitmap.debug
+         * @private
          */
         static debug: boolean;
         private static renderFilter;
@@ -3703,11 +3767,13 @@ declare module egret {
         /**
          * 单个Bitmap是否开启DEBUG模式
          * @member {boolean} egret.Bitmap#debug
+         * @private
          */
         debug: boolean;
         /**
          * debug边框颜色，默认值为红色
          * @member {number} egret.Bitmap#debugColor
+         * @private
          */
         debugColor: number;
         private _texture;
@@ -4020,6 +4086,7 @@ declare module egret {
  */
 declare module egret {
     /**
+     * @extends egret.DisplayObjectContainer
      * @class egret.Sprite
      * @classdesc Sprite 类是基本显示列表构造块：一个可显示图形并且也可包含子项的显示列表节点。Sprite 对象与影片剪辑类似，但没有时间轴。Sprite 是不需要时间轴的对象的相应基类。例如，Sprite 将是通常不使用时间轴的用户界面 (UI) 组件的逻辑基类。
      */
@@ -4086,6 +4153,7 @@ declare module egret {
         _setType(value: string): void;
         text: string;
         _getText(): string;
+        _setSizeDirty(): void;
         _setTextDirty(): void;
         /**
          * 作为文本字段中当前文本的字符串
@@ -4195,6 +4263,9 @@ declare module egret {
         _maxChars: number;
         maxChars: number;
         _setMaxChars(value: number): void;
+        _scrollV: number;
+        scrollV: number;
+        private _maxScrollV;
         maxScrollV: number;
         selectionBeginIndex: number;
         selectionEndIndex: number;
@@ -4214,7 +4285,7 @@ declare module egret {
          * 文本行数。【只读】
          * @member {number} egret.TextField#numLines
          */
-        private _numLines;
+        _numLines: number;
         numLines: number;
         /**
          * 表示字段是否为多行文本字段。注意，此属性仅在type为TextFieldType.INPUT时才有效。
@@ -4240,24 +4311,94 @@ declare module egret {
          * 测量显示对象坐标与大小
          */
         _measureBounds(): Rectangle;
+        private _isFlow;
         /**
          *
-         * @param textArr [["text1", {"color":0xffffff}], ["text2", {"color":0xff0000}]]
-         * @private
          */
-        _setTextArray(textArr: any[]): void;
+        textFlow: ITextElement[];
         private changeToPassText(text);
         private _textArr;
         private _isArrayChanged;
         private setMiddleStyle(textArr);
+        _textMaxWidth: number;
+        textWidth: number;
+        _textMaxHeight: number;
+        textHeight: number;
+        appendText(text: string): void;
+        appendElement(element: ITextElement): void;
         private _linesArr;
-        _getLinesArr(): any[];
+        _getLinesArr(): ILineElement[];
+        private measureText();
         /**
          * @private
          * @param renderContext
          * @returns {Rectangle}
          */
-        private drawText(renderContext, forMeasure);
+        private drawText(renderContext);
+    }
+    interface ITextStyle {
+        textColor: number;
+        strokeColor: number;
+        size: number;
+        stroke: number;
+        bold: boolean;
+        italic: boolean;
+        fontFamily: string;
+    }
+    interface ITextElement {
+        text: string;
+        style: ITextStyle;
+    }
+    interface IWTextElement extends ITextElement {
+        width: number;
+    }
+    interface ILineElement {
+        width: number;
+        height: number;
+        elements: IWTextElement[];
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    /**
+     * @class egret.HtmlTextParser
+     * @classdesc
+     *
+     */
+    class HtmlTextParser {
+        constructor();
+        private resutlArr;
+        parser(htmltext: string): ITextElement[];
+        private addToResultArr(value);
+        private changeStringToObject(str);
+        private addProperty(info, prV);
+        private stackArray;
+        private addToArray(infoStr);
     }
 }
 /**
@@ -4419,7 +4560,6 @@ declare module egret {
  */
 declare module egret {
     /**
-     * @class egret.TextInput
      * @classdesc
      * TextInput 已废弃，请使用TextField代替，并设置type为TextFieldType.INPUT
      * @extends egret.TextField
@@ -4691,48 +4831,37 @@ declare module egret {
  */
 declare module egret {
     /**
-     * @class egret.StageText
      * @classdesc
-     * @extends egret.HashObject
+     * @extends egret.EventDispatcher
+     * @private
      */
     class StageText extends EventDispatcher {
         constructor();
         /**
-         * @method egret.StageText#getText
          * @returns {string}
          */
         _getText(): string;
         /**
-         * @method egret.StageText#setText
          * @param value {string}
          */
         _setText(value: string): void;
         /**
-         * @method egret.StageText#setTextType
          * @param type {string}
          */
         _setTextType(type: string): void;
         /**
-         * @method egret.StageText#getTextType
          * @returns {string}
          */
         _getTextType(): string;
         /**
-         * @method egret.StageText#open
          * @param x {number}
          * @param y {number}
          * @param width {number}
          * @param height {number}
          */
         _open(x: number, y: number, width?: number, height?: number): void;
-        /**
-         * @method egret.StageText#add
-         */
         _show(): void;
         _add(): void;
-        /**
-         * @method egret.StageText#remove
-         */
         _remove(): void;
         _hide(): void;
         _addListeners(): void;
@@ -5154,11 +5283,11 @@ declare module egret {
         /**
          * 获取某一点像素的颜色值
          * @method egret.Texture#getPixel32
-         * @param x 像素点的X轴坐标
-         * @param y 像素点的Y轴坐标
+         * @param x {number} 像素点的X轴坐标
+         * @param y {number} 像素点的Y轴坐标
          * @returns {number} 指定像素点的颜色值
          */
-        getPixel32(x: any, y: any): number[];
+        getPixel32(x: number, y: number): number[];
     }
 }
 /**
@@ -5197,12 +5326,13 @@ declare module egret {
     class RenderTexture extends Texture {
         private renderContext;
         constructor();
+        private static identityRectangle;
         /**
          * 将制定显示对象绘制为一个纹理
          * @method egret.RenderTexture#drawToTexture
          * @param displayObject {egret.DisplayObject}
          */
-        drawToTexture(displayObject: DisplayObject): void;
+        drawToTexture(displayObject: DisplayObject): boolean;
     }
 }
 /**
@@ -5238,6 +5368,7 @@ declare module egret {
      * RenderContext是游戏的渲染上下文。
      * 这是一个抽象基类，制定主要的接口
      * @extends egret.HashObject
+     * @private
      */
     class RendererContext extends HashObject {
         /**
@@ -5306,7 +5437,7 @@ declare module egret {
          * @method egret.RendererContext#setupFont
          * @param textField {TextField}
          */
-        setupFont(textField: TextField): void;
+        setupFont(textField: TextField, style?: ITextStyle): void;
         /**
          * 测量文本
          * @method egret.RendererContext#measureText
@@ -5324,7 +5455,7 @@ declare module egret {
          * @param y {number}
          * @param maxWidth {numbe}
          */
-        drawText(textField: TextField, text: string, x: number, y: number, maxWidth: number, style: Object): void;
+        drawText(textField: TextField, text: string, x: number, y: number, maxWidth: number, style?: ITextStyle): void;
         strokeRect(x: any, y: any, w: any, h: any, color: any): void;
         pushMask(mask: Rectangle): void;
         popMask(): void;
@@ -5407,6 +5538,7 @@ declare module egret {
      *
      * @class egret.TouchContext
      * @classdesc TouchContext是egret的触摸Context
+     * @private
      */
     class TouchContext extends HashObject {
         private _currentTouchTarget;
@@ -5459,11 +5591,13 @@ declare module egret {
      * @class egret.NetContext
      * @classdesc
      * @extends egret.HashObject
+     * @private
      */
     class NetContext extends HashObject {
         constructor();
         proceed(loader: URLLoader): void;
         static _getUrl(request: URLRequest): string;
+        getChangeList(): any[];
     }
 }
 /**
@@ -5494,7 +5628,6 @@ declare module egret {
  */
 declare module egret {
     /**
-     * @class egret.DeviceContext
      * @classdesc
      * @extends egret.HashObject
      */
@@ -5828,12 +5961,10 @@ declare module egret {
          */
         endian: string;
         /**
-         * @method egret.ByteArray#ensureWriteableSpace
          * @param n {number}
          */
         ensureWriteableSpace(n: number): void;
         /**
-         * @method egret.ByteArray#setArrayBuffer
          * @param aBuffer {egret.ArrayBuffer}
          */
         setArrayBuffer(aBuffer: ArrayBuffer): void;
@@ -5881,7 +6012,8 @@ declare module egret {
         /**
          * 从字节流中读取无符号的字节。
          * 返回值的范围是从 0 到 255。
-         * @method egret.ByteArray#readUnsignedByte 介于 0 到 255 之间的无符号字节。
+         * @method egret.ByteArray#readUnsignedByte
+         * @returns {number} 介于 0 到 255 之间的无符号字节。
          */
         readUnsignedByte(): number;
         /**
@@ -5986,15 +6118,18 @@ declare module egret {
      */
     class Tween extends EventDispatcher {
         /**
-         * @constant {any} egret.Tween.NONE
+         * 不做特殊处理
+         * @constant {number} egret.Tween.NONE
          */
         static NONE: number;
         /**
-         * @constant {any} egret.Tween.LOOP
+         * 循环
+         * @constant {number} egret.Tween.LOOP
          */
         static LOOP: number;
         /**
-         * @constant {any} egret.Tween.REVERSE
+         * 倒序
+         * @constant {number} egret.Tween.REVERSE
          */
         static REVERSE: number;
         private static _tweens;
