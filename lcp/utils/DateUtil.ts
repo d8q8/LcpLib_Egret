@@ -16,18 +16,18 @@ module lcp {
          */
         public static formatDate(dateToFormat:Date, formatString:string):string {
             var returnString:string = '';
-            var char:string;
+            var tempstr:string = '';
             var i:number = -1;
             var l:number = formatString.length;
             var t:number;
 
             while (++i < l) {
-                char = formatString.substr(i, 1);
+                tempstr = formatString.substr(i, 1);
 
-                if (char == '^')
+                if (tempstr == '^')
                     returnString += formatString.substr(++i, 1);
                 else {
-                    switch (char) {
+                    switch (tempstr) {
                         // 月天数
                         case 'd' :
                             returnString += NumberUtil.addLeadingZero(dateToFormat.getDate());
