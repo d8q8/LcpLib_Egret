@@ -689,7 +689,7 @@ declare module egret.gui {
          * @param oldContent any 旧的内容对象,传入值有可能为null。
          * 对于某些类型素材，例如MovieClip，可以重用传入的显示对象,只修改其数据再返回。
          */
-        getAsset(source: any, compFunc: Function, thisObject: any, oldContent: any): void;
+        getAsset(source: any, compFunc: (content: any, source: any) => void, thisObject: any, oldContent: any): void;
     }
 }
 /**
@@ -1496,6 +1496,73 @@ declare module egret.gui {
  */
 declare module egret.gui {
     /**
+     * @class egret.gui.IStyleClient
+     * @interface
+     * @classdesc
+     * 能够设置样式的组件接口
+     */
+    interface IStyleClient {
+        /**
+         * 获取指定的名称的样式属性值
+         * @param styleProp 样式名称
+         */
+        getStyle(styleProp: String): any;
+        /**
+         * 对此组件实例设置样式属性。在此组件上设置的样式会覆盖父级容器的同名样式。
+         * @param styleProp 样式名称
+         * @param newValue 样式值
+         */
+        setStyle(styleProp: String, newValue: any): void;
+        /**
+         * 清除在此组件实例上设置过的指定样式名。
+         * @param styleProp 样式名称
+         */
+        clearStyle(styleProp: string): void;
+        /**
+         * 组件上的样式发生改变
+         * @param styleProp 发生改变的样式名称，若为null表示所有样式都发生了改变。
+         */
+        styleChanged(styleProp: string): void;
+        /**
+         * 通知项列表样式发生改变
+         * @param styleProp 样式名称
+         */
+        notifyStyleChangeInChildren(styleProp: string): void;
+        /**
+         * 重新生成自身以及所有子项的原型链
+         * @param parentChain
+         */
+        regenerateStyleCache(parentChain: any): void;
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret.gui {
+    /**
      * @class egret.gui.IUIComponent
      * @interface
      * @classdesc
@@ -2116,12 +2183,16 @@ declare module egret.gui {
      * @implements egret.gui.IInvalidating
      * @implements egret.gui.IVisualElement
      */
-    class UIComponent extends DisplayObjectContainer implements IUIComponent, ILayoutManagerClient, ILayoutElement, IInvalidating, IVisualElement {
+    class UIComponent extends DisplayObjectContainer implements IUIComponent, ILayoutManagerClient, ILayoutElement, IInvalidating, IVisualElement, IStyleClient {
         /**
          * 构造函数
          * @method egret.gui.UIComponent#constructor
          */
         constructor();
+        /**
+         * __proto__属性是否可以设置的标志，兼容IE9，IE10。
+         */
+        private static prototypeCanSet;
         /**
          * 添加到舞台
          */
@@ -2176,12 +2247,59 @@ declare module egret.gui {
          * 子项创建完成
          * @method egret.gui.UIComponent#childrenCreated
          */
-        private childrenCreated();
+        childrenCreated(): void;
         private _nestLevel;
         /**
          * @member egret.gui.UIComponent#nestLevel
          */
         nestLevel: number;
+        /**
+         * 更新子项的nestLevel属性
+         */
+        _updateChildrenNestLevel(): void;
+        /**
+         * 是否已经创建了自身的样式原型链
+         */
+        _hasOwnStyleChain: boolean;
+        /**
+         * 样式原型链引用
+         */
+        _styleProtoChain: any;
+        /**
+         * 获取指定的名称的样式属性值
+         */
+        getStyle(styleProp: string): any;
+        /**
+         * 对此组件实例设置样式属性。在此组件上设置的样式会覆盖父级容器的同名样式。推荐在子项较少的组件上使用，尽量避免在全局调用此方法，有可能造成性能问题。
+         */
+        setStyle(styleProp: string, newValue: any): void;
+        styleChanged(styleProp: string): void;
+        /**
+         * 一个性能优化的标志变量。某些子类可以设置为true显式表明自己不含有可设置样式的子项。
+         */
+        _hasNoStyleChild: boolean;
+        /**
+         * 通知子项列表样式发生改变
+         */
+        notifyStyleChangeInChildren(styleProp: string): void;
+        _createOwnStyleProtoChain(chain: any): void;
+        /**
+         * 创建一个原型链节点
+         */
+        private createProtoChain(parentChain);
+        /**
+         * 清除在此组件实例上设置过的指定样式名。
+         */
+        clearStyle(styleProp: string): void;
+        private static emptyStyleChain;
+        /**
+         * 重新生成自身以及所有子项的原型链
+         */
+        regenerateStyleCache(parentChain: any): void;
+        /**
+         * 兼容IE9，10的写法。
+         */
+        regenerateStyleCacheForIE(parentChain: any): void;
         /**
          * 添加对象到显示列表,此接口仅预留给框架内部使用
          * 如果需要管理子项，若有，请使用容器的addElement()方法，非法使用有可能造成无法自动布局。
@@ -3032,6 +3150,84 @@ declare module egret.gui {
          * 设置属性值
          */
         private setPropertyValue(obj, name, value, valueForType);
+        /**
+         * 转成Boolean值
+         */
+        private toBoolean(value);
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret.gui {
+    /**
+     * @class egret.gui.SetProperty
+     * @classdesc
+     * 设置属性
+     * @extends egret.gui.OverrideBase
+     */
+    class SetStyle extends OverrideBase {
+        /**
+         * 构造函数
+         * @method egret.gui.SetProperty#constructor
+         */
+        constructor(target: string, name: string, value: any);
+        /**
+         * 要修改的属性名
+         * @member egret.gui.SetProperty#name
+         */
+        name: string;
+        /**
+         * 目标实例名
+         * @member egret.gui.SetProperty#target
+         */
+        target: string;
+        /**
+         * 属性值
+         * @member egret.gui.SetProperty#value
+         */
+        value: any;
+        /**
+         * 旧的属性值
+         */
+        private oldValue;
+        /**
+         * @method egret.gui.SetProperty#apply
+         * @param parent {IContainer}
+         */
+        apply(parent: IContainer): void;
+        /**
+         * @method egret.gui.SetProperty#remove
+         * @param parent {IContainer}
+         */
+        remove(parent: IContainer): void;
+        /**
+         * 设置属性值
+         */
+        private setStyleValue(obj, name, value, valueForType);
         /**
          * 转成Boolean值
          */
@@ -4255,6 +4451,8 @@ declare module egret.gui {
          * 呈示此文本的内部 TextField
          */
         _textField: TextField;
+        private allStyleChanged;
+        styleChanged(styleProp: string): void;
         private fontFamilyChanged;
         private _fontFamily;
         /**
@@ -4263,14 +4461,12 @@ declare module egret.gui {
          */
         fontFamily: string;
         _sizeChanged: boolean;
-        _size: number;
+        private _size;
         /**
          * 字号大小,默认值30 。
          * @member egret.gui.TextBase#size
          */
         size: number;
-        _getFontSize(): number;
-        _setFontSize(value: number): void;
         _focusEnabled: boolean;
         focusEnabled: boolean;
         /**
@@ -4331,6 +4527,9 @@ declare module egret.gui {
          * @member egret.gui.TextBase#text
          */
         text: string;
+        _textFlow: ITextElement[];
+        _textFlowChanged: boolean;
+        textFlow: ITextElement[];
         createChildren(): void;
         commitProperties(): void;
         /**
@@ -9321,8 +9520,6 @@ declare module egret.gui {
          * [SkinPart]垂直滚动条
          */
         verticalScrollBar: VScrollBar;
-        hBar: HScrollBar;
-        vBar: VScrollBar;
         _scroller: ScrollView;
         /**
          * @method egret.gui.Scroller#measure
@@ -9503,6 +9700,19 @@ declare module egret.gui {
         _removeScrollBars(): void;
         private hBarChanged(e);
         private vBarChanged(e);
+        _createOwnStyleProtoChain(chain: any): void;
+        /**
+         * 添加到父级容器的样式原型链
+         */
+        regenerateStyleCache(parentChain: any): void;
+        /**
+         * 通知项列表样式发生改变
+         */
+        notifyStyleChangeInChildren(styleProp: string): void;
+        /**
+         * 更新子项的nestLevel属性
+         */
+        _updateChildrenNestLevel(): void;
     }
 }
 declare module egret.gui {
@@ -9545,10 +9755,7 @@ declare module egret.gui {
          * @inheritDoc
          */
         restrict: string;
-        /**
-         * @inheritDoc
-         */
-        _setFontSize(value: number): void;
+        styleChanged(styleProp: string): void;
         _setLineSpacing(value: number): void;
         private _heightInLines;
         private heightInLinesChanged;

@@ -3492,6 +3492,11 @@ declare module egret {
          * @param content {egret.DisplayObject} 需要滚动的对象
          */
         setContent(content: DisplayObject): void;
+        /**
+         * 移除滚动的对象
+         * @method egret.ScrollView#removeContent
+         */
+        removeContent(): void;
         private _verticalScrollPolicy;
         /**
          * 垂直滚动条显示策略，on/off/auto。
@@ -3544,8 +3549,8 @@ declare module egret {
         _addEvents(): void;
         _removeEvents(): void;
         _onTouchBegin(e: TouchEvent): void;
-        delayTouchBeginEvent: any;
-        touchBeginTimer: any;
+        private delayTouchBeginEvent;
+        private touchBeginTimer;
         _onTouchBeginCapture(event: TouchEvent): void;
         private _onTouchEndCapture(event);
         private _onTouchBeginTimer();
@@ -3561,7 +3566,7 @@ declare module egret {
         _getContentHeight(): number;
         getMaxScrollLeft(): number;
         getMaxScrollTop(): number;
-        static weight: number[];
+        private static weight;
         private _moveAfterTouchEnd();
         setScrollTop(scrollTop: number, duration?: number): Tween;
         setScrollLeft(scrollLeft: number, duration?: number): Tween;
@@ -3618,62 +3623,7 @@ declare module egret {
          * @param index2 {number}
          */
         swapChildrenAt(index1: number, index2: number): void;
-    }
-}
-/**
- * Copyright (c) 2014,Egret-Labs.org
- * All rights reserved.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the Egret-Labs.org nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-declare module egret {
-    /**
-     * @classdesc
-     * egret.Scroller已废弃，请使用egret.ScrollView
-     * @extends egret.DisplayObject
-     */
-    class Scroller extends ScrollView {
-        content: DisplayObject;
-        /**
-         * egret.Scroller已废弃，请使用egret.ScrollView
-         * @method egret.Scroller#constructor
-         * @param content {egret.DisplayObject} 需要滚动的对象
-         * @param width {number} Scroller的宽度，默认值为content的宽度
-         * @param height {number} Scroller的高度，默认值为content的高度
-         */
-        constructor(content: DisplayObject, width?: number, height?: number);
-        /**
-         * 是否启用水平滚动
-         * @member {boolean} egret.Scroller#scrollXEnabled
-         * @returns {boolean}
-         */
-        scrollXEnabled: boolean;
-        /**
-         * 是否启用垂直滚动
-         * @member {boolean} egret.Scroller#scrollYEnabled
-         * @returns {boolean}
-         */
-        scrollYEnabled: boolean;
+        hitTest(x: number, y: number, ignoreTouchEnabled?: boolean): DisplayObject;
     }
 }
 /**
@@ -3858,6 +3808,8 @@ declare module egret {
          *
          */
         text: string;
+        private _spriteSheet;
+        private _spriteSheetChanged;
         /**
          * BitmapTextSpriteSheet对象，缓存了所有文本的位图纹理
          * @member {egret.BitmapTextSpriteSheet} egret.BitmapText#spriteSheet
@@ -4559,67 +4511,6 @@ declare module egret {
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 declare module egret {
-    /**
-     * @classdesc
-     * TextInput 已废弃，请使用TextField代替，并设置type为TextFieldType.INPUT
-     * @extends egret.TextField
-     * @deprecated
-     */
-    class TextInput extends TextField {
-        constructor();
-        /**
-         * 请使用TextField.text设置
-         * @deprecated
-         * @param value
-         */
-        setText(value: string): void;
-        /**
-         * 请使用TextInput.text获取
-         * @deprecated
-         * @returns {string}
-         */
-        getText(): string;
-        /**
-         * 请使用TextInput.displayAsPassword设置
-         * @deprecated
-         * @param value
-         */
-        setTextType(type: string): void;
-        /**
-         * 请使用TextInput.displayAsPassword获取
-         * @deprecated
-         * @returns {string}
-         */
-        getTextType(): string;
-    }
-}
-/**
- * Copyright (c) 2014,Egret-Labs.org
- * All rights reserved.
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the Egret-Labs.org nor the
- *       names of its contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-declare module egret {
     class InputController extends HashObject {
         private stageText;
         private _isFocus;
@@ -5083,6 +4974,47 @@ declare module egret {
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 declare module egret {
+    class URLRequestHeader {
+        /**
+         * HTTP 请求标头名称，如 Content-Type
+         * @member {string} egret.URLRequestHeader#name
+         */
+        name: string;
+        /**
+         * 与 name 属性相关联的值，如 text/plain
+         * @member {string} egret.URLRequestHeader#value
+         */
+        value: string;
+        constructor(name: string, value: string);
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
     /**
      * @class egret.URLRequest
      * @classdesc URLRequest 类可捕获单个 HTTP 请求中的所有信息。
@@ -5118,6 +5050,13 @@ declare module egret {
          * @member {string} egret.URLRequest#url
          */
         url: string;
+        /**
+         * 要追加到 HTTP 请求的 HTTP 请求标头的数组。该数组由 URLRequestHeader 对象组成。
+         * 数组中的每一对象必须是包含一个名称字符串和一个值字符串的 URLRequestHeader 对象。
+         * 由于浏览器兼容性原因，该属性在 html5 中并未实现
+         * @member {Array} egret.URLRequest#requestHeaders
+         */
+        requestHeaders: URLRequestHeader[];
     }
 }
 /**
@@ -6423,8 +6362,12 @@ declare module egret {
 declare module egret {
     class NumberUtils {
         static isNumber(value: any): Boolean;
+        static sin(value: number): number;
+        static cos(value: number): number;
     }
 }
+declare var egret_sin_map: {};
+declare var egret_cos_map: {};
 /**
  * Copyright (c) Egret-Labs.org. Permission is hereby granted, free of charge,
  * to any person obtaining a copy of this software and associated documentation
@@ -6455,20 +6398,30 @@ declare module RES {
          */
         static ITEM_LOAD_ERROR: string;
         /**
-         * 配置文件加载并解析完成事件
+         * 配置文件加载并解析完成事件。注意：若有配置文件加载失败，将不会抛出此事件，若要处理配置加载失败，请同时监听CONFIG_LOAD_ERROR事件。
          * @constant {string} RES.ResourceEvent.CONFIG_COMPLETE
          */
         static CONFIG_COMPLETE: string;
+        /**
+         * 配置文件加载失败事件
+         * @constant {string} RES.ResourceEvent.CONFIG_COMPLETE
+         */
+        static CONFIG_LOAD_ERROR: string;
         /**
          * 延迟加载组资源加载进度事件
          * @constant {string} RES.ResourceEvent.GROUP_PROGRESS
          */
         static GROUP_PROGRESS: string;
         /**
-         * 延迟加载组资源加载完成事件
+         * 延迟加载组资源加载完成事件。注意：若组内有资源项加载失败，将不会抛出此事件，若要处理组加载失败，请同时监听GROUP_LOAD_ERROR事件。
          * @constant {string} RES.ResourceEvent.GROUP_COMPLETE
          */
         static GROUP_COMPLETE: string;
+        /**
+         * 延迟加载组资源加载失败事件
+         * @constant {string} RES.ResourceEvent.GROUP_LOAD_ERROR
+         */
+        static GROUP_LOAD_ERROR: string;
         /**
          * 构造函数
          * @method RES.ResourceEvent#constructor
@@ -6780,6 +6733,13 @@ declare module RES {
          * 正在加载的组列表,key为groupName
          */
         private itemListDic;
+        /**
+         * 加载失败的组,key为groupName
+         */
+        private groupErrorDic;
+        private retryTimesDic;
+        maxRetryTimes: number;
+        private failedList;
         /**
          * 优先级队列,key为priority，value为groupName列表
          */
