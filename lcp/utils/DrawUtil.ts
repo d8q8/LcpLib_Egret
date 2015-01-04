@@ -27,7 +27,7 @@ module lcp {
                     LTrace.trace("传入的不是坐标点,请重新传入.");
 
             if (points.length < 2)
-                throw new Error('At least two Points are needed to draw a path.');
+                LTrace.trace("低于两个点是不能绘制一条路径的.");
 
             graphics.moveTo(points[0].x, points[0].y);
 
@@ -43,7 +43,7 @@ module lcp {
          */
         public static drawShape(graphics:egret.Graphics, points:Array<any>):void {
             if (points.length < 3)
-                throw new Error('At least three Points are needed to draw a shape.');
+                LTrace.trace("低于三个点是不能绘制一个图形的.");
 
             DrawUtil.drawPath(graphics, points);
 
