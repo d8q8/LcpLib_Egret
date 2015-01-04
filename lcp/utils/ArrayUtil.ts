@@ -323,6 +323,21 @@ module lcp {
         }
 
         /**
+         * 去重数组(换一种方式实现)
+         * @param inArray
+         * @returns {Array<any>}
+         */
+        public static reDupliction(inArray:Array<any>):Array<any> {
+            var t:Array<any> = inArray.sort();
+            var re:Array<any> = [t[0]];
+            for (var i = 1; i < t.length; i++) {
+                if (t[i] != re[re.length - 1])
+                    re.push(t[i]);
+            }
+            return re;
+        }
+
+        /**
          * 删除数组中某一项
          * @param tarArray
          * @param item
