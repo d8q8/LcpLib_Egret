@@ -26,7 +26,7 @@ module lcp {
          * 子元件初始化
          * @param $container 父容器
          * @param $target 子元件
-         * @param $object 子属性
+         * @param $proper 子属性
          * @param $depth 深度
          * @returns {DisplayObject} 返回子元件
          *
