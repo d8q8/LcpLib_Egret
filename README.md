@@ -20,7 +20,7 @@ arrow,聆听Q语,波姬小丝,小狐狸,N神,球球,子鱼,小小明,潜意识,�
 </pre>
 目录结构如下
 
-<pre class="brush:ts;toolbar:false">
+<pre>
 lcp
 ├─collection
 │   ├─IList             //列表接口类
@@ -89,42 +89,42 @@ lcp
 
 1> 绘制参数
 
-<pre class="brush:ts;toolbar:false">
-    //基本属性
-    x?:number;//元件x坐标
-    y?:number;//元件y坐标
-    name?:string;//元件实例名,如sp
-    width?:number;//元件宽度
-    height?:number;//元件高度
-    anchorX?:number;//元件x锚点,旋转时会用到
-    anchorY?:number;//元件y锚点,旋转时会用到
-    
-    //样式属性
-    thickness?:number;//一个整数，以点为单位表示线条的粗细，有效值为 0 到 255.
-    linecolor?:number;//线条的十六进制颜色值（例如，红色为 0xFF0000，蓝色为 0x0000FF 等）。
-    linealpha?:number;//表示线条颜色的 Alpha 值的数字；有效值为 0 到 1。
-    pixelHinting?:boolean;//指定是否提示笔触采用完整像素
-    scaleMode?:string;//用于指定要使用的比例模式
-    caps?:string;//用于指定线条末端处端点类型的 CapsStyle 类的值
-    joints?:string;//指定用于拐角的连接外观的类型
-    miterLimit?:number;//用于表示剪切斜接的极限值的数字
-    
-    //填充属性
-    fillcolor?:number;//填充颜色,如0xff0000 红色
-    fillalpha?:number;//填充透明度,有效值为 0 到 1
-    
-    radius?:number;//半径及圆角半径
-    ellipseWidth?:number;//圆角宽半径
-    ellipseHeight?:number;//圆角高半径
-    corner?:number;//多边形角
-    ratio?:number;//多角星比率
-    
-    petal?:number;//花瓣数,偶数翻倍,奇数不变
-</pre>
+```typescript
+//基本属性
+x?:number;//元件x坐标
+y?:number;//元件y坐标
+name?:string;//元件实例名,如sp
+width?:number;//元件宽度
+height?:number;//元件高度
+anchorX?:number;//元件x锚点,旋转时会用到
+anchorY?:number;//元件y锚点,旋转时会用到
+
+//样式属性
+thickness?:number;//一个整数，以点为单位表示线条的粗细，有效值为 0 到 255.
+linecolor?:number;//线条的十六进制颜色值（例如，红色为 0xFF0000，蓝色为 0x0000FF 等）。
+linealpha?:number;//表示线条颜色的 Alpha 值的数字；有效值为 0 到 1。
+pixelHinting?:boolean;//指定是否提示笔触采用完整像素
+scaleMode?:string;//用于指定要使用的比例模式
+caps?:string;//用于指定线条末端处端点类型的 CapsStyle 类的值
+joints?:string;//指定用于拐角的连接外观的类型
+miterLimit?:number;//用于表示剪切斜接的极限值的数字
+
+//填充属性
+fillcolor?:number;//填充颜色,如0xff0000 红色
+fillalpha?:number;//填充透明度,有效值为 0 到 1
+
+radius?:number;//半径及圆角半径
+ellipseWidth?:number;//圆角宽半径
+ellipseHeight?:number;//圆角高半径
+corner?:number;//多边形角
+ratio?:number;//多角星比率
+
+petal?:number;//花瓣数,偶数翻倍,奇数不变
+```
 
 2> 圆,方,圆角矩形,椭圆,多边形,多角星实现
 
-<pre class="brush:ts;toolbar:false">
+```typescript
 //圆
 var sp = new lcp.LCircle({name:"sp",x:100,y:200,radius:100,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 //方
@@ -142,11 +142,11 @@ var sp = new lcp.LCircle({name:"sp",x:100,y:200,radius:100,fillcolor:0xff0000,th
 //多角星,如五角星
 //var sp = new lcp.LStar({name:"sp",x:100,y:200,width:200,height:200,corner:5,ratio:.4,fillcolor:0xff0000,thickness:5,linecolor:0x00ff00});
 this.addChild(sp);
-</pre>
+```
 
 3> 自定义事件类和全局侦听类使用如下
 
-<pre class="brush:ts;toolbar:false">
+```typescript
 sp.touchEnabled=true;//开启触点事件
 //单击
 sp.addEventListener(egret.TouchEvent.TOUCH_TAP,(e)=>{
@@ -166,10 +166,10 @@ lcp.LListener.getInstance().addEventListener("mycircle",(e)=>{
     console.log(e.param);//同上
     sp.alpha=parseFloat(e.param);
 },this);
-</pre>
+```
 
 4> 数组排序处理
-<pre class="brush:ts;toolbar:false">
+```typescript
 //数字数组排序
 var num_Arr = [1,22,14,2,54,21,6,8,3,9];
 lcp.LOrder.sort(num_Arr);//默认升序
@@ -192,10 +192,10 @@ var key_Arr:Array<any> = [
 lcp.LOrder.sortOn(key_Arr,"age");//默认升序
 //lcp.LOrder.sortOn(key_Arr,"age",lcp.OrderByType.DESCENDING);//降序
 console.log(key_Arr);
-</pre>
+```
 
 5> 字典类用法
-<pre class="brush:ts;toolbar:false">
+```typescript
 //字典类用法
 var dic = new lcp.LDictionary({"d":4});
 dic.set("a",1);
@@ -205,11 +205,12 @@ if(dic.has("c")){
     dic.remove("c");
 }
 console.log(dic,dic.get("d"));
-</pre>
+```
 
 6>数组/算术工具类使用(更多用法见源码,基本都有案例)
-<pre class="brush:ts;toolbar:false">
+
 1.数组扩展处理工具类使用
+```typescript
 var people:Array<any> = [
     {name: "Aaron", sex: "Male", hair: "Brown"},
     {name: "Linda", sex: "Female", hair: "Blonde"},
@@ -235,65 +236,77 @@ console.log("数组随机:",lcp.ArrayUtil.randomize(numberArray));
 var color:Array<any>     = ["Red", "Blue", "Green", "Indigo", "Violet"];
 var colorsAlt:Array<any> = ["Red", "Blue", "Green", "Violet"];
 console.log(lcp.ArrayUtil.getIndexOfDifference(color, colorsAlt));
-
+```
 2.算术工具扩展使用方法(更多使用看源码)
-    1)判断奇数
-    console.log(lcp.NumberUtil.isOdd(7)); // 输出 false
-    console.log(lcp.NumberUtil.isOdd(12)); // 输出 true
-    2)判断偶数
-    console.log(lcp.NumberUtil.isEven(7)); // 输出 false
-    console.log(lcp.NumberUtil.isEven(12)); // 输出 true
-    3)判断数字
-    console.log(lcp.NumberUtil.isNumber(7));// 输出 true
-    console.log(lcp.NumberUtil.isNumber("a"));// 输出 false
-    4)取整
-    console.log(lcp.NumberUtil.int(7.5));// 输出 7
-    5)数字转英文数字
-    console.log(lcp.NumberUtil.convertNum("3.4556645445E7"));// 输出 34556645.445
-    console.log(lcp.NumberUtil.spell(0)); // 输出 Zero
-    console.log(lcp.NumberUtil.spell(23)); // 输出 Twenty-Three
-    console.log(lcp.NumberUtil.spell(2005678)); // 输出 Two Million, Five Thousand, Six Hundred Seventy-Eight
-    6)循环获取数值
-    var colors:Array<any> = ["红", "绿", "蓝"];
-    console.log(colors[lcp.NumberUtil.loopIndex(2, colors.length)]); // 输出 蓝
-    console.log(colors[lcp.NumberUtil.loopIndex(4, colors.length)]); // 输出 绿
-    console.log(colors[lcp.NumberUtil.loopIndex(-6, colors.length)]); // 输出 红
-</pre>
+
+1)判断奇数
+```typescript
+console.log(lcp.NumberUtil.isOdd(7)); // 输出 false
+console.log(lcp.NumberUtil.isOdd(12)); // 输出 true
+```
+2)判断偶数
+```typescript
+console.log(lcp.NumberUtil.isEven(7)); // 输出 false
+console.log(lcp.NumberUtil.isEven(12)); // 输出 true
+```
+3)判断数字
+```typescript
+console.log(lcp.NumberUtil.isNumber(7));// 输出 true
+console.log(lcp.NumberUtil.isNumber("a"));// 输出 false
+```
+4)取整
+```typescript
+console.log(lcp.NumberUtil.int(7.5));// 输出 7
+```
+5)数字转英文数字
+```typescript
+console.log(lcp.NumberUtil.convertNum("3.4556645445E7"));// 输出 34556645.445
+console.log(lcp.NumberUtil.spell(0)); // 输出 Zero
+console.log(lcp.NumberUtil.spell(23)); // 输出 Twenty-Three
+console.log(lcp.NumberUtil.spell(2005678)); // 输出 Two Million, Five Thousand, Six Hundred Seventy-Eight
+```
+6)循环获取数值
+```typescript
+var colors:Array<any> = ["红", "绿", "蓝"];
+console.log(colors[lcp.NumberUtil.loopIndex(2, colors.length)]); // 输出 蓝
+console.log(colors[lcp.NumberUtil.loopIndex(4, colors.length)]); // 输出 绿
+console.log(colors[lcp.NumberUtil.loopIndex(-6, colors.length)]); // 输出 红
+```
 
 7>扩展点方法与原官方点方法
-<pre class="brush:ts;toolbar:false">
+```typescript
 //扩展点方法与原官方点方法
 console.log("官方提供任意两点间距离:",egret.Point.distance(new egret.Point(100,100),new egret.Point(50,50)));
 console.log("自己扩展任意两点间距离:",lcp.LPoint.twodis(100,100,50,50));
-</pre>
+```
 
 8>扩展精灵类(简单拖拽和碰撞检测)
-<pre class="brush:ts;toolbar:false">
+
 1.简单拖拽
-    var sp2 = new lcp.LSprite();//继承lcp.LSprite
-    this.addChild(sp2);
-    sp2.graphics.beginFill(0xff0000);
-    sp2.graphics.drawRect(0,0,100,50);
-    sp2.graphics.endFill();
-    sp2.name="sp2";
-    sp2.x=300;
-    sp2.y=300;
-    sp2.width=100;
-    sp2.height=50;
-    sp2.touchEnabled=true;
-    sp2.isDrag=true;//给拖拽属性为true就可以拖拽了,是不是很简单
-    sp2.addEventListener(egret.TouchEvent.TOUCH_BEGIN,(e)=>{
-        console.log("我点击试试");
-    },this);
+```typescript
+var sp2 = new lcp.LSprite();//继承lcp.LSprite
+this.addChild(sp2);
+sp2.graphics.beginFill(0xff0000);
+sp2.graphics.drawRect(0,0,100,50);
+sp2.graphics.endFill();
+sp2.name="sp2";
+sp2.x=300;
+sp2.y=300;
+sp2.width=100;
+sp2.height=50;
+sp2.touchEnabled=true;
+sp2.isDrag=true;//给拖拽属性为true就可以拖拽了,是不是很简单
+sp2.addEventListener(egret.TouchEvent.TOUCH_BEGIN,(e)=>{
+    console.log("我点击试试");
+},this);
+```
 2.简单碰撞
-    //定义两个显示对象sp1,sp2
-    if(lcp.LSprite.hitTestObject(sp1,sp2)){
-        console.log("碰撞了哟西");
-    }
+```typescript
+//定义两个显示对象sp1,sp2
+if(lcp.LSprite.hitTestObject(sp1,sp2)){
+    console.log("碰撞了哟西");
+}
+```
 
-</pre>
-
-使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. <br />
-<a href="http://bbs.egret-labs.org/thread-592-1-1.html" target="_blank">
-http://bbs.egret-labs.org/thread-592-1-1.html
-</a>
+使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. 
+[http://bbs.egret-labs.org/thread-592-1-1.html](http://bbs.egret-labs.org/thread-592-1-1.html "白鹭论坛内裤帖子")
