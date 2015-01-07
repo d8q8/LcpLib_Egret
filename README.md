@@ -284,7 +284,7 @@ console.log("自己扩展任意两点间距离:",lcp.LPoint.twodis(100,100,50,50
 
 1.简单拖拽
 ```typescript
-var sp2 = new lcp.LSprite();//继承lcp.LSprite
+var sp2 = new lcp.LSprite();//继承lcp.CSprite
 this.addChild(sp2);
 sp2.graphics.beginFill(0xff0000);
 sp2.graphics.drawRect(0,0,100,50);
@@ -308,6 +308,5 @@ if(lcp.LSprite.hitTestObject(sp1,sp2)){
 }
 ```
 
-使用说明也可以参照请看这里,欢迎测试使用,有问题即时反馈. 
-
+使用说明也可以参照请看这里,欢迎测试使用,有问题及时反馈. 
 [http://bbs.egret-labs.org/thread-592-1-1.html](http://bbs.egret-labs.org/thread-592-1-1.html "白鹭论坛内裤帖子")
