@@ -308,5 +308,5 @@ if(lcp.LSprite.hitTestObject(sp1,sp2)){
 }
 ```
 
-使用说明也可以参照请看这里,欢迎测试使用,有问题及时反馈. 
+使用说明也可以参照请看这里,欢迎测试使用,有问题及时反馈. <br/>
 [http://bbs.egret-labs.org/thread-592-1-1.html](http://bbs.egret-labs.org/thread-592-1-1.html "白鹭论坛内裤帖子")
