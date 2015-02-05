@@ -60,6 +60,7 @@ lcp
 │   ├─IRemovableEventDispatcher      //移除事件派发器类接口
 │   ├─IResumable                     //恢复类接口
 │   ├─IRunnable                      //运行类接口
+│   ├─IRegexEnum                     //验证接口类
 │   └─IGraphics                      //绘制图形接口类
 ├─layout
 │   └─Distribution      //分布类
@@ -84,7 +85,8 @@ lcp
     ├─QueryStringUtil        //查询字符串类(目前官方的针对HTML不可用,这个方法待完善)
     ├─RatioUtil              //比例工具类
     ├─StageReference         //舞台引用类
-    └─SingletonUtil          //单例工具类
+    ├─SingletonUtil          //单例工具类    
+    └─ValidationUtil         //验证检测类
 </pre>
 
 1> 绘制参数
@@ -306,6 +308,45 @@ sp2.addEventListener(egret.TouchEvent.TOUCH_BEGIN,(e)=>{
 if(lcp.LSprite.hitTestObject(sp1,sp2)){
     console.log("碰撞了哟西");
 }
+```
+
+9>验证检测使用方法
+```typescript
+//验证类
+console.log("整数", lcp.ValidationUtil.isValid(lcp.regexEnum.intege, 111));
+console.log("正整数", lcp.ValidationUtil.isValid(lcp.regexEnum.intege1, 111));
+console.log("负整数", lcp.ValidationUtil.isValid(lcp.regexEnum.intege2, -111));
+console.log("数字", lcp.ValidationUtil.isValid(lcp.regexEnum.num, -111.546));
+console.log("正数", lcp.ValidationUtil.isValid(lcp.regexEnum.num1, 111));
+console.log("负数", lcp.ValidationUtil.isValid(lcp.regexEnum.num2, -111.546));
+console.log("浮点数", lcp.ValidationUtil.isValid(lcp.regexEnum.decmal, -111.546));
+console.log("正浮点数", lcp.ValidationUtil.isValid(lcp.regexEnum.decmal1, 111.546));
+console.log("负浮点数", lcp.ValidationUtil.isValid(lcp.regexEnum.decmal2, -111.546));
+console.log("正负浮点数", lcp.ValidationUtil.isValid(lcp.regexEnum.decmal3, -111.546));
+console.log("非负浮点数", lcp.ValidationUtil.isValid(lcp.regexEnum.decmal4, 111.546));
+console.log("非正浮点数", lcp.ValidationUtil.isValid(lcp.regexEnum.decmal5, -111.546));
+console.log("邮箱", lcp.ValidationUtil.isEmail("d8q8@163.com"));
+console.log("颜色", lcp.ValidationUtil.isValid(lcp.regexEnum.color, "ff0000"));
+console.log("url地址", lcp.ValidationUtil.isValid(lcp.regexEnum.url, "http://www.qq.com"));
+console.log("仅中文", lcp.ValidationUtil.isValid(lcp.regexEnum.chinese, "白鹭引擎"));
+console.log("仅ACSII字符", lcp.ValidationUtil.isValid(lcp.regexEnum.ascii, "0D"));
+console.log("邮编", lcp.ValidationUtil.isValid(lcp.regexEnum.zipcode, "430000"));
+console.log("手机", lcp.ValidationUtil.isValid(lcp.regexEnum.mobile, "13000000000"));
+console.log("ip地址", lcp.ValidationUtil.isValid(lcp.regexEnum.ip4, "192.168.1.1"));
+console.log("非空", lcp.ValidationUtil.isValid(lcp.regexEnum.notempty, "0D"));
+console.log("图片", lcp.ValidationUtil.isValid(lcp.regexEnum.picture, "d8q8.jpg"));
+console.log("压缩文件", lcp.ValidationUtil.isValid(lcp.regexEnum.rar, "d8q8.rar"));
+console.log("日期", lcp.ValidationUtil.isValid(lcp.regexEnum.date, "2015-02-05"));
+console.log("短时间", lcp.ValidationUtil.isTime("15:27:50"));
+console.log("短日期", lcp.ValidationUtil.isDate("2015-02-05"));
+console.log("长日期", lcp.ValidationUtil.isDateTime("2015-02-05 15:27:50"));
+console.log("QQ号码", lcp.ValidationUtil.isValid(lcp.regexEnum.ascii, "10000"));
+console.log("电话号码", lcp.ValidationUtil.isValid(lcp.regexEnum.tel, "82751213"));
+console.log("用户注册", lcp.ValidationUtil.isValid(lcp.regexEnum.username, "d8q8"));
+console.log("字母", lcp.ValidationUtil.isValid(lcp.regexEnum.letter, "abcd"));
+console.log("大写字母", lcp.ValidationUtil.isValid(lcp.regexEnum.letter_u, "ABCD"));
+console.log("小写字母", lcp.ValidationUtil.isValid(lcp.regexEnum.letter_l, "abcd"));
+console.log("身份证", lcp.ValidationUtil.isCardID("431381198109106573"));
 ```
 
 使用说明也可以参照请看这里,欢迎测试使用,有问题及时反馈. <br/>
