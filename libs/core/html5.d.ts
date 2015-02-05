@@ -149,6 +149,7 @@ declare module egret_h5_graphics {
     function endFill(): void;
     function _fill(): void;
     function createEndLineCommand(): void;
+    function _pushCommand(cmd: any): void;
     function _draw(renderContext: egret.RendererContext): void;
     function _setStyle(colorStr: string): void;
     function init(): void;
@@ -188,8 +189,11 @@ declare module egret {
      * @private
      */
     class WebGLRenderer extends RendererContext {
+        private static glID;
+        private static isInit;
         private canvas;
         private gl;
+        private glID;
         private size;
         private vertices;
         private vertSize;
@@ -198,6 +202,8 @@ declare module egret {
         private projectionY;
         private shaderManager;
         constructor(canvas?: HTMLCanvasElement);
+        onRenderFinish(): void;
+        private initAll();
         private createCanvas();
         private onResize();
         private contextLost;
@@ -208,8 +214,6 @@ declare module egret {
         private vertexBuffer;
         private indexBuffer;
         private setContext(gl);
-        private blendModesWebGL;
-        private initBlendMode();
         private start();
         clearScreen(): void;
         private currentBlendMode;
@@ -227,9 +231,12 @@ declare module egret {
         private maskList;
         private maskDataFreeList;
         pushMask(mask: Rectangle): void;
+        private getScissorRect(mask);
         popMask(): void;
+        private scissor(x, y, w, h);
         private colorTransformMatrix;
         setGlobalColorTransform(colorTransformMatrix: any[]): void;
+        private html5Canvas;
         private canvasContext;
         setupFont(textField: TextField, style?: ITextStyle): void;
         measureText(text: string): number;
@@ -270,12 +277,150 @@ declare module egret {
  */
 declare module egret {
     class WebGLUtils {
-        static compileProgram(gl: any, vertexSrc: any, fragmentSrc: any): any;
-        static compileFragmentShader(gl: any, shaderSrc: any): any;
-        static compileVertexShader(gl: any, shaderSrc: any): any;
+        static compileProgram(gl: WebGLRenderingContext, vertexSrc: string, fragmentSrc: string): WebGLProgram;
+        static compileFragmentShader(gl: WebGLRenderingContext, shaderSrc: string): WebGLShader;
+        static compileVertexShader(gl: WebGLRenderingContext, shaderSrc: string): WebGLShader;
         private static _compileShader(gl, shaderSrc, shaderType);
         private static canUseWebGL;
         static checkCanUseWebGL(): boolean;
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    class EgretShader {
+        private defaultVertexSrc;
+        private gl;
+        program: WebGLProgram;
+        fragmentSrc: string;
+        private uSampler;
+        projectionVector: WebGLUniformLocation;
+        private offsetVector;
+        private dimensions;
+        aVertexPosition: number;
+        aTextureCoord: number;
+        colorAttribute: number;
+        attributes: number[];
+        uniforms: any;
+        constructor(gl: WebGLRenderingContext);
+        init(): void;
+        initUniforms(): void;
+        syncUniforms(): void;
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    class ColorTransformShader extends EgretShader {
+        fragmentSrc: string;
+        uniforms: {
+            matrix: {
+                type: string;
+                value: number[];
+            };
+            colorAdd: {
+                type: string;
+                value: {
+                    x: number;
+                    y: number;
+                    z: number;
+                    w: number;
+                };
+            };
+        };
+        constructor(gl: WebGLRenderingContext);
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    class PrimitiveShader {
+        private gl;
+        program: WebGLProgram;
+        projectionVector: WebGLUniformLocation;
+        offsetVector: WebGLUniformLocation;
+        tintColor: WebGLUniformLocation;
+        aVertexPosition: number;
+        colorAttribute: number;
+        attributes: number[];
+        translationMatrix: WebGLUniformLocation;
+        alpha: WebGLUniformLocation;
+        fragmentSrc: string;
+        vertexSrc: string;
+        constructor(gl: WebGLRenderingContext);
+        private init();
     }
 }
 /**
@@ -318,60 +463,6 @@ declare module egret {
         setContext(gl: any): void;
         activateShader(shader: any): void;
         private setAttribs(attribs);
-    }
-    class EgretShader {
-        private defaultVertexSrc;
-        private gl;
-        program: any;
-        fragmentSrc: string;
-        private uSampler;
-        projectionVector: any;
-        private offsetVector;
-        private dimensions;
-        aVertexPosition: any;
-        aTextureCoord: any;
-        colorAttribute: any;
-        attributes: any[];
-        uniforms: any;
-        constructor(gl: any);
-        init(): void;
-        initUniforms(): void;
-        syncUniforms(): void;
-    }
-    class ColorTransformShader extends EgretShader {
-        fragmentSrc: string;
-        uniforms: {
-            matrix: {
-                type: string;
-                value: number[];
-            };
-            colorAdd: {
-                type: string;
-                value: {
-                    x: number;
-                    y: number;
-                    z: number;
-                    w: number;
-                };
-            };
-        };
-        constructor(gl: any);
-    }
-    class PrimitiveShader {
-        private gl;
-        program: any;
-        projectionVector: any;
-        offsetVector: any;
-        tintColor: any;
-        aVertexPosition: any;
-        colorAttribute: any;
-        attributes: any[];
-        translationMatrix: any;
-        alpha: any;
-        fragmentSrc: string;
-        vertexSrc: string;
-        constructor(gl: any);
-        private init();
     }
 }
 /**

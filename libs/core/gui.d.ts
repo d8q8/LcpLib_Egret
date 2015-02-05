@@ -2282,7 +2282,7 @@ declare module egret.gui {
          * 通知子项列表样式发生改变
          */
         notifyStyleChangeInChildren(styleProp: string): void;
-        _createOwnStyleProtoChain(chain: any): void;
+        _createOwnStyleProtoChain(chain: any): any;
         /**
          * 创建一个原型链节点
          */
@@ -2737,6 +2737,11 @@ declare module egret.gui {
          * @constant egret.gui.PopUpPosition.RIGHT
          */
         static RIGHT: string;
+        /**
+         * 在屏幕中心弹出
+         * @constant egret.gui.PopUpPosition.SCREEN_CENTER
+         */
+        static SCREEN_CENTER: string;
     }
 }
 /**
@@ -2821,7 +2826,7 @@ declare module egret.gui {
      * @classdesc ClassFactory 实例是一个“工厂对象”，Egret 可用其生成其他类的实例，每个实例拥有相同的属性。
      * @extends egret.HashObject
      */
-    class ClassFactory extends HashObject {
+    class ClassFactory extends HashObject implements IFactory {
         /**
          * @method egret.gui.ClassFactory#constructor
          * @param generator {any} newInstance() 方法根据工厂对象生成对象时使用的 Class。
@@ -3184,30 +3189,31 @@ declare module egret.gui {
  */
 declare module egret.gui {
     /**
-     * @class egret.gui.SetProperty
+     * @class egret.gui.SetStyle
      * @classdesc
      * 设置属性
      * @extends egret.gui.OverrideBase
+     * @private
      */
     class SetStyle extends OverrideBase {
         /**
          * 构造函数
-         * @method egret.gui.SetProperty#constructor
+         * @method egret.gui.SetStyle#constructor
          */
         constructor(target: string, name: string, value: any);
         /**
          * 要修改的属性名
-         * @member egret.gui.SetProperty#name
+         * @member egret.gui.SetStyle#name
          */
         name: string;
         /**
          * 目标实例名
-         * @member egret.gui.SetProperty#target
+         * @member egret.gui.SetStyle#target
          */
         target: string;
         /**
          * 属性值
-         * @member egret.gui.SetProperty#value
+         * @member egret.gui.SetStyle#value
          */
         value: any;
         /**
@@ -3215,12 +3221,12 @@ declare module egret.gui {
          */
         private oldValue;
         /**
-         * @method egret.gui.SetProperty#apply
+         * @method egret.gui.SetStyle#apply
          * @param parent {IContainer}
          */
         apply(parent: IContainer): void;
         /**
-         * @method egret.gui.SetProperty#remove
+         * @method egret.gui.SetStyle#remove
          * @param parent {IContainer}
          */
         remove(parent: IContainer): void;
@@ -3599,9 +3605,7 @@ declare module egret.gui {
     /**
      * @class egret.gui.UIAsset
      * @classdesc
-     * 素材包装器。<p/>
-     * 注意：UIAsset仅在添content时测量一次初始尺寸， 请不要在外部直接修改content尺寸，
-     * 若做了引起content尺寸发生变化的操作, 需手动调用UIAsset的invalidateSize()进行重新测量。
+     * 素材和非GUI显示对象包装器包装器。<p/>
      * @extends egret.gui.UIComponent
      * @implements egret.gui.ISkinnableClient
      */
@@ -3782,7 +3786,7 @@ declare module egret.gui {
          * @member {string} egret.gui.SkinnableComponent#skinName
          */
         skinName: any;
-        private createChildrenCalled;
+        _createChildrenCalled: boolean;
         /**
          * @method egret.gui.SkinnableComponent#createChildren
          */
@@ -4483,7 +4487,7 @@ declare module egret.gui {
         private italicChanged;
         private _italic;
         /**
-         * 是否显示为粗体，默认false。
+         * 是否显示为斜体，默认false。
          * @member egret.gui.TextBase#italic
          */
         italic: boolean;
@@ -4537,6 +4541,7 @@ declare module egret.gui {
          */
         private checkTextField();
         _createTextField(): void;
+        _textFieldChanged(): void;
         measure(): void;
         /**
          * 更新显示列表
@@ -5538,6 +5543,32 @@ declare module egret.gui {
         partAdded(partName: string, instance: any): void;
     }
 }
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 declare module egret.gui {
     class SkinnableTextBase extends SkinnableComponent {
         constructor();
@@ -5858,6 +5889,140 @@ declare module egret.gui {
          * @param unscaledHeight {number}
          */
         updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret.gui {
+    /**
+     * @class egret.gui.BitmapLabel
+     * @classdesc
+     * 一行或多行不可编辑的位图文本控件
+     * @extends egret.gui.UIComponent
+     */
+    class BitmapLabel extends UIComponent implements IDisplayText {
+        private _bitmapText;
+        /**
+         * @method egret.gui.Label#constructor
+         */
+        constructor();
+        /**
+         * 一个验证阶段完成
+         */
+        private updateCompleteHandler(event);
+        private _textChanged;
+        private _text;
+        /**
+         * @member egret.gui.BitmapLabel#text
+         * 设置或获取显示文本
+         */
+        text: string;
+        private fontChanged;
+        _font: any;
+        /**
+         * 位图字体标识符，可以是BitmapFont对象或者在资源表中的key。
+         * @member egret.gui.BitmapLabel#font
+         */
+        font: any;
+        private createChildrenCalled;
+        /**
+         */
+        createChildren(): void;
+        /**
+         * 皮肤解析适配器
+         */
+        private static assetAdapter;
+        /**
+         * 解析source
+         */
+        private parseFont();
+        /**
+         * 获取资源适配器
+         */
+        private getAdapter();
+        /**
+         * 皮肤发生改变
+         */
+        private onFontChanged(bitmapFont, font);
+        /**
+         * 上一次测量的宽度
+         */
+        private lastUnscaledWidth;
+        private _padding;
+        /**
+         * 四个边缘的共同内边距。若单独设置了任一边缘的内边距，则该边缘的内边距以单独设置的值为准。
+         * 此属性主要用于快速设置多个边缘的相同内边距。默认值：0。
+         * @member egret.gui.BitmapLabel#padding
+         */
+        padding: number;
+        private _paddingLeft;
+        /**
+         * 文字距离左边缘的空白像素,若为NaN将使用padding的值，默认值：NaN。
+         * @member egret.gui.BitmapLabel#paddingLeft
+         */
+        paddingLeft: number;
+        private _paddingRight;
+        /**
+         * 文字距离右边缘的空白像素,若为NaN将使用padding的值，默认值：NaN。
+         * @member egret.gui.BitmapLabel#paddingRight
+         */
+        paddingRight: number;
+        private _paddingTop;
+        /**
+         * 文字距离顶部边缘的空白像素,若为NaN将使用padding的值，默认值：NaN。
+         * @member egret.gui.BitmapLabel#paddingTop
+         */
+        paddingTop: number;
+        private _paddingBottom;
+        /**
+         * 文字距离底部边缘的空白像素,若为NaN将使用padding的值，默认值：NaN。
+         * @member egret.gui.BitmapLabel#paddingBottom
+         */
+        paddingBottom: number;
+        /**
+         * @method egret.gui.BitmapLabel#measure
+         */
+        measure(): void;
+        /**
+         * 特殊情况，组件尺寸由父级决定，要等到父级UpdateDisplayList的阶段才能测量
+         */
+        private isSpecialCase();
+        /**
+         * 使用指定的宽度进行测量
+         */
+        private measureUsingWidth(w);
+        /**
+         * @method egret.gui.BitmapLabel#updateDisplayList
+         * @param unscaledWidth {number}
+         * @param unscaledHeight {number}
+         */
+        updateDisplayList(unscaledWidth: number, unscaledHeight: number): void;
+        private checkBitmapText();
+        commitProperties(): void;
     }
 }
 /**
@@ -6736,14 +6901,14 @@ declare module egret.gui {
          * @member egret.gui.Skin#minHeight
          */
         minHeight: number;
-        _hasWidthSet: Boolean;
+        _hasWidthSet: boolean;
         _width: number;
         /**
          * 组件宽度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
          * @member egret.gui.Skin#width
          */
         width: number;
-        _hasHeightSet: Boolean;
+        _hasHeightSet: boolean;
         _height: number;
         /**
          * 组件高度,默认值为NaN,设置为NaN将使用组件的measure()方法自动计算尺寸
@@ -8416,19 +8581,16 @@ declare module egret.gui {
  */
 declare module egret.gui {
     class HScrollBar extends HSlider {
-        constructor();
+        private _thumbLengthRatio;
         _setViewportMetric(width: number, contentWidth: number): void;
-        private _autoHideTimer;
-        private _autoHideDelay;
         trackAlpha: number;
         thumbAlpha: number;
+        setPosition(value: number): void;
+        getPosition(): number;
         _setValue(value: number): void;
         setValue(value: number): void;
-        private autoHide();
-        private _autoHideShowAnimat;
-        private _animatTargetIsShow;
-        private hideOrShow(show);
         _animationUpdateHandler(animation: Animation): void;
+        updateSkinDisplayList(): void;
     }
 }
 /**
@@ -8510,20 +8672,22 @@ declare module egret.gui {
 declare module egret.gui {
     class VScrollBar extends VSlider {
         constructor();
+        private _thumbLengthRatio;
         _setViewportMetric(height: number, contentHeight: number): void;
-        private _autoHideTimer;
-        private _autoHideDelay;
         trackAlpha: number;
         thumbAlpha: number;
         setPosition(value: number): void;
         getPosition(): number;
         _setValue(value: number): void;
         setValue(value: number): void;
-        private autoHide();
-        private _autoHideShowAnimat;
-        private _animatTargetIsShow;
-        private hideOrShow(show);
         _animationUpdateHandler(animation: Animation): void;
+        /**
+         * @param x {number}
+         * @param y {number}
+         * @returns {number}
+         */
+        pointToValue(x: number, y: number): number;
+        updateSkinDisplayList(): void;
     }
 }
 /**
@@ -8717,10 +8881,10 @@ declare module egret.gui {
          * @member egret.gui.PopUpAnchor#popUp
          */
         popUp: IVisualElement;
+        private _relativeToStage;
         private _popUpPosition;
         /**
          * popUp相对于PopUpAnchor的弹出位置。请使用PopUpPosition里定义的常量。默认值TOP_LEFT。
-         * @see org.flexlite.domUI.core.PopUpPosition
          * @member egret.gui.PopUpAnchor#popUpPosition
          */
         popUpPosition: string;
@@ -9300,7 +9464,6 @@ declare module egret.gui {
      * @class egret.gui.DropDownList
      * @classdesc
      * 不可输入的下拉列表控件。带输入功能的下拉列表控件，请使用ComboBox。
-     * @see org.flexlite.domUI.components.ComboBox
      * @extends egret.gui.DropDownListBase
      */
     class DropDownList extends DropDownListBase {
@@ -9505,16 +9668,25 @@ declare module egret.gui {
      * 滚动条组件
      * @extends egret.gui.UIComponent
      * @implements egret.gui.IVisualElementContainer
-     */
+        */
     class Scroller extends SkinnableComponent implements IVisualElementContainer {
         /**
          * 构造函数
          * @method egret.gui.Scroller#constructor
-         */
+            */
         constructor();
+        private _scrollLeft;
+        private _scrollTop;
+        private _content;
+        setContent(content: IViewport): void;
+        _updateContentPosition(): void;
+        getMaxScrollLeft(): number;
+        getMaxScrollTop(): number;
+        _getContentWidth(): number;
+        _getContentHeight(): number;
         /**
-         * [SkinPart]水平滚动条
-         */
+             * [SkinPart]水平滚动条
+             */
         horizontalScrollBar: HScrollBar;
         /**
          * [SkinPart]垂直滚动条
@@ -9552,7 +9724,6 @@ declare module egret.gui {
          * 安装并初始化视域组件
          */
         private installViewport();
-        _onAddToStage(): void;
         /**
          * 卸载视域组件
          */
@@ -9575,6 +9746,19 @@ declare module egret.gui {
          * @param duration {number}
          */
         throwVertically(vspTo: number, duration?: number): void;
+        private _autoHideScrollBars;
+        /**
+         * 是否自动隐藏滚动条
+         * @member egret.gui.Scroller#autoHideScrollBars
+         */
+        autoHideScrollBars: boolean;
+        private _autoHideTimer;
+        private _autoHideDelay;
+        autoHideDelay: number;
+        private setAutoHideTimer();
+        private _autoHideShowAnimat;
+        private _animatTargetIsShow;
+        private hideOrShow(show);
         /**
          * @member egret.gui.Scroller#numElements
          */
@@ -9691,30 +9875,53 @@ declare module egret.gui {
         swapChildrenAt(index1: number, index2: number): void;
         _checkHbar(): void;
         _checkVbar(): void;
+        createChildren(): void;
         /**
          * 若皮肤是ISkin,则调用此方法附加皮肤中的公共部件
          * @param partName {string}
          * @param instance {any}
          */
         partAdded(partName: string, instance: any): void;
-        _removeScrollBars(): void;
+        /**
+         * 若皮肤是ISkin，则调用此方法卸载皮肤之前注入的公共部件
+         * @method egret.gui.Scroller#partRemoved
+         * @param partName {string}
+         * @param instance {any}
+         */
+        partRemoved(partName: string, instance: any): void;
+        _uninstallHorizontalScrollBar(): void;
+        _uninstallVerticalScrollBar(): void;
         private hBarChanged(e);
         private vBarChanged(e);
-        _createOwnStyleProtoChain(chain: any): void;
-        /**
-         * 添加到父级容器的样式原型链
-         */
-        regenerateStyleCache(parentChain: any): void;
-        /**
-         * 通知项列表样式发生改变
-         */
-        notifyStyleChangeInChildren(styleProp: string): void;
-        /**
-         * 更新子项的nestLevel属性
-         */
-        _updateChildrenNestLevel(): void;
+        hitTest(x: number, y: number, ignoreTouchEnabled?: boolean): DisplayObject;
     }
 }
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 declare module egret.gui {
     class EditableText extends TextBase implements IEditableText, IDisplayText, IViewport {
         constructor();
@@ -9752,7 +9959,8 @@ declare module egret.gui {
         private _restrict;
         private restrictChanged;
         /**
-         * @inheritDoc
+         * @deprecated
+         * TextFiled里还没实现这个接口，等实现之后再去掉废弃标志。目前暂时不要使用它。
          */
         restrict: string;
         styleChanged(styleProp: string): void;
@@ -9870,6 +10078,32 @@ declare module egret.gui {
         private textField_textInputHandler(event);
     }
 }
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 declare module egret.gui {
     class TextArea extends SkinnableTextBase {
         /**
@@ -9924,6 +10158,32 @@ declare module egret.gui {
         createSkinParts(): void;
     }
 }
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 declare module egret.gui {
     class TextInput extends SkinnableTextBase {
         /**
@@ -12549,12 +12809,12 @@ declare module egret.gui {
          * 模态遮罩的填充颜色
          * @member egret.gui.PopUpManager#modalColor
          */
-        modalColor: number;
+        static modalColor: number;
         /**
          * 模态遮罩的透明度
          * @member egret.gui.PopUpManager#modalAlpha
          */
-        modalAlpha: number;
+        static modalAlpha: number;
         /**
          * 弹出一个窗口。<br/>
          * @method egret.gui.PopUpManager.addPopUp
@@ -12589,7 +12849,6 @@ declare module egret.gui {
         /**
          * 添加事件监听,参考PopUpEvent定义的常量。
          * @method egret.gui.PopUpManager.addEventListener
-         * @see org.flexlite.domUI.events.PopUpEvent
          * @param type {string}
          * @param listener {Function}
          * @param thisObject {any}
@@ -12600,7 +12859,6 @@ declare module egret.gui {
         /**
          * 移除事件监听,参考PopUpEvent定义的常量。
          * @method egret.gui.PopUpManager.removeEventListener
-         * @see org.flexlite.domUI.events.PopUpEvent
          * @param type {string}
          * @param listener {Function}
          * @param thisObject {any}

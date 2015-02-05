@@ -362,6 +362,11 @@ declare module egret {
          */
         static COMPLETE: string;
         /**
+         * 循环完成
+         * @constant {string} egret.Event.LOOP_COMPLETE
+         */
+        static LOOP_COMPLETE: string;
+        /**
          * 主循环：进入新的一帧
          * @constant {string} egret.Event.ENTER_FRAME
          */
@@ -1355,12 +1360,10 @@ declare module egret {
  */
 declare module egret {
     /**
-     * @class egret.Ticker
-     * @classdesc
-     * Ticker是egret引擎的心跳控制器，是游戏唯一的时间处理入口。开发者务必不要使用setTimeout / setInterval 等方法，而是统一使用Ticker
-     * @extends egret.EventDispatcher
+     * Ticker是egret引擎的心跳控制器，是游戏唯一的时间处理入口。开发者务必不要使用Ticker,应该使用egret.Timer。
      */
     class Ticker extends EventDispatcher {
+        constructor();
         private _timeScale;
         private _paused;
         /**
@@ -1851,12 +1854,6 @@ declare module egret {
      * @extends egret.HashObject
      */
     class Matrix extends HashObject {
-        a: number;
-        b: number;
-        c: number;
-        d: number;
-        tx: number;
-        ty: number;
         /**
          * @method egret.Matrix#constructor
          * @param a {number} 缩放或旋转图像时影响像素沿 x 轴定位的值。
@@ -1867,6 +1864,12 @@ declare module egret {
          * @param ty {number} 沿 y 轴平移每个点的距离。
          */
         constructor(a?: number, b?: number, c?: number, d?: number, tx?: number, ty?: number);
+        a: number;
+        b: number;
+        c: number;
+        d: number;
+        tx: number;
+        ty: number;
         static identity: Matrix;
         static DEG_TO_RAD: number;
         /**
@@ -2157,6 +2160,7 @@ declare module egret {
          * @returns {boolean} 如果两个矩形相交，返回true，否则返回false
          */
         intersects(toIntersect: Rectangle): boolean;
+        setEmpty(): void;
         /**
          * 克隆矩形对象
          * @method egret.Rectangle#clone
@@ -2806,6 +2810,11 @@ declare module egret {
         getDirty(): boolean;
         private _sizeDirty;
         _setParentSizeDirty(): void;
+        /**
+         * 尺寸发生改变的回调函数。若此对象被添加到UIAsset里，此函数将被赋值，在尺寸发生改变时通知UIAsset重新测量。
+         */
+        _sizeChangeCallBack: Function;
+        _sizeChangeCallTarget: any;
         _setSizeDirty(): void;
         _clearDirty(): void;
         _clearSizeDirty(): void;
@@ -2992,12 +3001,12 @@ declare module egret {
          * @param value
          */
         height: number;
-        _hasWidthSet: Boolean;
+        _hasWidthSet: boolean;
         /**
          * @inheritDoc
          */
         _setWidth(value: number): void;
-        _hasHeightSet: Boolean;
+        _hasHeightSet: boolean;
         /**
          * @inheritDoc
          */
@@ -3122,14 +3131,14 @@ declare module egret {
         private _cacheAsBitmap;
         cacheAsBitmap: boolean;
         private renderTexture;
-        private _makeBitmapCache();
+        _makeBitmapCache(): boolean;
         private _cacheDirty;
         private _setCacheDirty(dirty?);
         static getTransformBounds(bounds: Rectangle, mtx: Matrix): Rectangle;
         /**
          * beta功能，请勿调用此方法
          */
-        private _colorTransform;
+        _colorTransform: ColorTransform;
         colorTransform: ColorTransform;
     }
     class ColorTransform {
@@ -3330,6 +3339,10 @@ declare module egret {
      */
     class Stage extends DisplayObjectContainer {
         static _invalidateRenderFlag: boolean;
+        /**
+         * 是否会派发 RESIZE 事件
+         */
+        _changeSizeDispatchFlag: boolean;
         /**
          * 调用 invalidate() 方法后，在显示列表下次呈现时，Egret 会向每个已注册侦听 render 事件的显示对象发送一个 render 事件。
          * 每次您希望 Egret 发送 render 事件时，都必须调用 invalidate() 方法。
@@ -3542,9 +3555,9 @@ declare module egret {
          */
         _setHeight(value: number): void;
         _updateContentPosition(): void;
-        private _hCanScroll;
-        private _vCanScroll;
-        private _checkScrollPolicy();
+        _hCanScroll: boolean;
+        _vCanScroll: boolean;
+        _checkScrollPolicy(): boolean;
         private __checkScrollPolicy(policy, contentLength, viewLength);
         _addEvents(): void;
         _removeEvents(): void;
@@ -3735,14 +3748,14 @@ declare module egret {
         /**
          * 矩形区域，它定义位图对象的九个缩放区域。此属性仅当fillMode为BitmapFillMode.SCALE时有效。
          * scale9Grid的x、y、width、height分别代表九宫图中中间那块的左上点的x、y以及中间方块的宽高。
-         * @member {egret.Texture} egret.Bitmap#scale9Grid
+         * @member {egret.Rectangle} egret.Bitmap#scale9Grid
          */
         scale9Grid: Rectangle;
         /**
          * 确定位图填充尺寸的方式。
          * 设置为 BitmapFillMode.REPEAT时，位图将重复以填充区域；BitmapFillMode.SCALE时，位图将拉伸以填充区域。
          * 默认值：BitmapFillMode.SCALE。
-         * @member {egret.Texture} egret.Bitmap#fillMode
+         * @member {string} egret.Bitmap#fillMode
          */
         fillMode: string;
         _render(renderContext: RendererContext): void;
@@ -3794,9 +3807,10 @@ declare module egret {
      * @classdesc
      * @class egret.BitmapText
      * 位图字体采用了Bitmap+SpriteSheet的方式来渲染文字。
-     * @extends egret.DisplayObjectContainer
+     * @extends egret.DisplayObject
      */
-    class BitmapText extends DisplayObjectContainer {
+    class BitmapText extends DisplayObject {
+        constructor();
         /**
          * 设置文本
          */
@@ -3805,21 +3819,30 @@ declare module egret {
         /**
          * 显示的文本内容
          * @member {string} egret.BitmapText#text
-         *
          */
         text: string;
-        private _spriteSheet;
-        private _spriteSheetChanged;
+        private _font;
+        private _fontChanged;
         /**
-         * BitmapTextSpriteSheet对象，缓存了所有文本的位图纹理
-         * @member {egret.BitmapTextSpriteSheet} egret.BitmapText#spriteSheet
+         * BitmapFont对象，缓存了所有文本的位图纹理
+         * @member {egret.BitmapFont} egret.BitmapText#font
+         */
+        font: BitmapFont;
+        /**
+         * @deprecated
+         * 此属性已经废弃，请使用BitmapText.font属性代替。
          */
         spriteSheet: BitmapTextSpriteSheet;
-        private _bitmapPool;
-        constructor();
-        _updateTransform(): void;
-        _renderText(forMeasureContentSize?: boolean): Rectangle;
+        _setSizeDirty(): void;
+        private static EMPTY_FACTOR;
+        _render(renderContext: RendererContext): void;
         _measureBounds(): Rectangle;
+        private _textWidth;
+        private _textHeight;
+        private textLinesChange;
+        private _textLines;
+        private _lineHeights;
+        private getTextLines();
     }
 }
 /**
@@ -3861,6 +3884,7 @@ declare module egret {
         private renderContext;
         private strokeStyleColor;
         private fillStyleColor;
+        private _dirty;
         constructor();
         /**
          * 指定一种简单的单一颜色填充，在绘制时该填充将在随后对其他 Graphics 方法（如 lineTo() 或 drawCircle()）的调用中使用。
@@ -3878,7 +3902,6 @@ declare module egret {
          * @param y {number} 相对于父显示对象注册点的圆心的 y 位置（以像素为单位）。
          * @param width {number} 矩形的宽度（以像素为单位）。
          * @param height {number} 矩形的高度（以像素为单位）。
-         * @param r? {number} 圆的半径（以像素为单位）,不设置就为直角矩形。
          */
         drawRect(x: number, y: number, width: number, height: number): void;
         /**
@@ -3891,7 +3914,7 @@ declare module egret {
         drawCircle(x: number, y: number, r: number): void;
         /**
          * 绘制一个圆角矩形
-         * @method egret.Graphics#drawRect
+         * @method egret.Graphics#drawRoundRect
          * @param x {number} 圆心相对于父显示对象注册点的 x 位置（以像素为单位）。
          * @param y {number} 相对于父显示对象注册点的圆心的 y 位置（以像素为单位）。
          * @param width {number} 矩形的宽度（以像素为单位）。
@@ -4280,7 +4303,6 @@ declare module egret {
         appendElement(element: ITextElement): void;
         private _linesArr;
         _getLinesArr(): ILineElement[];
-        private measureText();
         /**
          * @private
          * @param renderContext
@@ -4289,17 +4311,17 @@ declare module egret {
         private drawText(renderContext);
     }
     interface ITextStyle {
-        textColor: number;
-        strokeColor: number;
-        size: number;
-        stroke: number;
-        bold: boolean;
-        italic: boolean;
-        fontFamily: string;
+        textColor?: number;
+        strokeColor?: number;
+        size?: number;
+        stroke?: number;
+        bold?: boolean;
+        italic?: boolean;
+        fontFamily?: string;
     }
     interface ITextElement {
         text: string;
-        style: ITextStyle;
+        style?: ITextStyle;
     }
     interface IWTextElement extends ITextElement {
         width: number;
@@ -4520,6 +4542,7 @@ declare module egret {
         init(text: TextField): void;
         _addStageText(): void;
         _removeStageText(): void;
+        private onResize();
         _getText(): string;
         _setText(value: string): void;
         private onFocusHandler(event);
@@ -4561,10 +4584,18 @@ declare module egret {
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 declare module egret {
-    class BitmapTextSpriteSheet extends SpriteSheet {
-        constructor(texture: Texture, fntText: string);
+    /**
+     * @classdesc
+     * @class egret.BitmapFont
+     * 位图字体,是一个字体的纹理集，通常作为BitmapText.font属性的值。
+     * @extends egret.SpriteSheet
+     */
+    class BitmapFont extends SpriteSheet {
+        constructor(texture: Texture, config: any);
         private charList;
         getTexture(name: string): Texture;
+        private firstCharHeight;
+        _getFirstCharHeight(): number;
         private parseConfig(fntText);
         private getConfigByKey(configText, key);
     }
@@ -4597,101 +4628,386 @@ declare module egret {
  */
 declare module egret {
     /**
+     * @deprecated
+     * 位图字体,此类已废弃，请使用egret.BitmapFont代替。
+     */
+    class BitmapTextSpriteSheet extends BitmapFont {
+        constructor(texture: Texture, fntText: string);
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    /**
      * @class egret.MovieClip
-     * @classdesc 影片剪辑，可以通过影片剪辑播放序列帧动画。
+     * @classdesc 影片剪辑，可以通过影片剪辑播放序列帧动画。MovieClip 类从以下类继承而来：DisplayObject 和 EventDispatcher。不同于 DisplayObject 对象，MovieClip 对象拥有一个时间轴。
      * @extends egret.DisplayObjectContainer
      */
-    class MovieClip extends DisplayObjectContainer {
-        private delegate;
+    class MovieClip extends DisplayObject {
+        private _isAddedToStage;
+        private static renderFilter;
+        private _textureToRender;
+        _movieClipData: MovieClipData;
+        private _frames;
+        private _totalFrames;
+        _frameLabels: any[];
+        private _frameIntervalTime;
+        _eventPool: string[];
+        private _isPlaying;
+        private _isStopped;
+        private _playTimes;
+        _currentFrameNum: number;
+        _nextFrameNum: number;
+        private _displayedKeyFrameNum;
+        private _passedTime;
         /**
-         * 动画的播放帧频
-         * @member {number} egret.MovieClip#frameRate
+         * 创建新的 MovieClip 实例。创建 MovieClip 之后，调用舞台上的显示对象容器的addElement方法。
+         * @method egret.MovieClip#constructor
+         * @param movieClipData {MovieClipData} 被引用的 MovieClipData 对象
          */
-        frameRate: number;
-        constructor(data: any, texture?: Texture);
+        constructor(movieClipData?: MovieClipData);
+        _init(): void;
+        _reset(): void;
+        private _initFrame();
+        _render(renderContext: RendererContext): void;
+        _onAddToStage(): void;
+        _onRemoveFromStage(): void;
         /**
-         * 播放指定动画
-         * @method egret.MovieClip#gotoAndPlay
-         * @param frameName {string} 指定帧的帧名称
-
+         * 返回帧标签为指定字符串的FrameLabel对象
+         * @method egret.MovieClip#getFrameLabelByName
+         * @param labelName {string} 帧标签名
+         * @param ignoreCase {boolean} 是否忽略大小写，可选参数，默认false
+         * @returns {egret.FrameLabel} FrameLabel对象
          */
-        gotoAndPlay(frameName: string): void;
+        _getFrameLabelByName(labelName: string, ignoreCase?: boolean): FrameLabel;
         /**
-         * 播放并暂停指定动画
-         * @method egret.MovieClip#gotoAndStop
-         * @param frameName {string} 指定帧的帧名称
-
+         * 返回指定序号的帧的FrameLabel对象
+         * @method egret.MovieClip#getFrameLabelByFrame
+         * @param frame {number} 帧序号
+         * @returns {egret.FrameLabel} FrameLabel对象
          */
-        gotoAndStop(frameName: string): void;
+        _getFrameLabelByFrame(frame: number): FrameLabel;
         /**
-         * 暂停动画
+         * 返回指定序号的帧对应的FrameLabel对象，如果当前帧没有标签，则返回前面最近的有标签的帧的FrameLabel对象
+         * @method egret.MovieClip#getFrameLabelForFrame
+         * @param frame {number} 帧序号
+         * @returns {egret.FrameLabel} FrameLabel对象
+         */
+        _getFrameLabelForFrame(frame: number): FrameLabel;
+        /**
+         * 继续播放当前动画
+         * @method egret.MovieClip#play
+         * @param playTimes {number} 播放次数。 参数为整数，可选参数，>=1：设定播放次数，<0：循环播放，默认值 0：不改变播放次数，
+         */
+        play(playTimes?: number): void;
+        /**
+         * 暂停播放动画
          * @method egret.MovieClip#stop
          */
         stop(): void;
         /**
-         * @method egret.MovieClip#dispose
+         * 将播放头移到前帧并停止
+         * @method egret.MovieClip#prevFrame
          */
-        dispose(): void;
+        prevFrame(): void;
         /**
-         * 方法名改为 dispose
-         * @method egret.MovieClip#release
-         * @deprecated
+         * 跳到后一帧并停止
+         * @method egret.MovieClip#prevFrame
          */
-        release(): void;
+        nextFrame(): void;
         /**
-         * @method egret.MovieClip#getCurrentFrameIndex
-         * @deprecated
-         * @returns {number}
+         * 将播放头移到指定帧并播放
+         * @method egret.MovieClip#gotoAndPlay
+         * @param frame {any} 指定帧的帧号或帧标签
+         * @param playTimes {number} 播放次数。 参数为整数，可选参数，>=1：设定播放次数，<0：循环播放，默认值 0：不改变播放次数，
          */
-        getCurrentFrameIndex(): number;
+        gotoAndPlay(frame: any, playTimes?: number): void;
         /**
-         * 获取当前影片剪辑的帧频数
-         * @method egret.MovieClip#getTotalFrame
-         * @deprecated
-         * @returns {number}
+         * 将播放头移到指定帧并停止
+         * @method egret.MovieClip#gotoAndPlay
+         * @param frame {any} 指定帧的帧号或帧标签
          */
-        getTotalFrame(): number;
+        gotoAndStop(frame: any): void;
+        private _gotoFrame(frame);
+        private _advanceTime(advancedTime);
+        _advanceFrame(): void;
+        private _constructFrame();
+        private _handlePendingEvent();
         /**
-         * @method egret.MovieClip#setInterval
-         * @deprecated
-         * @param value {number}
+         * MovieClip 实例中帧的总数
+         * @member {number} egret.MovieClip#totalFrames
          */
-        setInterval(value: number): void;
+        totalFrames: number;
         /**
-         * @method egret.MovieClip#getIsPlaying
-         * @deprecated
-         * @returns {boolean}
+         * MovieClip 实例当前播放的帧的序号
+         * @member {number} egret.MovieClip#currentFrame
          */
-        getIsPlaying(): boolean;
+        currentFrame: number;
+        /**
+         * MovieClip 实例当前播放的帧的标签。如果当前帧没有标签，则 currentFrameLabel返回null。
+         * @member {number} egret.MovieClip#currentFrame
+         */
+        currentFrameLabel: string;
+        /**
+         * 当前播放的帧对应的标签，如果当前帧没有标签，则currentLabel返回包含标签的先前帧的标签。如果当前帧和先前帧都不包含标签，currentLabel返回null。
+         * @member {number} egret.MovieClip#currentFrame
+         */
+        currentLabel: string;
+        /**
+         * MovieClip 实例的帧频
+         * @member {number} egret.MovieClip#frameRate
+         */
+        frameRate: number;
+        /**
+         * MovieClip 实例当前是否正在播放
+         * @member {boolean} egret.MovieClip#isPlaying
+         */
+        isPlaying: boolean;
+        /**
+         * MovieClip数据源
+         * @member {any} egret.MovieClip#dataSource
+         */
+        movieClipData: MovieClipData;
+        private _setMovieClipData(value);
+        private setPlayTimes(value);
+        private setIsStopped(value);
     }
-    interface MovieClipDelegate {
-        gotoAndPlay(frameName: string): void;
-        gotoAndStop(frameName: string): void;
-        stop(): void;
-        dispose(): void;
-        setMovieClip(movieclip: MovieClip): void;
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    class FrameLabel extends EventDispatcher {
+        private _name;
+        private _frame;
+        constructor(name: string, frame: number);
+        /**
+         * 标签名
+         * @member {string} egret.FrameLabel#name
+         */
+        name: string;
+        /**
+         * 标签所在帧序号
+         * @member {number} egret.FrameLabel#frame
+         */
+        frame: number;
+        /**
+         * 复制当前帧标签对象
+         * @method egret.FrameLabel#clone
+         */
+        clone(): FrameLabel;
     }
-    class DefaultMovieClipDelegate implements MovieClipDelegate {
-        data: any;
-        private _frameData;
-        private _totalFrame;
-        private _spriteSheet;
-        private _passTime;
-        private _currentFrameIndex;
-        private _currentFrameName;
-        private _isPlaying;
-        private movieClip;
-        private bitmap;
-        constructor(data: any, texture: Texture);
-        setMovieClip(movieClip: MovieClip): void;
-        gotoAndPlay(frameName: string): void;
-        gotoAndStop(frameName: string): void;
-        stop(): void;
-        dispose(): void;
-        private checkHasFrame(name);
-        private update(advancedTime);
-        private playNextFrame(needShow?);
-        private getTexture(name);
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    /**
+     * @class egret.MovieClipData
+     * @classdesc 使用 MovieClipData 类，您可以创建 MovieClip 对象和处理 MovieClip 对象的数据。MovieClipData 一般由MovieClipDataFactory生成
+     * @extends egret.HashObject
+     */
+    class MovieClipData extends HashObject {
+        /**
+         * MovieClip数据
+         */
+        _mcData: any;
+        /**
+         * 总帧数
+         */
+        numFrames: number;
+        /**
+         * 帧数据列表
+         */
+        frames: any[];
+        /**
+         * 帧标签列表
+         */
+        labels: any[];
+        /**
+         * 帧率
+         */
+        frameRate: number;
+        /**
+         * 纹理数据
+         */
+        textureData: any;
+        /**
+         * 纹理集
+         */
+        spriteSheet: SpriteSheet;
+        constructor();
+        _init(mcData: any, textureData: any, spriteSheet: SpriteSheet): void;
+        /**
+         * 根据指定帧序号获取该帧对应的关键帧数据
+         * @method egret.MovieClipData#getKeyFrameData
+         * @param frame {number} 帧序号
+         * @returns {any} 帧数据对象
+         */
+        getKeyFrameData(frame: number): any;
+        /**
+         * 根据指定帧序号获取该帧对应的Texture对象
+         * @method egret.MovieClipData#getTextureByFrame
+         * @param frame {number} 帧序号
+         * @returns {egret.Texture} Texture对象
+         */
+        getTextureByFrame(frame: number): Texture;
+        private getTextureByResName(resName);
+        _isDataValid(): boolean;
+        _isTextureValid(): boolean;
+        _fillMCData(mcData: any): void;
+        private _fillFramesData(framesData);
+        private _fillFrameLabelsData(frameLabelsData);
+        /**
+         * MovieClip数据源
+         * @member {any} egret.MovieClip#dataSource
+         */
+        mcData: MovieClipData;
+        private _setMCData(value);
+    }
+}
+/**
+ * Copyright (c) 2014,Egret-Labs.org
+ * All rights reserved.
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ *     * Redistributions of source code must retain the above copyright
+ *       notice, this list of conditions and the following disclaimer.
+ *     * Redistributions in binary form must reproduce the above copyright
+ *       notice, this list of conditions and the following disclaimer in the
+ *       documentation and/or other materials provided with the distribution.
+ *     * Neither the name of the Egret-Labs.org nor the
+ *       names of its contributors may be used to endorse or promote products
+ *       derived from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY EGRET-LABS.ORG AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL EGRET-LABS.ORG AND CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+declare module egret {
+    /**
+     * @class egret.MovieClipDataFactory
+     * @classdesc 使用 MovieClipDataFactory 类，可以生成 MovieClipData 对象用于创建MovieClip
+     * @extends egret.EventDispatcher
+     */
+    class MovieClipDataFactory extends EventDispatcher {
+        /**
+         * 是否开启缓存
+         * @member {boolean} egret.MovieClipDataFactory#enableCache
+         */
+        enableCache: boolean;
+        _mcDataSet: any;
+        _spriteSheet: SpriteSheet;
+        _mcDataCache: any;
+        constructor(movieClipDataSet?: any, texture?: Texture);
+        /**
+         * 清空缓存
+         * @method egret.MovieClipDataFactory#clearCache
+         */
+        clearCache(): void;
+        /**
+         * 根据名字生成一个MovieClipData实例。可以用于创建MovieClip。
+         * @method egret.MovieClipDataFactory#generateMovieClipData
+         * @param movieClipName {string} MovieClip名字. 可选参数，默认为"", 相当于取第一个MovieClip数据
+         * @returns {MovieClipData} 生成的MovieClipData对象
+         */
+        generateMovieClipData(movieClipName?: string): MovieClipData;
+        private _findFromCache(movieClipName, cache);
+        private _fillData(movieClipName, movieClip, cache);
+        /**
+         * MovieClip数据集
+         * @member {any} egret.MovieClipDataFactory#mcDataSet
+         */
+        mcDataSet: any;
+        /**
+         * MovieClip需要使用的纹理图
+         * @member {Texture} egret.MovieClipDataFactory#texture
+         */
+        texture: Texture;
+        /**
+         * 由纹理图生成的精灵表
+         * @member {SpriteSheet} egret.MovieClipDataFactory#spriteSheet
+         */
+        spriteSheet: SpriteSheet;
+        private setTexture(value);
     }
 }
 /**
@@ -4945,6 +5261,8 @@ declare module egret {
          * @method egret.URLVariables#toString
          */
         toString(): string;
+        private encodeValue(key, value);
+        private encodeArray(key, value);
     }
 }
 /**
@@ -5265,13 +5583,20 @@ declare module egret {
     class RenderTexture extends Texture {
         private renderContext;
         constructor();
-        private static identityRectangle;
+        init(): void;
+        static identityRectangle: Rectangle;
         /**
          * 将制定显示对象绘制为一个纹理
          * @method egret.RenderTexture#drawToTexture
          * @param displayObject {egret.DisplayObject}
+         * @param clipBounds {egret.Rectangle}
+         * @param scale number
          */
-        drawToTexture(displayObject: DisplayObject): boolean;
+        drawToTexture(displayObject: DisplayObject, clipBounds?: Rectangle, scale?: number): boolean;
+        setSize(width: number, height: number): void;
+        begin(): void;
+        end(): void;
+        dispose(): void;
     }
 }
 /**
@@ -5319,7 +5644,9 @@ declare module egret {
          * 绘制纹理的缩放比率，默认值为1
          * @member egret.RendererContext#texture_scale_factor
          */
+        _texture_scale_factor: number;
         texture_scale_factor: number;
+        _setTextureScaleFactor(value: number): void;
         /**
          * 是否对图像使用平滑处理
          * 该特性目前只支持Canvas
@@ -5402,6 +5729,18 @@ declare module egret {
         onRenderFinish(): void;
         setGlobalColorTransform(colorTransformMatrix: number[]): void;
         static createRendererContext(canvas: any): RendererContext;
+        static deleteTexture(texture: Texture): void;
+        static blendModesForGL: any;
+        private static initBlendMode();
+        /**
+         * 设置 gl 模式下的blendMode，canvas模式下不会生效
+         * @method egret.RendererContext#registerBlendModeForGL
+         * @param key {string} 键值
+         * @param src {number} 源颜色因子
+         * @param dst {number} 目标颜色因子
+         * @param override {boolean} 是否覆盖
+         */
+        static registerBlendModeForGL(key: string, src: number, dst: number, override?: boolean): void;
     }
 }
 /**
@@ -6361,8 +6700,18 @@ declare module egret {
  */
 declare module egret {
     class NumberUtils {
-        static isNumber(value: any): Boolean;
+        static isNumber(value: any): boolean;
+        /**
+         * 得到对应角度值的sin近似值
+         * @param value {number} 角度值
+         * @returns {number} sin值
+         */
         static sin(value: number): number;
+        /**
+         * 得到对应角度值的cos近似值
+         * @param value {number} 角度值
+         * @returns {number} cos值
+         */
         static cos(value: number): number;
     }
 }
@@ -7026,11 +7375,22 @@ declare module RES {
         sheetMap: any;
         private textureMap;
         /**
-         * 解析并缓存加载成功的数据
+         * 解析并缓存加载成功的配置文件
          */
-        analyzeData(resItem: ResourceItem, data: any): void;
-        private getRelativePath(url, file);
+        analyzeConfig(resItem: ResourceItem, data: string): string;
+        /**
+         * 解析并缓存加载成功的位图数据
+         */
+        analyzeBitmap(resItem: ResourceItem, data: egret.Texture): void;
+        /**
+         * 获取相对位置
+         */
+        getRelativePath(url: string, file: string): string;
         parseSpriteSheet(texture: egret.Texture, data: any, name: string): egret.SpriteSheet;
+        /**
+         * @inheritDoc
+         */
+        destroyRes(name: string): boolean;
     }
 }
 /**
@@ -7062,11 +7422,13 @@ declare module RES {
 declare module RES {
     class FontAnalyzer extends SheetAnalyzer {
         constructor();
-        /**
-         * 解析并缓存加载成功的数据
-         */
-        analyzeData(resItem: ResourceItem, data: any): void;
+        analyzeConfig(resItem: ResourceItem, data: string): string;
+        analyzeBitmap(resItem: ResourceItem, data: egret.Texture): void;
         private getTexturePath(url, fntText);
+        /**
+         * @inheritDoc
+         */
+        destroyRes(name: string): boolean;
     }
 }
 /**
@@ -7192,6 +7554,13 @@ declare module RES {
      * @returns {boolean}
      */
     function hasRes(key: string): boolean;
+    /**
+     * 运行时动态解析一个配置文件,
+     * @method RES.parseConfig
+     * @param data {any} 配置文件数据，请参考resource.json的配置文件格式。传入对应的json对象即可。
+     * @param folder {string} 加载项的路径前缀。
+     */
+    function parseConfig(data: any, folder?: string): void;
     /**
      * 同步方式获取缓存的已经加载成功的资源。<br/>
      * @method RES.getRes
