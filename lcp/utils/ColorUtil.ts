@@ -65,9 +65,9 @@ module lcp {
          * 使用方法如下
          * <code>
          *     var myRGB:Object = lcp.ColorUtil.getRGB(0xFF00FF);
-         *     trace("Red = " + myRGB.r);
-         *     trace("Green = " + myRGB.g);0
-         *     trace("Blue = " + myRGB.b);
+         *     console.log("Red = " + myRGB.r);
+         *     console.log("Green = " + myRGB.g);0
+         *     console.log("Blue = " + myRGB.b);
          * </code>
          */
         public static getRGB(color : number) : Object {
